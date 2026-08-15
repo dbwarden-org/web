@@ -92,6 +92,8 @@ h1, h2 { letter-spacing: -.075em; line-height: .98; }
 h1 { font-size: clamp(58px, 8vw, 106px); font-weight: 700; max-width: 780px; }
 h1 em, h2 em { color: var(--blue); font-style: normal; }
 .hero-lede { font-size: 17px; line-height: 1.6; color: var(--muted); max-width: 515px; margin-top: 29px; }
+.hero-title-kicker { margin-top: 20px; color: var(--blue); font-size: 10px; font-weight: 800; letter-spacing: .13em; text-transform: uppercase; }
+.hero-title-kicker span { color: var(--muted); margin-left: 9px; }
 .hero-actions { display: flex; gap: 10px; margin-top: 33px; }
 .button { display: inline-flex; align-items: center; justify-content: center; gap: 18px; min-height: 46px; padding: 0 19px; border: 1px solid transparent; font-size: 11px; font-weight: 800; transition: transform .2s ease, background .2s ease, border-color .2s ease; }
 .button:hover { transform: translateY(-2px); }
@@ -299,6 +301,18 @@ h2 { font-size: clamp(45px, 6vw, 78px); font-weight: 700; }
 .comparison-honesty strong { display: block; margin-bottom: 12px; color: var(--gold); font-size: 18px; }
 .comparison-honesty p { max-width: 700px; color: var(--inverse-muted); font-size: 13px; line-height: 1.7; }
 .comparison-honesty .text-link { color: var(--gold); }
+.essay-body { max-width: 930px; margin-left: auto; }
+.essay-body > p { max-width: 760px; color: var(--muted); font-size: 15px; line-height: 1.85; }
+.essay-body > p + p { margin-top: 24px; }
+.comparison-prose-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 75px; }
+.comparison-prose-grid > div { padding-top: 5px; }
+.comparison-prose-grid p { color: var(--muted); font-size: 14px; line-height: 1.8; }
+.comparison-prose-grid p + p { margin-top: 21px; }
+.comparison-fit-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.comparison-fit-grid > div { padding: 25px 27px; border-top: 3px solid var(--blue); background: var(--surface-muted); }
+.comparison-fit-grid > div:last-child { border-top-color: var(--gold); }
+.comparison-fit-grid strong { display: block; margin-bottom: 14px; font-size: 16px; letter-spacing: -.04em; }
+.comparison-fit-grid ul { margin: 0; padding-left: 18px; color: var(--muted); font-size: 13px; line-height: 1.8; }
 
 /* Each narrative page has its own reading rhythm while sharing the system. */
 .page-why-dbwarden .page-hero { padding-top: 34px; border-bottom: 4px solid var(--blue); }
@@ -526,6 +540,8 @@ h2 { font-size: clamp(45px, 6vw, 78px); font-weight: 700; }
   .comparison-verdict { padding: 25px 20px; }
   .comparison-table-section { overflow-x: auto; }
   .comparison-table-section table { min-width: 640px; }
+  .essay-body { margin-left: 0; }
+  .comparison-prose-grid, .comparison-fit-grid { grid-template-columns: 1fr; gap: 30px; }
   .page-why-dbwarden .page-hero-grid, .page-how-it-works .page-hero-grid, .page-product-surface .page-hero-grid { grid-template-columns: 1fr; }
   .page-why-dbwarden .article-section:nth-of-type(odd), .page-why-dbwarden .fit-section, .page-product-surface .article-section:nth-of-type(even), .page-product-surface .article-section:nth-of-type(4) { margin-left: -19px; margin-right: -19px; padding-left: 19px; padding-right: 19px; }
   .page-product-surface .page-hero, .page-product-surface .section-plugins { margin-left: -19px; margin-right: -19px; padding-left: 19px; padding-right: 19px; }

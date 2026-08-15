@@ -39,6 +39,16 @@ const pages = {
     description: 'An honest comparison of dbwarden and Alembic: source of truth, generated artifacts, rollback contracts, drift detection, offline CI, and when each tool fits best.',
     type: 'Article',
   },
+  '/compare/atlas': {
+    title: 'dbwarden vs Atlas | Declarative schema management compared',
+    description: 'A detailed comparison of dbwarden and Atlas: schema location, runtime, declarative modes, versioned artifacts, rollback, drift, safety, CI, and ecosystem fit.',
+    type: 'Article',
+  },
+  '/compare/django-migrations': {
+    title: 'dbwarden vs Django migrations | Model-driven SQLAlchemy migrations',
+    description: 'A detailed comparison of dbwarden and Django migrations: model-driven workflows, artifacts, rollback, renames, drift, coupling, offline state, and backend support.',
+    type: 'Article',
+  },
 }
 
 function setMeta(attribute, key, content) {

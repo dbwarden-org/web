@@ -5,7 +5,7 @@ import { PageHeader, WhyPage } from './pages.jsx'
 import { ProductSurfacePage } from './surface.jsx'
 import { TimelinePage } from './timeline.jsx'
 import { Seo } from './seo.jsx'
-import { AlembicComparisonPage, ComparePage } from './compare.jsx'
+import { AlembicComparisonPage, AtlasComparisonPage, ComparePage, DjangoComparisonPage } from './compare.jsx'
 
 const logo = 'https://raw.githubusercontent.com/dbwarden-org/dbwarden/refs/heads/main/assets/icon.png'
 
@@ -90,6 +90,12 @@ function App() {
   if (window.location.pathname.replace(/\/$/, '') === '/compare/alembic') {
     return <AlembicComparisonPage dark={dark} toggleTheme={toggleTheme} />
   }
+  if (window.location.pathname.replace(/\/$/, '') === '/compare/atlas') {
+    return <AtlasComparisonPage dark={dark} toggleTheme={toggleTheme} />
+  }
+  if (window.location.pathname.replace(/\/$/, '') === '/compare/django-migrations') {
+    return <DjangoComparisonPage dark={dark} toggleTheme={toggleTheme} />
+  }
   if (window.location.pathname.replace(/\/$/, '') === '/why') {
     return <WhyPage dark={dark} toggleTheme={toggleTheme} />
   }
@@ -127,10 +133,10 @@ function App() {
       <main id="top">
         <section className="hero">
           <div className="content-wrap">
-          <div className="eyebrow"><span className="pulse" /> declarative schema infrastructure <span className="eyebrow-year">for SQLAlchemy</span></div>
           <div className="hero-grid">
             <div className="hero-copy">
               <h1>Your models are<br /><em>your migrations.</em></h1>
+              <div className="hero-title-kicker">declarative schema infrastructure <span>for SQLAlchemy</span></div>
               <p className="hero-lede">dbwarden turns the schema you declare into plain SQL, explicit rollback paths, and a database state you can verify before it ships. Fully open source.</p>
               <div className="hero-actions">
                 <a className="button button-primary" href="https://docs.dbwarden.org/getting-started/setup/" target="_blank" rel="noreferrer">Get started <span>↗</span></a>
