@@ -358,6 +358,9 @@ h2 { font-size: clamp(45px, 6vw, 78px); font-weight: 700; }
 .page-product-surface .section-plugins .section-label { color: var(--gold); }
 .page-product-surface .section-plugins .section-label span, .page-product-surface .section-plugins .article-body > p { color: var(--inverse-muted); }
 .page-product-surface .section-plugins .section-doc { color: var(--gold); }
+.page-compare .page-hero { padding-top: 34px; }
+.compare-card.is-upcoming { cursor: default; opacity: .7; }
+.compare-card.is-upcoming:hover { border-color: var(--line); transform: none; }
 .page-product-surface .surface-section { border-top: 0; padding-top: 90px; }
 .page-product-surface .surface-safety { background: var(--surface-muted); margin-left: calc((100% - 100vw) / 2); margin-right: calc((100% - 100vw) / 2); padding-left: max(36px, calc((100vw - 1180px) / 2)); padding-right: max(36px, calc((100vw - 1180px) / 2)); }
 .page-product-surface .surface-safety .article-body { max-width: 1180px; margin-left: auto; margin-right: auto; }

@@ -2,14 +2,14 @@ import { PageFrame } from './pages.jsx'
 
 const comparisons = [
   { name: 'Alembic', slug: '/compare/alembic', description: 'The established imperative migration tool for SQLAlchemy.', status: 'Detailed comparison available', href: '/compare/alembic' },
-  { name: 'Atlas', description: 'A language-agnostic declarative schema platform with HCL, SQL, and ORM inputs.', status: 'Read the article', href: 'https://blog.emiliano-go.com/works/dbwarden-vs-atlas' },
-  { name: 'Django migrations', description: 'The model-driven workflow that inspired dbwarden for non-Django SQLAlchemy stacks.', status: 'Read the article', href: 'https://blog.emiliano-go.com/works/dbwarden-vs-django-migrations' },
+  { name: 'Atlas', description: 'A language-agnostic declarative schema platform with HCL, SQL, and ORM inputs.', status: 'Coming soon', href: null },
+  { name: 'Django migrations', description: 'The model-driven workflow that inspired dbwarden for non-Django SQLAlchemy stacks.', status: 'Coming soon', href: null },
 ]
 
 export function ComparePage({ dark, toggleTheme }) {
   return <PageFrame dark={dark} toggleTheme={toggleTheme} eyebrow="compare" title={<>Choose the tool<br /><em>that fits the team.</em></>} intro="Migration tools make different bets about where schema truth lives, what gets reviewed, and when risk becomes visible. Compare those bets directly.">
     <section className="compare-principle"><div className="section-label">/ the short version</div><div className="compare-principle-grid"><strong>dbwarden is for SQLAlchemy teams that want models as authority and plain SQL as the frozen artifact.</strong><p>That is not automatically better than every alternative. It is a deliberate fit. These comparisons explain the tradeoffs so you can choose without marketing fog.</p></div></section>
-    <section className="compare-list"><div className="section-label">/ comparison index</div><div className="compare-cards">{comparisons.map((comparison, index) => <a className="compare-card" href={comparison.href} target={comparison.href.startsWith('http') ? '_blank' : undefined} rel={comparison.href.startsWith('http') ? 'noreferrer' : undefined} key={comparison.name}><div><span>0{index + 1}</span><em>{comparison.status}</em></div><h2>dbwarden<br /><strong>vs {comparison.name}</strong></h2><p>{comparison.description}</p><span className="compare-arrow">↗</span></a>)}</div></section>
+    <section className="compare-list"><div className="section-label">/ comparison index</div><div className="compare-cards">{comparisons.map((comparison, index) => <ComparisonCard comparison={comparison} index={index} key={comparison.name} />)}</div></section>
     <section className="compare-guidance"><div className="section-label">/ decide by constraint</div><div className="compare-guidance-grid"><div><strong>Choose dbwarden</strong><p>SQLAlchemy is your native ecosystem. You want generated SQL reviewed in pull requests, rollback beside upgrade, application-aware impact analysis, and offline generation from committed state.</p></div><div><strong>Keep looking</strong><p>You need a polyglot schema platform, Django's integrated migration graph, declarative apply for ephemeral environments, or a commercial platform team around the tool.</p></div></div></section>
   </PageFrame>
 }
@@ -28,4 +28,9 @@ export function AlembicComparisonPage({ dark, toggleTheme }) {
 
 function ComparisonBlock({ number, title, children }) {
   return <section className="comparison-block"><div className="section-label">/ {number} <span>{title}</span></div>{children}</section>
+}
+
+function ComparisonCard({ comparison, index }) {
+  const Tag = comparison.href ? 'a' : 'article'
+  return <Tag className={comparison.href ? 'compare-card' : 'compare-card is-upcoming'} {...(comparison.href ? { href: comparison.href } : {})}><div><span>0{index + 1}</span><em>{comparison.status}</em></div><h2>dbwarden<br /><strong>vs {comparison.name}</strong></h2><p>{comparison.description}</p>{comparison.href && <span className="compare-arrow">↗</span>}</Tag>
 }
