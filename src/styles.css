@@ -299,6 +299,26 @@ h2 { font-size: clamp(45px, 6vw, 78px); font-weight: 700; }
 
 .page-product-surface .page-hero { padding-bottom: 72px; }
 .page-product-surface .page-hero { padding-top: 34px; }
+.page-product-surface .page-hero { position: relative; margin-left: calc((100% - 100vw) / 2); margin-right: calc((100% - 100vw) / 2); padding-left: max(36px, calc((100vw - 1180px) / 2)); padding-right: max(36px, calc((100vw - 1180px) / 2)); padding-bottom: 110px; overflow: hidden; color: var(--inverse-ink); background-color: var(--flow-bg); background-image: linear-gradient(var(--inverse-line) 1px, transparent 1px), linear-gradient(90deg, var(--inverse-line) 1px, transparent 1px); background-size: 72px 72px; }
+.page-product-surface .page-hero::after { content: 'SURFACE / 05'; position: absolute; right: max(36px, calc((100vw - 1180px) / 2)); bottom: 28px; color: var(--gold); font: 800 10px Inter, sans-serif; letter-spacing: .16em; }
+.page-product-surface .page-hero .directory-kicker { color: var(--gold); }
+.page-product-surface .page-hero h1 em { color: var(--gold); }
+.page-product-surface .page-hero p { color: var(--inverse-muted); }
+.page-product-surface .article-section { border-top: 0; padding-top: 90px; }
+.page-product-surface .article-section > .section-label { color: var(--gold); }
+.page-product-surface .article-section > .section-label span { color: var(--muted); }
+.page-product-surface .article-section > h2 { max-width: 760px; }
+.page-product-surface .surface-grid { gap: 0; border-top: 1px solid var(--line); border-left: 1px solid var(--line); }
+.page-product-surface .surface-card { min-height: 245px; border: 0; border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); border-top: 4px solid var(--blue); }
+.page-product-surface .surface-card:nth-child(2) { border-top-color: var(--gold); }
+.page-product-surface .surface-card:nth-child(3) { border-top-color: var(--blue-deep); }
+.page-product-surface .surface-card > span { display: block; font-size: 27px; }
+.page-product-surface .surface-card h3 { font-size: 23px; }
+.page-product-surface .section-backends { background: var(--surface-muted); }
+.page-product-surface .section-plugins { background: var(--ink); color: var(--inverse-ink); margin-left: calc((100% - 100vw) / 2); margin-right: calc((100% - 100vw) / 2); padding-left: max(36px, calc((100vw - 1180px) / 2)); padding-right: max(36px, calc((100vw - 1180px) / 2)); }
+.page-product-surface .section-plugins .section-label { color: var(--gold); }
+.page-product-surface .section-plugins .section-label span, .page-product-surface .section-plugins .article-body > p { color: var(--inverse-muted); }
+.page-product-surface .section-plugins .section-doc { color: var(--gold); }
 .page-product-surface .page-hero-grid { grid-template-columns: 1fr .8fr; }
 .page-product-surface .article-section:nth-of-type(even) { background: var(--surface-muted); margin-left: calc((100% - 100vw) / 2); margin-right: calc((100% - 100vw) / 2); padding-left: max(36px, calc((100vw - 1180px) / 2)); padding-right: max(36px, calc((100vw - 1180px) / 2)); }
 .page-product-surface .article-section:nth-of-type(even) .surface-card { min-height: 230px; border-top: 3px solid var(--blue); }
@@ -391,6 +411,8 @@ h2 { font-size: clamp(45px, 6vw, 78px); font-weight: 700; }
   .article-links > div:last-child { flex-direction: column; }
   .page-why-dbwarden .page-hero-grid, .page-how-it-works .page-hero-grid, .page-product-surface .page-hero-grid { grid-template-columns: 1fr; }
   .page-why-dbwarden .article-section:nth-of-type(odd), .page-why-dbwarden .fit-section, .page-product-surface .article-section:nth-of-type(even), .page-product-surface .article-section:nth-of-type(4) { margin-left: -19px; margin-right: -19px; padding-left: 19px; padding-right: 19px; }
+  .page-product-surface .page-hero, .page-product-surface .section-plugins { margin-left: -19px; margin-right: -19px; padding-left: 19px; padding-right: 19px; }
+  .page-product-surface .page-hero::after { right: 19px; }
   .page-why-dbwarden .section-one-definition .article-body, .page-why-dbwarden .section-reality .page-columns { display: block; }
   .page-why-dbwarden .section-one-definition .page-aside, .page-why-dbwarden .section-reality .page-aside { margin-top: 30px; }
   .page-how-it-works .article-section { display: block; }
