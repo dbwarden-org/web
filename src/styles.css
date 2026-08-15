@@ -331,17 +331,21 @@ h2 { font-size: clamp(45px, 6vw, 78px); font-weight: 700; }
 .safety-card.is-active button strong { color: var(--blue); }
 .safety-detail { display: grid; grid-template-columns: 45px 1fr 30px; gap: 14px; padding: 0 30px 24px 59px; }
 .safety-detail p { grid-column: 2; color: var(--ink); font-size: 13px; line-height: 1.7; }
-.safety-detail span { grid-column: 2; color: var(--gold); font-size: 10px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; }
+.safety-detail span { display: block; grid-column: 2; color: var(--gold); font-size: 10px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; }
 .operations-surface { display: grid; grid-template-columns: .7fr 1.3fr; gap: 75px; align-items: start; padding: 30px 0 10px; }
 .safety-accordion { display: flex; gap: 10px; border-top: 0; align-items: stretch; }
 .safety-card { flex: 1; min-width: 0; border: 1px solid var(--line); background: var(--surface); transition: flex .35s ease, border-color .25s ease, transform .25s ease; }
 .safety-card.is-active { flex: 2.15; border-color: var(--gold); transform: translateY(-3px); }
 .safety-card { overflow: visible; }
-.safety-card button { min-height: 78px; height: auto; grid-template-columns: 30px 1fr 28px; align-items: center; padding: 14px; }
+.safety-card button { min-height: 68px; height: auto; grid-template-columns: 30px 1fr 28px; align-items: center; padding: 12px 14px; }
 .safety-card button strong { font-size: 16px; }
-.safety-card button b { display: grid; place-items: center; width: 24px; height: 24px; border: 1px solid var(--blue); border-radius: 50%; }
+.safety-card button b { color: var(--blue); font-size: 23px; font-weight: 400; text-align: right; }
+.safety-icon { display: grid; place-items: center; width: 28px; height: 28px; color: var(--gold); }
+.safety-icon svg { width: 25px; height: 25px; fill: none; stroke: currentColor; stroke-linecap: round; stroke-linejoin: round; stroke-width: 1.5; }
+.safety-closed-icon { display: grid; place-items: center; min-height: 46px; padding-bottom: 12px; }
 .safety-detail { display: block; padding: 0 14px 14px 50px; }
 .safety-detail p { margin-bottom: 16px; }
+.safety-detail a { display: inline-block; margin-top: 14px; color: var(--blue); font-size: 10px; font-weight: 800; }
 .surface-state-and-operations .article-body, .surface-backends .article-body { max-width: 100%; }
 .surface-state-and-operations .operations-surface, .surface-backends .backend-surface { max-width: 1040px; margin-left: auto; margin-right: auto; }
 .operations-copy p { max-width: 390px; color: var(--muted); font-size: 14px; line-height: 1.75; }
