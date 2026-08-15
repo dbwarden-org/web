@@ -4,6 +4,7 @@ import './styles.css'
 import { PageHeader, WhyPage } from './pages.jsx'
 import { ProductSurfacePage } from './surface.jsx'
 import { TimelinePage } from './timeline.jsx'
+import { Seo } from './seo.jsx'
 
 const logo = 'https://raw.githubusercontent.com/dbwarden-org/dbwarden/refs/heads/main/assets/icon.png'
 
@@ -251,4 +252,4 @@ function Check({ text }) {
   return <div className="check-item"><span>✓</span>{text}</div>
 }
 
-createRoot(document.getElementById('root')).render(<StrictMode><App /></StrictMode>)
+createRoot(document.getElementById('root')).render(<StrictMode><><Seo /><App /></></StrictMode>)

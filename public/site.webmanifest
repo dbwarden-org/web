@@ -1,0 +1,14 @@
+{
+  "name": "dbwarden",
+  "short_name": "dbwarden",
+  "description": "Declarative database migration infrastructure for SQLAlchemy.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f7f9fc",
+  "theme_color": "#1555d6",
+  "icons": [{
+    "src": "/icon.png",
+    "sizes": "512x512",
+    "type": "image/png"
+  }]
+}
