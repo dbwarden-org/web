@@ -353,9 +353,11 @@ h2 { font-size: clamp(45px, 6vw, 78px); font-weight: 700; }
 .surface-backends .section-doc, .surface-backends .text-link { color: var(--gold); }
 .backend-surface { display: grid; grid-template-columns: .75fr 1.25fr; gap: 100px; align-items: center; padding: 28px 0 35px; }
 .backend-orbit { aspect-ratio: 1; max-width: 260px; display: grid; place-content: center; text-align: center; border: 1px solid var(--gold); border-radius: 50%; box-shadow: 0 0 0 16px rgba(216,164,43,.08), 0 0 0 34px rgba(216,164,43,.04); }
+.backend-orbit-copy { display: grid; gap: 10px; animation: backend-pair-drop .55s ease both; }
 .backend-orbit span { color: var(--inverse-muted); font-size: 9px; letter-spacing: .13em; text-transform: uppercase; }
-.backend-orbit strong { margin-top: 10px; color: var(--gold); font-size: 16px; letter-spacing: -.05em; }
-.backend-orbit em { margin-top: 9px; color: var(--inverse-muted); font-size: 9px; font-style: normal; letter-spacing: .1em; text-transform: uppercase; }
+.backend-orbit strong { color: var(--gold); font-size: 25px; letter-spacing: -.05em; }
+.backend-orbit i { margin-top: 17px; color: var(--inverse-muted); font-size: 9px; font-style: normal; letter-spacing: .1em; text-transform: uppercase; }
+@keyframes backend-pair-drop { from { opacity: 0; transform: translateY(-18px); } to { opacity: 1; transform: translateY(0); } }
 .backend-stack { border-top: 1px solid var(--inverse-line); }
 .backend-stack > div { display: grid; grid-template-columns: 40px 1fr auto; gap: 14px; align-items: center; min-height: 57px; border-bottom: 1px solid var(--inverse-line); }
 .backend-stack span { color: var(--gold); font-size: 10px; font-weight: 800; }
