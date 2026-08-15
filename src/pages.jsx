@@ -1,3 +1,5 @@
+import { useEffect, useState } from 'react'
+
 const logo = 'https://raw.githubusercontent.com/dbwarden-org/dbwarden/refs/heads/main/assets/icon.png'
 
 export function PageFrame({ dark, toggleTheme, eyebrow, title, intro, children }) {
@@ -6,7 +8,10 @@ export function PageFrame({ dark, toggleTheme, eyebrow, title, intro, children }
 }
 
 function PageHeader({ dark, toggleTheme }) {
-  return <header className="topbar"><a className="brand" href="/" aria-label="dbwarden home"><img src={logo} alt="" /><span>dbwarden</span></a><nav className="directory-nav" aria-label="Page navigation"><a href="/why">Why dbwarden</a><a href="/how-it-works">How it works</a><a href="/product-surface">Product surface</a><a href="/plugins">Plugins</a></nav><div className="top-actions"><button className="theme-button" type="button" onClick={toggleTheme} aria-label="Toggle color theme"><span className="theme-icon" aria-hidden="true">{dark ? '☀' : '☾'}</span></button><a className="github-link" href="https://github.com/dbwarden-org/dbwarden" target="_blank" rel="noreferrer">GitHub <span className="arrow">↗</span></a></div></header>
+  const [menuOpen, setMenuOpen] = useState(false)
+  useEffect(() => { document.body.style.overflow = menuOpen ? 'hidden' : ''; return () => { document.body.style.overflow = '' } }, [menuOpen])
+  const closeMenu = () => setMenuOpen(false)
+  return <header className="topbar"><a className="brand" href="/" aria-label="dbwarden home"><img src={logo} alt="" /><span>dbwarden</span></a><nav className={menuOpen ? 'directory-nav is-open' : 'directory-nav'} aria-label="Page navigation"><a href="/why" onClick={closeMenu}>Why dbwarden</a><a href="/how-it-works" onClick={closeMenu}>How it works</a><a href="/product-surface" onClick={closeMenu}>Product surface</a><a href="/plugins" onClick={closeMenu}>Plugins</a></nav><div className="top-actions"><button className="theme-button" type="button" onClick={toggleTheme} aria-label="Toggle color theme"><span className="theme-icon" aria-hidden="true">{dark ? '☀' : '☾'}</span></button><a className="github-link" href="https://github.com/dbwarden-org/dbwarden" target="_blank" rel="noreferrer">GitHub <span className="arrow">↗</span></a><button className={menuOpen ? 'menu-button is-open' : 'menu-button'} type="button" onClick={() => setMenuOpen((value) => !value)} aria-expanded={menuOpen} aria-label={menuOpen ? 'Close navigation' : 'Open navigation'}><span /><span /><span /></button></div></header>
 }
 
 export function WhyPage({ dark, toggleTheme }) {

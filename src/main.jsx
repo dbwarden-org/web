@@ -70,6 +70,11 @@ function App() {
     localStorage.setItem('dbwarden-theme', dark ? 'dark' : 'light')
   }, [dark])
 
+  useEffect(() => {
+    document.body.style.overflow = menuOpen ? 'hidden' : ''
+    return () => { document.body.style.overflow = '' }
+  }, [menuOpen])
+
   const toggleTheme = () => setDark((value) => !value)
 
   if (window.location.pathname.replace(/\/$/, '') === '/plugins') {
@@ -104,12 +109,13 @@ function App() {
             <span className="theme-icon" aria-hidden="true">{dark ? '☀' : '☾'}</span>
           </button>
           <a className="github-link" href="https://github.com/dbwarden-org/dbwarden" target="_blank" rel="noreferrer">GitHub <span className="arrow">↗</span></a>
-          <button className="menu-button" type="button" onClick={() => setMenuOpen((value) => !value)} aria-label="Toggle navigation">{menuOpen ? 'Close' : 'Menu'}</button>
+          <button className={menuOpen ? 'menu-button is-open' : 'menu-button'} type="button" onClick={() => setMenuOpen((value) => !value)} aria-expanded={menuOpen} aria-label={menuOpen ? 'Close navigation' : 'Open navigation'}><span /><span /><span /></button>
         </div>
       </header>
 
       <main id="top">
-        <section className="hero content-wrap">
+        <section className="hero">
+          <div className="content-wrap">
           <div className="eyebrow"><span className="pulse" /> declarative schema infrastructure <span className="eyebrow-year">for SQLAlchemy</span></div>
           <div className="hero-grid">
             <div className="hero-copy">
@@ -133,6 +139,7 @@ function App() {
             </div>
           </div>
           <div className="hero-foot"><span>SQLAlchemy 2.0+</span><span>Python 3.12+</span><span>MIT licensed</span><span>open source</span></div>
+          </div>
         </section>
 
         <section className="signal-strip" aria-label="Product capabilities">
