@@ -337,9 +337,9 @@ h2 { font-size: clamp(45px, 6vw, 78px); font-weight: 700; }
 .safety-card { flex: 1; min-width: 0; border: 1px solid var(--line); background: var(--surface); transition: flex .35s ease, border-color .25s ease, transform .25s ease; }
 .safety-card.is-active { flex: 2.15; border-color: var(--gold); transform: translateY(-3px); }
 .safety-card { overflow: visible; }
-.safety-card button { min-height: 150px; height: auto; grid-template-columns: 30px 1fr 24px; align-items: start; padding: 20px; }
+.safety-card button { min-height: 105px; height: auto; grid-template-columns: 30px 1fr 24px; align-items: start; padding: 17px; }
 .safety-card button strong { font-size: 18px; }
-.safety-detail { display: block; padding: 0 20px 22px 70px; }
+.safety-detail { display: block; padding: 0 20px 16px 64px; }
 .safety-detail p { margin-bottom: 16px; }
 .surface-state-and-operations .article-body, .surface-backends .article-body { max-width: 100%; }
 .surface-state-and-operations .operations-surface, .surface-backends .backend-surface { max-width: 1040px; margin-left: auto; margin-right: auto; }
