@@ -75,7 +75,7 @@ main:not(.directory-main) { padding-top: 78px; }
 .eyebrow { display: flex; align-items: center; gap: 9px; }
 .eyebrow-year { color: var(--muted); margin-left: 4px; }
 .pulse { width: 7px; height: 7px; background: var(--gold); border-radius: 50%; box-shadow: 0 0 0 4px rgba(216, 164, 43, .15); }
-.hero-grid { display: grid; grid-template-columns: 1fr; gap: 43px; align-items: end; padding: 20px 0 38px; }
+.hero-grid { display: grid; grid-template-columns: minmax(0, 1fr) 520px; gap: 72px; align-items: center; padding: 20px 0 38px; }
 h1, h2, h3, p { margin: 0; }
 h1, h2 { letter-spacing: -.075em; line-height: .98; }
 h1 { font-size: clamp(58px, 8vw, 106px); font-weight: 700; max-width: 780px; }
@@ -90,17 +90,17 @@ h1 em, h2 em { color: var(--blue); font-style: normal; }
 .button-quiet:hover { border-color: var(--blue); color: var(--blue); }
 .button-light { color: #182230; background: #fff; }
 .button-light:hover { color: var(--blue-deep); }
-.hero-proof { width: min(100%, 960px); margin: 0 auto; background: var(--surface); border: 1px solid var(--line); padding: 24px 27px 22px; box-shadow: var(--shadow); }
+.hero-proof { width: 100%; margin: 0; background: var(--surface); border: 1px solid var(--line); padding: 24px 27px 22px; box-shadow: var(--shadow); }
 .proof-header, .proof-footer { display: flex; justify-content: space-between; gap: 20px; color: var(--muted); font-size: 9px; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; }
 .proof-header { padding-bottom: 19px; border-bottom: 1px solid var(--line); }
 .proof-header span:last-child { color: var(--gold); }
-.proof-track { display: grid; grid-template-columns: 1fr 40px 1fr 40px 1fr; align-items: center; gap: 12px; padding: 28px 0; }
+.proof-track { display: grid; grid-template-columns: 1fr; align-items: center; gap: 8px; padding: 22px 0; }
 .proof-node { min-height: 126px; display: flex; flex-direction: column; justify-content: space-between; padding: 17px 18px; border: 1px solid var(--line); background: var(--bg); }
 .proof-node > span { color: var(--blue); font-size: 9px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; }
 .proof-node strong { font-size: 20px; letter-spacing: -.05em; }
 .proof-node code { color: var(--muted); font: 11px 'SFMono-Regular', Consolas, monospace; }
 .proof-node-accent { border-color: var(--gold); box-shadow: inset 3px 0 var(--gold); }
-.proof-arrow { color: var(--gold); font-size: 25px; text-align: center; }
+.proof-arrow { color: var(--gold); font-size: 21px; text-align: center; transform: rotate(90deg); }
 .proof-footer { padding-top: 18px; border-top: 1px solid var(--line); }
 .proof-footer b { color: var(--blue); }
 .hero-foot { display: flex; gap: 30px; border-top: 1px solid var(--line); padding: 15px 0 18px; color: var(--muted); font-size: 10px; text-transform: uppercase; letter-spacing: .1em; }
