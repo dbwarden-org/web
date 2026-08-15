@@ -23,7 +23,8 @@ export function ProductSurfacePage({ dark, toggleTheme }) {
 
 function PageSection({ number, label, title, doc, children }) {
   const external = doc.startsWith('http')
-  return <section className="article-section"><div className="section-label">/ {number} <span>{label}</span><a className="section-doc" href={doc} target={external ? '_blank' : undefined} rel={external ? 'noreferrer' : undefined}>Read the docs ↗</a></div><h2>{title}</h2><div className="article-body">{children}</div></section>
+  const sectionClass = label.toLowerCase().replaceAll(' ', '-')
+  return <section className={`article-section section-${sectionClass}`}><div className="section-label">/ {number} <span>{label}</span><a className="section-doc" href={doc} target={external ? '_blank' : undefined} rel={external ? 'noreferrer' : undefined}>Read the docs ↗</a></div><h2>{title}</h2><div className="article-body">{children}</div></section>
 }
 
 function Aside({ title, children }) {

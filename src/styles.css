@@ -253,7 +253,7 @@ h2 { font-size: clamp(45px, 6vw, 78px); font-weight: 700; }
 .article-links a:hover { border-color: var(--blue); }
 
 /* Each narrative page has its own reading rhythm while sharing the system. */
-.page-why-dbwarden .page-hero { border-bottom: 4px solid var(--blue); }
+.page-why-dbwarden .page-hero { padding-top: 34px; border-bottom: 4px solid var(--blue); }
 .page-why-dbwarden .article-section:first-of-type { padding-top: 100px; }
 .page-why-dbwarden .page-hero-grid { grid-template-columns: 1.2fr .5fr; }
 .page-why-dbwarden .article-section:nth-of-type(odd) { background: var(--surface-muted); margin-left: calc((100% - 100vw) / 2); margin-right: calc((100% - 100vw) / 2); padding-left: max(36px, calc((100vw - 1180px) / 2)); padding-right: max(36px, calc((100vw - 1180px) / 2)); }
@@ -262,6 +262,18 @@ h2 { font-size: clamp(45px, 6vw, 78px); font-weight: 700; }
 .page-why-dbwarden .fit-section .section-label { color: var(--gold); }
 .page-why-dbwarden .fit-grid > div { background: transparent; border-color: var(--inverse-line); }
 .page-why-dbwarden .fit-grid p { color: var(--inverse-muted); }
+.page-why-dbwarden .section-one-definition .article-body { max-width: none; display: grid; grid-template-columns: minmax(0, 1.35fr) minmax(260px, .65fr); gap: 100px; align-items: start; }
+.page-why-dbwarden .section-one-definition .page-columns { display: contents; }
+.page-why-dbwarden .section-one-definition .page-columns > div { padding-top: 4px; }
+.page-why-dbwarden .section-one-definition .page-aside { border-top: 3px solid var(--gold); border-left: 0; }
+.page-why-dbwarden .section-reality { background: var(--flow-bg); color: var(--inverse-ink); margin-left: calc((100% - 100vw) / 2); margin-right: calc((100% - 100vw) / 2); padding-left: max(36px, calc((100vw - 1180px) / 2)); padding-right: max(36px, calc((100vw - 1180px) / 2)); }
+.page-why-dbwarden .section-reality .section-label { color: var(--gold); }
+.page-why-dbwarden .section-reality .section-label span, .page-why-dbwarden .section-reality .article-body p { color: var(--inverse-muted); }
+.page-why-dbwarden .section-reality .section-doc { color: var(--gold); }
+.page-why-dbwarden .section-reality .article-body { max-width: none; }
+.page-why-dbwarden .section-reality .page-columns { grid-template-columns: minmax(0, 1.25fr) minmax(260px, .75fr); gap: 100px; align-items: center; }
+.page-why-dbwarden .section-reality .page-aside { border-left: 3px solid var(--gold); background: rgba(255,255,255,.08); }
+.page-why-dbwarden .section-reality .page-aside strong { color: var(--inverse-ink); }
 
 .page-how-it-works .page-hero { padding-bottom: 70px; }
 .page-how-it-works .page-hero-grid { grid-template-columns: .8fr 1fr; }
@@ -338,6 +350,8 @@ h2 { font-size: clamp(45px, 6vw, 78px); font-weight: 700; }
   .article-links > div:last-child { flex-direction: column; }
   .page-why-dbwarden .page-hero-grid, .page-how-it-works .page-hero-grid, .page-product-surface .page-hero-grid { grid-template-columns: 1fr; }
   .page-why-dbwarden .article-section:nth-of-type(odd), .page-why-dbwarden .fit-section, .page-product-surface .article-section:nth-of-type(even), .page-product-surface .article-section:nth-of-type(4) { margin-left: -19px; margin-right: -19px; padding-left: 19px; padding-right: 19px; }
+  .page-why-dbwarden .section-one-definition .article-body, .page-why-dbwarden .section-reality .page-columns { display: block; }
+  .page-why-dbwarden .section-one-definition .page-aside, .page-why-dbwarden .section-reality .page-aside { margin-top: 30px; }
   .page-how-it-works .article-section { display: block; }
   .page-how-it-works .article-section::before { left: 3px; }
   .page-how-it-works .article-section > .section-label { position: relative; padding-left: 17px; }
