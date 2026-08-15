@@ -319,6 +319,46 @@ h2 { font-size: clamp(45px, 6vw, 78px); font-weight: 700; }
 .page-product-surface .section-plugins .section-label { color: var(--gold); }
 .page-product-surface .section-plugins .section-label span, .page-product-surface .section-plugins .article-body > p { color: var(--inverse-muted); }
 .page-product-surface .section-plugins .section-doc { color: var(--gold); }
+.page-product-surface .surface-section { border-top: 0; padding-top: 90px; }
+.page-product-surface .surface-safety { background: var(--surface-muted); margin-left: calc((100% - 100vw) / 2); margin-right: calc((100% - 100vw) / 2); padding-left: max(36px, calc((100vw - 1180px) / 2)); padding-right: max(36px, calc((100vw - 1180px) / 2)); }
+.safety-accordion { border-top: 1px solid var(--line); }
+.safety-card { border-bottom: 1px solid var(--line); }
+.safety-card button { width: 100%; display: grid; grid-template-columns: 45px 1fr 30px; gap: 14px; align-items: center; padding: 23px 0; border: 0; background: transparent; color: var(--ink); text-align: left; cursor: pointer; }
+.safety-card button > span { color: var(--gold); font-size: 10px; font-weight: 800; }
+.safety-card button strong { font-size: 20px; letter-spacing: -.04em; }
+.safety-card button b { color: var(--blue); font-size: 23px; font-weight: 400; text-align: right; }
+.safety-card.is-active button strong { color: var(--blue); }
+.safety-detail { display: grid; grid-template-columns: 45px 1fr 30px; gap: 14px; padding: 0 30px 24px 59px; }
+.safety-detail p { grid-column: 2; color: var(--muted); font-size: 13px; line-height: 1.7; }
+.safety-detail span { grid-column: 2; color: var(--gold); font-size: 10px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; }
+.operations-surface { display: grid; grid-template-columns: .7fr 1.3fr; gap: 75px; align-items: start; padding: 30px 0 10px; }
+.operations-copy p { max-width: 390px; color: var(--muted); font-size: 14px; line-height: 1.75; }
+.operations-board { display: grid; grid-template-columns: 1fr 1fr; border-top: 2px solid var(--blue); border-left: 1px solid var(--line); }
+.operations-board > div { min-height: 118px; display: flex; flex-direction: column; justify-content: space-between; padding: 18px 20px; border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); background: var(--surface); }
+.operations-board span { color: var(--muted); font-size: 9px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; }
+.operations-board strong { font-size: 15px; letter-spacing: -.04em; }
+.operations-board b { color: var(--gold); font-size: 20px; font-weight: 500; }
+.surface-backends { background: var(--flow-bg); color: var(--inverse-ink); margin-left: calc((100% - 100vw) / 2); margin-right: calc((100% - 100vw) / 2); padding-left: max(36px, calc((100vw - 1180px) / 2)); padding-right: max(36px, calc((100vw - 1180px) / 2)); }
+.surface-backends .section-label { color: var(--gold); }
+.surface-backends .section-label span, .surface-backends .article-body p { color: var(--inverse-muted); }
+.surface-backends .section-doc, .surface-backends .text-link { color: var(--gold); }
+.backend-surface { display: grid; grid-template-columns: .75fr 1.25fr; gap: 100px; align-items: center; padding: 28px 0 35px; }
+.backend-orbit { aspect-ratio: 1; max-width: 260px; display: grid; place-content: center; text-align: center; border: 1px solid var(--gold); border-radius: 50%; box-shadow: 0 0 0 16px rgba(216,164,43,.08), 0 0 0 34px rgba(216,164,43,.04); }
+.backend-orbit span { color: var(--inverse-muted); font-size: 9px; letter-spacing: .13em; text-transform: uppercase; }
+.backend-orbit strong { margin-top: 10px; color: var(--gold); font-size: 23px; letter-spacing: -.05em; }
+.backend-stack { border-top: 1px solid var(--inverse-line); }
+.backend-stack > div { display: grid; grid-template-columns: 40px 1fr auto; gap: 14px; align-items: center; min-height: 57px; border-bottom: 1px solid var(--inverse-line); }
+.backend-stack span { color: var(--gold); font-size: 10px; font-weight: 800; }
+.backend-stack strong { font-size: 16px; letter-spacing: -.04em; }
+.backend-stack em { color: var(--inverse-muted); font-size: 9px; font-style: normal; text-transform: uppercase; letter-spacing: .1em; }
+.surface-plugin-callout { margin-left: calc((100% - 100vw) / 2); margin-right: calc((100% - 100vw) / 2); padding: 90px max(36px, calc((100vw - 1180px) / 2)); background: var(--flow-bg); color: var(--inverse-ink); }
+.surface-plugin-callout .section-label { color: var(--gold); }
+.surface-plugin-callout .section-label span { color: var(--inverse-muted); }
+.surface-plugin-callout .section-doc { color: var(--gold); }
+.surface-plugin-callout > div:last-child { display: grid; grid-template-columns: 1fr .65fr auto; gap: 60px; align-items: end; }
+.surface-plugin-callout h2 { font-size: clamp(38px, 5vw, 68px); }
+.surface-plugin-callout h2 em { color: var(--gold); }
+.surface-plugin-callout p { max-width: 360px; color: var(--inverse-muted); font-size: 13px; line-height: 1.7; }
 .page-product-surface .page-hero-grid { grid-template-columns: 1fr .8fr; }
 .page-product-surface .article-section:nth-of-type(even) { background: var(--surface-muted); margin-left: calc((100% - 100vw) / 2); margin-right: calc((100% - 100vw) / 2); padding-left: max(36px, calc((100vw - 1180px) / 2)); padding-right: max(36px, calc((100vw - 1180px) / 2)); }
 .page-product-surface .article-section:nth-of-type(even) .surface-card { min-height: 230px; border-top: 3px solid var(--blue); }
@@ -413,6 +453,10 @@ h2 { font-size: clamp(45px, 6vw, 78px); font-weight: 700; }
   .page-why-dbwarden .article-section:nth-of-type(odd), .page-why-dbwarden .fit-section, .page-product-surface .article-section:nth-of-type(even), .page-product-surface .article-section:nth-of-type(4) { margin-left: -19px; margin-right: -19px; padding-left: 19px; padding-right: 19px; }
   .page-product-surface .page-hero, .page-product-surface .section-plugins { margin-left: -19px; margin-right: -19px; padding-left: 19px; padding-right: 19px; }
   .page-product-surface .page-hero::after { right: 19px; }
+  .page-product-surface .surface-safety, .page-product-surface .surface-backends, .page-product-surface .surface-plugin-callout { margin-left: -19px; margin-right: -19px; padding-left: 19px; padding-right: 19px; }
+  .operations-surface, .backend-surface, .surface-plugin-callout > div:last-child { grid-template-columns: 1fr; gap: 35px; }
+  .backend-orbit { max-width: 190px; }
+  .safety-detail { display: block; padding-left: 59px; }
   .page-why-dbwarden .section-one-definition .article-body, .page-why-dbwarden .section-reality .page-columns { display: block; }
   .page-why-dbwarden .section-one-definition .page-aside, .page-why-dbwarden .section-reality .page-aside { margin-top: 30px; }
   .page-how-it-works .article-section { display: block; }

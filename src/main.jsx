@@ -1,7 +1,8 @@
 import { StrictMode, useDeferredValue, useEffect, useState } from 'react'
 import { createRoot } from 'react-dom/client'
 import './styles.css'
-import { ProductSurfacePage, WhyPage } from './pages.jsx'
+import { WhyPage } from './pages.jsx'
+import { ProductSurfacePage } from './surface.jsx'
 import { TimelinePage } from './timeline.jsx'
 
 const logo = 'https://raw.githubusercontent.com/dbwarden-org/dbwarden/refs/heads/main/assets/icon.png'
