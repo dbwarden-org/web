@@ -336,6 +336,7 @@ h2 { font-size: clamp(45px, 6vw, 78px); font-weight: 700; }
 .safety-accordion { display: flex; gap: 10px; height: 300px; border-top: 0; align-items: stretch; }
 .safety-card { flex: 1; min-width: 0; border: 1px solid var(--line); background: var(--surface); transition: flex .35s ease, border-color .25s ease, transform .25s ease; }
 .safety-card { cursor: pointer; }
+.safety-card { align-self: flex-start; height: auto; }
 .safety-card.is-active { flex: 2.15; border-color: var(--gold); transform: translateY(-3px); }
 .safety-card { overflow: visible; }
 .safety-card button { min-height: 68px; height: auto; grid-template-columns: 30px 1fr 28px; align-items: center; padding: 12px 14px; }
