@@ -96,6 +96,7 @@ function App() {
           <a href="/why" onClick={() => setMenuOpen(false)}>Why dbwarden</a>
           <a href="/how-it-works" onClick={() => setMenuOpen(false)}>How it works</a>
           <a href="/product-surface" onClick={() => setMenuOpen(false)}>Product surface</a>
+          <a href="/plugins" onClick={() => setMenuOpen(false)}>Plugins</a>
           <a href="https://docs.dbwarden.org" target="_blank" rel="noreferrer">Docs <span className="arrow">↗</span></a>
         </nav>
         <div className="top-actions">
