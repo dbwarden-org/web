@@ -285,6 +285,7 @@ h2 { font-size: clamp(45px, 6vw, 78px); font-weight: 700; }
 .page-why-dbwarden .section-reality .page-aside strong { color: var(--inverse-ink); }
 
 .page-how-it-works .page-hero { padding-bottom: 70px; }
+.page-how-it-works .page-hero { padding-top: 34px; }
 .page-how-it-works .page-hero-grid { grid-template-columns: .8fr 1fr; }
 .page-how-it-works .article-section { display: grid; grid-template-columns: 180px minmax(0, 1fr); column-gap: 50px; position: relative; }
 .page-how-it-works .article-section::before { content: ''; position: absolute; top: 0; bottom: 0; left: 74px; border-left: 1px solid var(--line); z-index: -1; }
