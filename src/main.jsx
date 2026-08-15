@@ -95,13 +95,16 @@ function App() {
                 <a className="button button-quiet" href="https://github.com/dbwarden-org/dbwarden" target="_blank" rel="noreferrer">View source <span>↗</span></a>
               </div>
             </div>
-            <div className="hero-status" aria-label="dbwarden product status">
-              <div className="status-header"><span>system profile</span><span className="status-live">● live</span></div>
-              <div className="status-title">declarative <strong>→</strong> executable</div>
-              <div className="status-line"><span>models</span><span className="line-fill" /><b>01</b></div>
-              <div className="status-line"><span>migration sql</span><span className="line-fill" /><b>02</b></div>
-              <div className="status-line"><span>live schema</span><span className="line-fill" /><b>03</b></div>
-              <div className="status-footer"><span>convergence check</span><b>passed</b></div>
+            <div className="hero-preview" aria-label="Generated migration preview">
+              <div className="preview-header"><span>migration preview</span><span className="preview-state">ready</span></div>
+              <div className="preview-file"><strong>0001_initial.sql</strong><span>generated from model delta</span></div>
+              <div className="preview-code">
+                <div><i>+</i><code>CREATE TABLE accounts (</code></div>
+                <div><i>+</i><code>  id UUID PRIMARY KEY,</code></div>
+                <div><i>+</i><code>  email VARCHAR NOT NULL</code></div>
+                <div><i>+</i><code>);</code></div>
+              </div>
+              <div className="preview-footer"><span>upgrade + rollback</span><b>reviewable</b></div>
             </div>
           </div>
           <div className="hero-foot"><span>SQLAlchemy 2.0+</span><span>Python 3.12+</span><span>MIT licensed</span><span>open source</span></div>
