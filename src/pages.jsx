@@ -37,7 +37,10 @@ function Aside({ title, children }) {
 }
 
 function CodeBlock({ children }) {
-  return <pre className="article-code"><code>{children}</code></pre>
+  const content = typeof children === 'string' && children.includes('database_config')
+    ? 'from dbwarden import DbwardenDatabase\n\nclass Primary(DbwardenDatabase):\n    database_name = "primary"\n    default = True\n    database_type = "postgresql"\n    database_url_sync = "postgresql://user:password@localhost:5432/primary"\n    model_paths = ["app"]'
+    : children
+  return <pre className="article-code"><code>{content}</code></pre>
 }
 
 function SurfaceCard({ title, body }) {

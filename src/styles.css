@@ -283,7 +283,7 @@ h2 { font-size: clamp(45px, 6vw, 78px); font-weight: 700; }
 .comparison-verdict strong { display: block; max-width: 800px; margin: 22px 0 14px; font-size: clamp(26px, 3.5vw, 46px); line-height: 1; letter-spacing: -.06em; }
 .comparison-verdict p { max-width: 690px; color: var(--muted); font-size: 13px; line-height: 1.7; }
 .comparison-block { padding: 75px 0 85px; border-top: 1px solid var(--line); }
-.comparison-columns { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 30px; }
+.comparison-columns { display: grid; grid-template-columns: 1fr; gap: 10px; max-width: 930px; margin: 30px auto 0; }
 .comparison-columns > div { min-height: 265px; padding: 25px 27px; border: 1px solid var(--line); background: var(--surface); }
 .comparison-columns > div:first-child { border-top: 3px solid var(--blue); }
 .comparison-columns > div:last-child { border-top: 3px solid var(--gold); }
@@ -292,35 +292,35 @@ h2 { font-size: clamp(45px, 6vw, 78px); font-weight: 700; }
 .comparison-columns h2 { margin-top: 40px; font-size: 31px; }
 .comparison-columns p { max-width: 480px; margin-top: 15px; color: var(--muted); font-size: 13px; line-height: 1.7; }
 .comparison-table-section { padding: 65px 0 85px; border-top: 1px solid var(--line); }
-.comparison-table-section table { width: 100%; margin-top: 30px; border-collapse: collapse; font-size: 12px; }
+.comparison-table-section table { width: 100%; max-width: 930px; margin: 30px auto 0; border-collapse: collapse; font-size: 12px; }
 .comparison-table-section th, .comparison-table-section td { padding: 16px 14px; border-bottom: 1px solid var(--line); text-align: left; }
 .comparison-table-section thead th { color: var(--blue); font-size: 10px; letter-spacing: .1em; text-transform: uppercase; }
 .comparison-table-section tbody th { font-weight: 700; }
 .comparison-table-section td { color: var(--muted); }
-.comparison-honesty { margin: 0 0 40px; padding: 30px 35px; background: var(--flow-bg); color: var(--inverse-ink); }
+.comparison-honesty { max-width: 930px; margin: 0 auto 40px; padding: 30px 35px; background: var(--flow-bg); color: var(--inverse-ink); }
 .comparison-honesty strong { display: block; margin-bottom: 12px; color: var(--gold); font-size: 18px; }
 .comparison-honesty p { max-width: 700px; color: var(--inverse-muted); font-size: 13px; line-height: 1.7; }
 .comparison-honesty .text-link { color: var(--gold); }
-.essay-body { max-width: 930px; margin-left: auto; }
+.essay-body { width: min(930px, 100%); margin: 0 auto; }
 .essay-body > p { max-width: 760px; color: var(--muted); font-size: 15px; line-height: 1.85; }
 .essay-body > p + p { margin-top: 24px; }
-.comparison-prose-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 75px; }
+.comparison-prose-grid { display: grid; grid-template-columns: 1fr; gap: 30px; width: min(930px, 100%); margin: 30px auto 0; }
 .comparison-prose-grid > div { padding-top: 5px; }
 .comparison-prose-grid p { color: var(--muted); font-size: 14px; line-height: 1.8; }
 .comparison-prose-grid p + p { margin-top: 21px; }
-.comparison-code-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 30px; }
+.comparison-code-grid { display: grid; grid-template-columns: 1fr; gap: 10px; width: min(930px, 100%); margin: 30px auto 0; }
 .comparison-code-grid > div { min-width: 0; padding: 25px 27px; border: 1px solid var(--line); background: var(--surface-muted); }
 .comparison-code-grid .comparison-label { display: block; margin-bottom: 18px; }
 .comparison-code { overflow-x: auto; margin: 0; padding: 20px; border: 1px solid var(--line); background: var(--surface); color: var(--ink); font: 12px/1.75 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; white-space: pre; }
 .essay-body > .comparison-code { max-width: 760px; margin-top: 30px; }
 .comparison-example-section { padding: 75px 0 85px; border-top: 1px solid var(--line); }
-.comparison-example-intro { max-width: 760px; margin: 30px 0 35px auto; }
+.comparison-example-intro { max-width: 760px; margin: 30px auto 35px; }
 .comparison-example-intro h2 { max-width: 650px; font-size: clamp(28px, 4vw, 48px); line-height: 1; letter-spacing: -.06em; }
 .comparison-example-intro p { max-width: 650px; margin-top: 18px; color: var(--muted); font-size: 15px; line-height: 1.8; }
-.comparison-code-stack { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; max-width: 930px; margin-left: auto; }
+.comparison-code-stack { display: grid; grid-template-columns: 1fr; gap: 10px; width: min(930px, 100%); margin: 0 auto; }
 .comparison-code-stack > div { min-width: 0; padding: 25px 27px; border: 1px solid var(--line); background: var(--surface-muted); }
 .comparison-code-stack .comparison-label { display: block; margin-bottom: 18px; }
-.comparison-fit-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.comparison-fit-grid { display: grid; grid-template-columns: 1fr; gap: 10px; width: min(930px, 100%); margin: 30px auto 0; }
 .comparison-fit-grid > div { padding: 25px 27px; border-top: 3px solid var(--blue); background: var(--surface-muted); }
 .comparison-fit-grid > div:last-child { border-top-color: var(--gold); }
 .comparison-fit-grid strong { display: block; margin-bottom: 14px; font-size: 16px; letter-spacing: -.04em; }
