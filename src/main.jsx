@@ -1,4 +1,4 @@
-import { StrictMode, useEffect, useState } from 'react'
+import { StrictMode, useDeferredValue, useEffect, useState } from 'react'
 import { createRoot } from 'react-dom/client'
 import './styles.css'
 
@@ -49,6 +49,17 @@ const plugins = [
   { name: 'Sandbox validation', detail: 'Exercise generated SQL before it reaches a production connection.' },
 ]
 
+const pluginDirectory = [
+  { name: 'dbwarden-fastapi', tier: 'official', description: 'FastAPI lifecycle helpers, session dependencies, and health routes.', repository: 'https://github.com/dbwarden-org/dbwarden-fastapi' },
+  { name: 'dbwarden-pgsql-types', tier: 'official', description: 'PostgreSQL enum, domain, and custom type support.', repository: 'https://github.com/dbwarden-org/dbwarden-pgsql-types' },
+  { name: 'dbwarden-pgsql-rbac', tier: 'official', description: 'Roles, grants, and privilege metadata for PostgreSQL.', repository: 'https://github.com/dbwarden-org/dbwarden-pgsql-rbac' },
+  { name: 'dbwarden-pgsql-extensions', tier: 'official', description: 'PostgreSQL extensions and database object handlers.', repository: 'https://github.com/dbwarden-org/dbwarden-pgsql-extensions' },
+  { name: 'dbwarden-ch-rbac', tier: 'official', description: 'ClickHouse access control and RBAC metadata.', repository: 'https://github.com/dbwarden-org/dbwarden-ch-rbac' },
+  { name: 'dbwarden-seeds', tier: 'official', description: 'Deterministic seed data with migration-aware rollback.', repository: 'https://github.com/dbwarden-org/dbwarden-seeds' },
+  { name: 'dbwarden-sandbox', tier: 'official', description: 'Validate generated SQL in an isolated sandbox before deploy.', repository: 'https://github.com/dbwarden-org/dbwarden-sandbox' },
+  { name: 'dbwarden-acme', tier: 'community', description: 'Example community plugin discovered through the dbwarden plugin contract.', repository: null },
+]
+
 function App() {
   const [dark, setDark] = useState(() => localStorage.getItem('dbwarden-theme') === 'dark')
   const [menuOpen, setMenuOpen] = useState(false)
@@ -60,6 +71,10 @@ function App() {
   }, [dark])
 
   const toggleTheme = () => setDark((value) => !value)
+
+  if (window.location.pathname.replace(/\/$/, '') === '/plugins') {
+    return <PluginDirectory dark={dark} toggleTheme={toggleTheme} />
+  }
 
   return (
     <div className="site-shell">
@@ -95,16 +110,16 @@ function App() {
                 <a className="button button-quiet" href="https://github.com/dbwarden-org/dbwarden" target="_blank" rel="noreferrer">View source <span>↗</span></a>
               </div>
             </div>
-            <div className="hero-preview" aria-label="Generated migration preview">
-              <div className="preview-header"><span>migration preview</span><span className="preview-state">ready</span></div>
-              <div className="preview-file"><strong>0001_initial.sql</strong><span>generated from model delta</span></div>
-              <div className="preview-code">
-                <div><i>+</i><code>CREATE TABLE accounts (</code></div>
-                <div><i>+</i><code>  id UUID PRIMARY KEY,</code></div>
-                <div><i>+</i><code>  email VARCHAR NOT NULL</code></div>
-                <div><i>+</i><code>);</code></div>
+            <div className="hero-proof" aria-label="dbwarden declarative and deterministic workflow">
+              <div className="proof-header"><span>the contract</span><span>deterministic by construction</span></div>
+              <div className="proof-track">
+                <div className="proof-node"><span>01 / declare</span><strong>SQLAlchemy models</strong><code>Account.email: Email</code></div>
+                <span className="proof-arrow">→</span>
+                <div className="proof-node proof-node-accent"><span>02 / derive</span><strong>schema delta</strong><code>same input, same SQL</code></div>
+                <span className="proof-arrow">→</span>
+                <div className="proof-node"><span>03 / verify</span><strong>reviewable migration</strong><code>upgrade + rollback</code></div>
               </div>
-              <div className="preview-footer"><span>upgrade + rollback</span><b>reviewable</b></div>
+              <div className="proof-footer"><span>one declarative source</span><b>no second schema to maintain</b></div>
             </div>
           </div>
           <div className="hero-foot"><span>SQLAlchemy 2.0+</span><span>Python 3.12+</span><span>MIT licensed</span><span>open source</span></div>
@@ -120,7 +135,7 @@ function App() {
         </section>
 
         <section className="section content-wrap why-section" id="why">
-          <div className="section-label">/ 01 <span>the premise</span></div>
+           <div className="section-label">/ 01 <span>the premise</span><a className="section-doc" href="https://docs.dbwarden.org/features/" target="_blank" rel="noreferrer">Read the guide ↗</a></div>
           <div className="split-heading"><h2>Stop maintaining<br /><em>two schemas.</em></h2><p>Most migration workflows make you maintain application models and migration scripts as parallel truths. When they drift, production finds out first.<br /><br />dbwarden keeps the model as the contract and makes the migration artifact derived, reviewable, and disposable.</p></div>
           <div className="principle-grid">
             <div className="principle"><span>01</span><h3>Declare the state</h3><p>Use SQLAlchemy models and typed metadata to describe what the database should be.</p></div>
@@ -131,7 +146,7 @@ function App() {
 
         <section className="section flow-section" id="flow">
           <div className="content-wrap">
-            <div className="section-label">/ 02 <span>the operating loop</span></div>
+             <div className="section-label">/ 02 <span>the operating loop</span><a className="section-doc" href="https://docs.dbwarden.org/getting-started/workflows/" target="_blank" rel="noreferrer">Read the workflow ↗</a></div>
             <div className="split-heading"><h2>One source.<br /><em>Every artifact.</em></h2><p>From model declaration to production deploy, each step leaves a concrete artifact that can be reviewed, tested, and reproduced.</p></div>
             <div className="flow-map">
               <FlowStep number="01" title="models" detail="SQLAlchemy + class Meta" active />
@@ -143,30 +158,30 @@ function App() {
         </section>
 
         <section className="section content-wrap surface-section" id="surface">
-          <div className="section-label">/ 03 <span>the product surface</span></div>
+           <div className="section-label">/ 03 <span>the product surface</span><a className="section-doc" href="https://docs.dbwarden.org/features/" target="_blank" rel="noreferrer">Read the guide ↗</a></div>
           <div className="split-heading"><h2>Everything around<br />the <em>migration.</em></h2><p>dbwarden is small at the command line and broad where production risk lives: generation, safety, inspection, operations, and extensibility.</p></div>
           <div className="feature-grid">{features.map((feature) => <article className="feature-card" key={feature.id}><div className="feature-top"><span>{feature.id}</span><span className="feature-tag">{feature.tag}</span></div><h3>{feature.title}</h3><p>{feature.body}</p><span className="card-arrow">↗</span></article>)}</div>
         </section>
 
         <section className="section database-section">
           <div className="content-wrap">
-            <div className="section-label">/ 04 <span>database coverage</span></div>
+             <div className="section-label">/ 04 <span>database coverage</span><a className="section-doc" href="https://docs.dbwarden.org/databases/" target="_blank" rel="noreferrer">See databases ↗</a></div>
             <div className="split-heading"><h2>Different engines.<br /><em>Same contract.</em></h2><p>Use one declarative workflow across relational databases and analytical storage. Backend-specific metadata stays available when it matters.</p></div>
             <div className="backend-list">{backends.map((backend) => <div className="backend-row" key={backend.name}><span className="backend-code">{backend.code}</span><strong>{backend.name}</strong><span>{backend.note}</span><span className="row-arrow">↗</span></div>)}</div>
           </div>
         </section>
 
         <section className="section content-wrap plugin-section">
-          <div className="section-label">/ 05 <span>extend the contract</span></div>
-           <div className="plugin-layout"><div><h2>Core stays<br /><em>composable.</em></h2><p>Plugins add typed metadata, database objects, seeds, RBAC, FastAPI lifecycle helpers, and sandbox validation without turning the migration surface into a black box.</p><a className="text-link" href="https://docs.dbwarden.org/plugins/" target="_blank" rel="noreferrer">Explore plugins <span>↗</span></a></div><div className="plugin-list">{plugins.map((plugin, index) => <div className={activePlugin === index ? 'plugin-item is-active' : 'plugin-item'} key={plugin.name}><button type="button" aria-expanded={activePlugin === index} onClick={() => setActivePlugin(index)}><span>0{index + 1}</span><strong>{plugin.name}</strong><span className="plugin-mark">{activePlugin === index ? '−' : '+'}</span></button>{activePlugin === index && <p>{plugin.detail}</p>}</div>)}</div></div>
+           <div className="section-label">/ 05 <span>extend the contract</span><a className="section-doc" href="/plugins">Browse all plugins ↗</a></div>
+            <div className="plugin-layout"><div><h2>Core stays<br /><em>composable.</em></h2><p>Plugins add typed metadata, database objects, seeds, RBAC, FastAPI lifecycle helpers, and sandbox validation without turning the migration surface into a black box.</p><a className="text-link" href="/plugins">Explore plugins <span>↗</span></a></div><div className="plugin-list">{plugins.map((plugin, index) => <div className={activePlugin === index ? 'plugin-item is-active' : 'plugin-item'} key={plugin.name}><button type="button" aria-expanded={activePlugin === index} onClick={() => setActivePlugin(index)}><span>0{index + 1}</span><strong>{plugin.name}</strong><span className="plugin-mark">{activePlugin === index ? '−' : '+'}</span></button>{activePlugin === index && <p>{plugin.detail}</p>}</div>)}</div></div>
         </section>
 
         <section className="section correctness-section">
-          <div className="content-wrap correctness-layout"><div><div className="section-label">/ 06 <span>correctness by design</span></div><h2>Know what<br /><em>will happen.</em></h2><p>Snapshots, safety classifiers, impact analysis, offline mode, and rollback contracts make migration behavior visible before deployment.</p><a className="button button-light" href="https://docs.dbwarden.org/correctness/convergence-gate/" target="_blank" rel="noreferrer">Read the correctness guide <span>↗</span></a></div><div className="checklist"><Check text="schema snapshots" /><Check text="deterministic diffs" /><Check text="pre-deploy impact" /><Check text="rollback contract" /><Check text="offline generation" /></div></div>
+          <div className="content-wrap correctness-layout"><div><div className="section-label">/ 06 <span>correctness by design</span><a className="section-doc" href="https://docs.dbwarden.org/correctness/" target="_blank" rel="noreferrer">Read correctness docs ↗</a></div><h2>Know what<br /><em>will happen.</em></h2><p>Snapshots, safety classifiers, impact analysis, offline mode, and rollback contracts make migration behavior visible before deployment.</p><a className="button button-light" href="https://docs.dbwarden.org/correctness/convergence-gate/" target="_blank" rel="noreferrer">Read the correctness guide <span>↗</span></a></div><div className="checklist"><Check text="schema snapshots" /><Check text="deterministic diffs" /><Check text="pre-deploy impact" /><Check text="rollback contract" /><Check text="offline generation" /></div></div>
         </section>
 
         <section className="section content-wrap cli-section">
-          <div className="section-label">/ 07 <span>the interface</span></div>
+          <div className="section-label">/ 07 <span>the interface</span><a className="section-doc" href="https://docs.dbwarden.org/cli-reference/" target="_blank" rel="noreferrer">See CLI reference ↗</a></div>
           <div className="cli-layout">
             <div><h2>Small commands.<br /><em>Serious control.</em></h2><p>Keep the daily workflow legible. The generated artifacts carry the complexity, not a hidden runtime.</p></div>
             <div className="terminal">
@@ -189,6 +204,33 @@ function App() {
       <footer className="footer content-wrap"><div className="brand footer-brand"><img src={logo} alt="" /><span>dbwarden</span></div><span>Declarative database migration infrastructure.</span><div className="footer-links"><a href="https://github.com/dbwarden-org/dbwarden" target="_blank" rel="noreferrer">GitHub ↗</a><a href="https://docs.dbwarden.org" target="_blank" rel="noreferrer">Docs ↗</a></div></footer>
     </div>
   )
+}
+
+function PluginDirectory({ dark, toggleTheme }) {
+  const [filter, setFilter] = useState('all')
+  const [search, setSearch] = useState('')
+  const deferredSearch = useDeferredValue(search)
+  const visiblePlugins = pluginDirectory.filter((plugin) => {
+    const matchesTier = filter === 'all' || plugin.tier === filter
+    const haystack = `${plugin.name} ${plugin.description}`.toLowerCase()
+    return matchesTier && haystack.includes(deferredSearch.toLowerCase())
+  })
+
+  return <div className="site-shell plugin-directory-page">
+    <header className="topbar">
+      <a className="brand" href="/" aria-label="dbwarden home"><img src={logo} alt="" /><span>dbwarden</span></a>
+      <nav className="directory-nav" aria-label="Plugin directory navigation"><a href="/">Home</a><a href="https://docs.dbwarden.org/plugins/" target="_blank" rel="noreferrer">Plugin docs <span className="arrow">↗</span></a></nav>
+      <div className="top-actions"><button className="theme-button" type="button" onClick={toggleTheme} aria-label="Toggle color theme"><span className="theme-icon" aria-hidden="true">{dark ? '☀' : '☾'}</span></button><a className="github-link" href="https://github.com/dbwarden-org" target="_blank" rel="noreferrer">GitHub <span className="arrow">↗</span></a></div>
+    </header>
+    <main className="directory-main content-wrap">
+      <div className="directory-kicker">/ plugin directory</div>
+      <div className="directory-intro"><div><h1>Extend the<br /><em>contract.</em></h1></div><p>Official and community plugins add database objects, lifecycle hooks, seeds, and validation without changing the declarative core.</p></div>
+      <div className="directory-toolbar"><div className="filter-group" aria-label="Filter plugins">{['all', 'official', 'community'].map((option) => <button type="button" className={filter === option ? 'filter-button is-active' : 'filter-button'} key={option} onClick={() => setFilter(option)}>{option}</button>)}</div><label className="plugin-search"><span>⌕</span><input type="search" value={search} onChange={(event) => setSearch(event.target.value)} placeholder="Search plugins" aria-label="Search plugins" /></label></div>
+      <div className="directory-count">{visiblePlugins.length} {visiblePlugins.length === 1 ? 'plugin' : 'plugins'} found</div>
+      <div className="directory-grid">{visiblePlugins.map((plugin, index) => <article className="directory-card" key={plugin.name}><div className="directory-card-top"><span>0{index + 1}</span><span className={`tier-badge ${plugin.tier}`}>{plugin.tier}</span></div><h2>{plugin.name}</h2><p>{plugin.description}</p>{plugin.repository ? <a className="text-link" href={plugin.repository} target="_blank" rel="noreferrer">View repository <span>↗</span></a> : <span className="directory-note">Discover through the plugin contract</span>}</article>)}</div>
+    </main>
+    <footer className="footer content-wrap"><div className="brand footer-brand"><img src={logo} alt="" /><span>dbwarden</span></div><span>Declarative database migration infrastructure.</span><div className="footer-links"><a href="/">Home</a><a href="https://docs.dbwarden.org/plugins/" target="_blank" rel="noreferrer">Docs ↗</a></div></footer>
+  </div>
 }
 
 function FlowStep({ number, title, detail, active }) {
