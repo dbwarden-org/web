@@ -386,6 +386,7 @@ h2 { font-size: clamp(45px, 6vw, 78px); font-weight: 700; }
 .page-product-surface .section-plugins .section-doc { color: var(--gold); }
 .page-compare .page-hero { padding-top: 34px; }
 .content-page[class*="page-compare-/-atlas"] .page-hero { padding-top: 86px; }
+.content-page[class*="page-compare-/-django-migrations"] .page-hero { padding-top: 86px; }
 .compare-card.is-upcoming { cursor: default; opacity: .7; }
 .compare-card.is-upcoming:hover { border-color: var(--line); transform: none; }
 .page-product-surface .surface-section { border-top: 0; padding-top: 90px; }
