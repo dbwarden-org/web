@@ -330,14 +330,14 @@ h2 { font-size: clamp(45px, 6vw, 78px); font-weight: 700; }
 .safety-card button b { color: var(--blue); font-size: 23px; font-weight: 400; text-align: right; }
 .safety-card.is-active button strong { color: var(--blue); }
 .safety-detail { display: grid; grid-template-columns: 45px 1fr 30px; gap: 14px; padding: 0 30px 24px 59px; }
-.safety-detail p { grid-column: 2; color: var(--muted); font-size: 13px; line-height: 1.7; }
+.safety-detail p { grid-column: 2; color: var(--ink); font-size: 13px; line-height: 1.7; }
 .safety-detail span { grid-column: 2; color: var(--gold); font-size: 10px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; }
 .operations-surface { display: grid; grid-template-columns: .7fr 1.3fr; gap: 75px; align-items: start; padding: 30px 0 10px; }
 .safety-accordion { display: flex; gap: 10px; border-top: 0; align-items: stretch; }
 .safety-card { flex: 1; min-width: 0; border: 1px solid var(--line); background: var(--surface); transition: flex .35s ease, border-color .25s ease, transform .25s ease; }
 .safety-card.is-active { flex: 2.15; border-color: var(--gold); transform: translateY(-3px); }
-.safety-card, .safety-card button, .safety-detail { overflow: hidden; }
-.safety-card button { min-height: 150px; height: 100%; grid-template-columns: 30px 1fr 24px; align-items: start; padding: 20px; }
+.safety-card { overflow: visible; }
+.safety-card button { min-height: 150px; height: auto; grid-template-columns: 30px 1fr 24px; align-items: start; padding: 20px; }
 .safety-card button strong { font-size: 18px; }
 .safety-detail { display: block; padding: 0 20px 22px 70px; }
 .safety-detail p { margin-bottom: 16px; }
