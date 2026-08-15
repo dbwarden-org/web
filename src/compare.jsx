@@ -1,9 +1,9 @@
 import { PageFrame } from './pages.jsx'
 
 const comparisons = [
-  { name: 'Alembic', slug: '/compare/alembic', description: 'The established imperative migration tool for SQLAlchemy.', status: 'Detailed comparison available', href: '/compare/alembic' },
-  { name: 'Atlas', description: 'A language-agnostic declarative schema platform with HCL, SQL, and ORM inputs.', status: 'Detailed comparison available', href: '/compare/atlas' },
-  { name: 'Django migrations', description: 'The model-driven workflow that inspired dbwarden for non-Django SQLAlchemy stacks.', status: 'Detailed comparison available', href: '/compare/django-migrations' },
+  { name: 'Alembic', slug: '/compare/alembic', description: 'The established imperative migration tool for SQLAlchemy.', status: 'Read comparison', href: '/compare/alembic' },
+  { name: 'Atlas', description: 'A language-agnostic declarative schema platform with HCL, SQL, and ORM inputs.', status: 'Read comparison', href: '/compare/atlas' },
+  { name: 'Django migrations', description: 'The model-driven workflow that inspired dbwarden for non-Django SQLAlchemy stacks.', status: 'Read comparison', href: '/compare/django-migrations' },
 ]
 
 export function ComparePage({ dark, toggleTheme }) {
