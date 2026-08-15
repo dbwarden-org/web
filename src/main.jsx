@@ -232,7 +232,7 @@ function PluginDirectory({ dark, toggleTheme }) {
     <PageHeader dark={dark} toggleTheme={toggleTheme} />
     <main className="directory-main content-wrap">
       <div className="directory-kicker">/ plugin directory</div>
-       <div className="directory-intro"><div><h1>Extend the<br /><em>contract.</em></h1></div><p>Official and community plugins add database objects, lifecycle hooks, seeds, and validation without changing the declarative core.</p></div>
+       <div className="directory-intro"><div><h1>Extend the<br /><em>contract.</em></h1></div><p>Official and community plugins add database objects, lifecycle hooks, seeds, and validation without changing the declarative core. dbwarden is fully open source and MIT licensed.</p></div>
        <div className="directory-template-note">All plugins follow the <a href="https://github.com/dbwarden-org/dbwarden-plugin-template" target="_blank" rel="noreferrer">dbwarden plugin template <span>↗</span></a>.</div>
        <div className="directory-create-note">Want to create plugins? <a href="https://docs.dbwarden.org/plugins/developing/overview/" target="_blank" rel="noreferrer">See the docs <span>↗</span></a>.</div>
       <div className="directory-toolbar"><div className="filter-group" aria-label="Filter plugins">{['all', 'official', 'community'].map((option) => <button type="button" className={filter === option ? 'filter-button is-active' : 'filter-button'} key={option} onClick={() => setFilter(option)}>{option}</button>)}</div><label className="plugin-search"><span>⌕</span><input type="search" value={search} onChange={(event) => setSearch(event.target.value)} placeholder="Search plugins" aria-label="Search plugins" /></label></div>
