@@ -254,6 +254,7 @@ h2 { font-size: clamp(45px, 6vw, 78px); font-weight: 700; }
 
 /* Each narrative page has its own reading rhythm while sharing the system. */
 .page-why-dbwarden .page-hero { border-bottom: 4px solid var(--blue); }
+.page-why-dbwarden .article-section:first-of-type { padding-top: 100px; }
 .page-why-dbwarden .page-hero-grid { grid-template-columns: 1.2fr .5fr; }
 .page-why-dbwarden .article-section:nth-of-type(odd) { background: var(--surface-muted); margin-left: calc((100% - 100vw) / 2); margin-right: calc((100% - 100vw) / 2); padding-left: max(36px, calc((100vw - 1180px) / 2)); padding-right: max(36px, calc((100vw - 1180px) / 2)); }
 .page-why-dbwarden .article-section:nth-of-type(odd) > .article-body { max-width: 760px; }
