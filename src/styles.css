@@ -278,6 +278,11 @@ h2 { font-size: clamp(45px, 6vw, 78px); font-weight: 700; }
 .compare-guidance-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 35px; }
 .compare-guidance-grid > div { padding: 25px 27px; border: 1px solid var(--line); background: var(--surface-muted); }
 .compare-guidance-grid strong { display: block; margin-bottom: 15px; font-size: 17px; letter-spacing: -.04em; }
+.compare-core-surface { padding: 75px 0 85px; border-top: 1px solid var(--line); }
+.comparison-command-grid { display: grid; grid-template-columns: 1fr; gap: 10px; width: min(930px, 100%); margin: 0 auto 30px; }
+.comparison-command-grid > div { padding: 22px 27px; border: 1px solid var(--line); background: var(--surface-muted); }
+.comparison-command-grid p { margin-top: 12px; color: var(--muted); font-size: 13px; line-height: 1.75; }
+.compare-core-surface > .comparison-code { width: min(930px, 100%); margin: 0 auto; }
 .comparison-verdict { padding: 35px 42px; border: 1px solid var(--gold); background: var(--surface-muted); }
 .comparison-verdict > span { color: var(--gold); font-size: 10px; font-weight: 800; letter-spacing: .13em; text-transform: uppercase; }
 .comparison-verdict strong { display: block; max-width: 800px; margin: 22px 0 14px; font-size: clamp(26px, 3.5vw, 46px); line-height: 1; letter-spacing: -.06em; }
