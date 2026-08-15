@@ -1,9 +1,9 @@
 import { PageFrame } from './pages.jsx'
 
 const comparisons = [
-  { name: 'Alembic', slug: '/compare/alembic', description: 'The established imperative migration tool for SQLAlchemy.', status: 'Read comparison', href: '/compare/alembic' },
-  { name: 'Atlas', description: 'A language-agnostic declarative schema platform with HCL, SQL, and ORM inputs.', status: 'Read comparison', href: '/compare/atlas' },
-  { name: 'Django migrations', description: 'The model-driven workflow that inspired dbwarden for non-Django SQLAlchemy stacks.', status: 'Read comparison', href: '/compare/django-migrations' },
+  { name: 'Alembic', slug: '/compare/alembic', description: 'The established imperative migration tool for SQLAlchemy.', href: '/compare/alembic' },
+  { name: 'Atlas', description: 'A language-agnostic declarative schema platform with HCL, SQL, and ORM inputs.', href: '/compare/atlas' },
+  { name: 'Django migrations', description: 'The model-driven workflow that inspired dbwarden for non-Django SQLAlchemy stacks.', href: '/compare/django-migrations' },
 ]
 
 export function ComparePage({ dark, toggleTheme }) {
@@ -66,5 +66,5 @@ function ComparisonBlock({ number, title, children }) {
 
 function ComparisonCard({ comparison, index }) {
   const Tag = comparison.href ? 'a' : 'article'
-  return <Tag className={comparison.href ? 'compare-card' : 'compare-card is-upcoming'} {...(comparison.href ? { href: comparison.href } : {})}><div><span>0{index + 1}</span><em>{comparison.status}</em></div><h2>dbwarden<br /><strong>vs {comparison.name}</strong></h2><p>{comparison.description}</p>{comparison.href && <span className="compare-arrow">↗</span>}</Tag>
+  return <Tag className={comparison.href ? 'compare-card' : 'compare-card is-upcoming'} {...(comparison.href ? { href: comparison.href } : {})}><div><span>0{index + 1}</span><em /></div><h2>dbwarden<br /><strong>vs {comparison.name}</strong></h2><p>{comparison.description}</p>{comparison.href && <span className="compare-arrow">↗</span>}</Tag>
 }
