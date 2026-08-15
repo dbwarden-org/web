@@ -333,7 +333,7 @@ h2 { font-size: clamp(45px, 6vw, 78px); font-weight: 700; }
 .safety-detail p { grid-column: 2; color: var(--ink); font-size: 13px; line-height: 1.7; }
 .safety-detail span { display: block; grid-column: 2; color: var(--gold); font-size: 10px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; }
 .operations-surface { display: grid; grid-template-columns: .7fr 1.3fr; gap: 75px; align-items: start; padding: 30px 0 10px; }
-.safety-accordion { display: flex; gap: 10px; border-top: 0; align-items: stretch; }
+.safety-accordion { display: flex; gap: 10px; height: 300px; border-top: 0; align-items: stretch; }
 .safety-card { flex: 1; min-width: 0; border: 1px solid var(--line); background: var(--surface); transition: flex .35s ease, border-color .25s ease, transform .25s ease; }
 .safety-card { cursor: pointer; }
 .safety-card.is-active { flex: 2.15; border-color: var(--gold); transform: translateY(-3px); }
@@ -344,7 +344,8 @@ h2 { font-size: clamp(45px, 6vw, 78px); font-weight: 700; }
 .safety-icon { display: grid; place-items: center; width: 48px; height: 48px; color: var(--gold); }
 .safety-icon svg { width: 48px; height: 48px; fill: none; stroke: currentColor; stroke-linecap: round; stroke-linejoin: round; stroke-width: 1.5; }
 .safety-closed-icon { display: grid; place-items: center; min-height: 72px; padding-top: 8px; padding-bottom: 18px; }
-.safety-detail { display: block; padding: 0 14px 14px 50px; }
+.safety-detail { display: block; max-height: 0; padding: 0 14px 0 50px; overflow: hidden; opacity: 0; transition: max-height .35s ease, opacity .25s ease, padding .35s ease; }
+.safety-detail.is-visible { max-height: 190px; padding-bottom: 14px; opacity: 1; }
 .safety-detail p { margin-bottom: 16px; }
 .safety-detail a { display: inline-block; margin-top: 14px; color: var(--blue); font-size: 10px; font-weight: 800; }
 .surface-state-and-operations .article-body, .surface-backends .article-body { max-width: 100%; }
@@ -483,7 +484,7 @@ h2 { font-size: clamp(45px, 6vw, 78px); font-weight: 700; }
   .page-product-surface .surface-safety, .page-product-surface .surface-backends, .page-product-surface .surface-plugin-callout { margin-left: -19px; margin-right: -19px; padding-left: 19px; padding-right: 19px; }
   .operations-surface, .backend-surface, .surface-plugin-callout > div:last-child { grid-template-columns: 1fr; gap: 35px; }
   .backend-orbit { max-width: 190px; }
-  .safety-accordion { flex-direction: column; }
+  .safety-accordion { height: 540px; flex-direction: column; }
   .safety-card.is-active { flex: none; }
   .safety-card button { min-height: 80px; height: auto; }
   .safety-detail { display: block; padding-left: 59px; }
