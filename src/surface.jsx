@@ -39,5 +39,5 @@ function SurfaceSection({ number, label, title, doc, children }) {
 function SafetyIcon({ type }) {
   if (type === 'shield') return <span className="safety-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 3 19 6v5c0 4.7-2.9 8.1-7 10-4.1-1.9-7-5.3-7-10V6l7-3Z" /></svg></span>
   if (type === 'search') return <span className="safety-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="5.5" /><path d="m15 15 5 5" /></svg></span>
-  return <span className="safety-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M17.5 7.5A7 7 0 1 0 19 14" /><path d="m17 4 1 4-4-1M6.5 16.5A7 7 0 0 0 5 10" /><path d="m7 20-1-4 4 1" /></svg></span>
+  return <span className="safety-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M20 11a8 8 0 0 0-14-5L4 8" /><path d="M4 4v4h4" /><path d="M4 13a8 8 0 0 0 14 5l2-2" /><path d="M20 20v-4h-4" /></svg></span>
 }
