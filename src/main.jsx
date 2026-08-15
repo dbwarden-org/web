@@ -5,6 +5,7 @@ import { PageHeader, WhyPage } from './pages.jsx'
 import { ProductSurfacePage } from './surface.jsx'
 import { TimelinePage } from './timeline.jsx'
 import { Seo } from './seo.jsx'
+import { AlembicComparisonPage, ComparePage } from './compare.jsx'
 
 const logo = 'https://raw.githubusercontent.com/dbwarden-org/dbwarden/refs/heads/main/assets/icon.png'
 
@@ -83,6 +84,12 @@ function App() {
   if (window.location.pathname.replace(/\/$/, '') === '/plugins') {
     return <PluginDirectory dark={dark} toggleTheme={toggleTheme} />
   }
+  if (window.location.pathname.replace(/\/$/, '') === '/compare') {
+    return <ComparePage dark={dark} toggleTheme={toggleTheme} />
+  }
+  if (window.location.pathname.replace(/\/$/, '') === '/compare/alembic') {
+    return <AlembicComparisonPage dark={dark} toggleTheme={toggleTheme} />
+  }
   if (window.location.pathname.replace(/\/$/, '') === '/why') {
     return <WhyPage dark={dark} toggleTheme={toggleTheme} />
   }
@@ -105,6 +112,7 @@ function App() {
           <a href="/how-it-works" onClick={() => setMenuOpen(false)}>How it works</a>
           <a href="/product-surface" onClick={() => setMenuOpen(false)}>Product surface</a>
           <a href="/plugins" onClick={() => setMenuOpen(false)}>Plugins</a>
+          <a href="/compare" onClick={() => setMenuOpen(false)}>Compare</a>
           <a href="https://docs.dbwarden.org" target="_blank" rel="noreferrer">Docs <span className="arrow">↗</span></a>
         </nav>
         <div className="top-actions">

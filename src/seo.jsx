@@ -29,6 +29,16 @@ const pages = {
     description: 'Browse official dbwarden plugins and learn how to create compatible extensions with the dbwarden plugin template.',
     type: 'CollectionPage',
   },
+  '/compare': {
+    title: 'dbwarden comparisons | Choose the right migration tool',
+    description: 'Compare dbwarden with Alembic, Atlas, and Django migrations by philosophy, artifacts, rollback guarantees, drift detection, and ecosystem fit.',
+    type: 'CollectionPage',
+  },
+  '/compare/alembic': {
+    title: 'dbwarden vs Alembic | Declarative SQLAlchemy migrations',
+    description: 'An honest comparison of dbwarden and Alembic: source of truth, generated artifacts, rollback contracts, drift detection, offline CI, and when each tool fits best.',
+    type: 'Article',
+  },
 }
 
 function setMeta(attribute, key, content) {
