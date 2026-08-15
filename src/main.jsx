@@ -1,6 +1,7 @@
 import { StrictMode, useDeferredValue, useEffect, useState } from 'react'
 import { createRoot } from 'react-dom/client'
 import './styles.css'
+import { HowItWorksPage, ProductSurfacePage, WhyPage } from './pages.jsx'
 
 const logo = 'https://raw.githubusercontent.com/dbwarden-org/dbwarden/refs/heads/main/assets/icon.png'
 
@@ -75,6 +76,15 @@ function App() {
   if (window.location.pathname.replace(/\/$/, '') === '/plugins') {
     return <PluginDirectory dark={dark} toggleTheme={toggleTheme} />
   }
+  if (window.location.pathname.replace(/\/$/, '') === '/why') {
+    return <WhyPage dark={dark} toggleTheme={toggleTheme} />
+  }
+  if (window.location.pathname.replace(/\/$/, '') === '/how-it-works') {
+    return <HowItWorksPage dark={dark} toggleTheme={toggleTheme} />
+  }
+  if (window.location.pathname.replace(/\/$/, '') === '/product-surface') {
+    return <ProductSurfacePage dark={dark} toggleTheme={toggleTheme} />
+  }
 
   return (
     <div className="site-shell">
@@ -84,9 +94,9 @@ function App() {
           <span>dbwarden</span>
         </a>
         <nav className={menuOpen ? 'main-nav is-open' : 'main-nav'} aria-label="Primary navigation">
-          <a href="#why" onClick={() => setMenuOpen(false)}>Why dbwarden</a>
-          <a href="#flow" onClick={() => setMenuOpen(false)}>How it works</a>
-          <a href="#surface" onClick={() => setMenuOpen(false)}>Product surface</a>
+          <a href="/why" onClick={() => setMenuOpen(false)}>Why dbwarden</a>
+          <a href="/how-it-works" onClick={() => setMenuOpen(false)}>How it works</a>
+          <a href="/product-surface" onClick={() => setMenuOpen(false)}>Product surface</a>
           <a href="https://docs.dbwarden.org" target="_blank" rel="noreferrer">Docs <span className="arrow">↗</span></a>
         </nav>
         <div className="top-actions">
