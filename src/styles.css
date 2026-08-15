@@ -307,6 +307,31 @@ h2 { font-size: clamp(45px, 6vw, 78px); font-weight: 700; }
 .page-product-surface .article-section:nth-of-type(4) .section-doc { color: var(--gold); }
 .page-product-surface .article-section:nth-of-type(4) .text-link { color: var(--gold); }
 
+.timeline-shell { padding: 15px 0 80px; }
+.timeline-intro { display: grid; grid-template-columns: .7fr 1fr .8fr; gap: 45px; align-items: end; padding: 30px 0 82px; border-top: 1px solid var(--line); }
+.timeline-intro > span { color: var(--blue); font-size: 10px; font-weight: 800; letter-spacing: .13em; text-transform: uppercase; }
+.timeline-intro strong { font-size: clamp(30px, 4vw, 52px); letter-spacing: -.065em; line-height: 1; }
+.timeline-intro p { color: var(--muted); font-size: 13px; line-height: 1.7; }
+.timeline-track { position: relative; padding: 10px 0 20px; }
+.timeline-line { position: absolute; top: 0; bottom: 0; left: 88px; width: 1px; background: var(--line); }
+.timeline-progress { width: 2px; height: 100%; background: var(--gold); transform: scaleY(0); transform-origin: top center; }
+.timeline-item { display: grid; grid-template-columns: 178px minmax(0, 1fr) minmax(250px, .72fr); gap: 50px; align-items: center; min-height: 300px; padding: 52px 0; position: relative; border-top: 1px solid var(--line); }
+.timeline-item:first-of-type { border-top: 0; }
+.timeline-marker { display: grid; place-items: center; width: 50px; height: 50px; margin-left: 63px; border: 1px solid var(--line); border-radius: 50%; background: var(--bg); color: var(--blue); font-size: 11px; font-weight: 800; position: relative; z-index: 1; }
+.timeline-item:nth-child(odd) .timeline-marker { border-color: var(--gold); color: var(--gold); }
+.timeline-label { margin-bottom: 18px; color: var(--gold); font-size: 10px; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; }
+.timeline-copy h2 { max-width: 490px; font-size: clamp(32px, 4vw, 56px); }
+.timeline-copy p { max-width: 480px; margin-top: 21px; color: var(--muted); font-size: 13px; line-height: 1.75; }
+.timeline-copy a { display: inline-flex; gap: 15px; margin-top: 22px; color: var(--blue); font-size: 10px; font-weight: 800; }
+.timeline-artifact { min-height: 144px; display: flex; flex-direction: column; justify-content: space-between; padding: 20px 21px; border: 1px solid var(--line); background: var(--surface-muted); }
+.timeline-artifact span { color: var(--muted); font-size: 9px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; }
+.timeline-artifact strong { font-size: 17px; letter-spacing: -.04em; }
+.timeline-artifact code { color: var(--blue); font: 11px 'SFMono-Regular', Consolas, monospace; overflow-wrap: anywhere; }
+.timeline-end { display: grid; grid-template-columns: .7fr 1fr .8fr; gap: 45px; align-items: center; margin-top: 35px; padding: 28px 0; border-top: 2px solid var(--gold); border-bottom: 1px solid var(--line); }
+.timeline-end span { color: var(--gold); font-size: 10px; font-weight: 800; letter-spacing: .13em; text-transform: uppercase; }
+.timeline-end strong { font-size: 26px; letter-spacing: -.05em; }
+.timeline-end p { color: var(--muted); font-size: 13px; line-height: 1.7; }
+
 @media (max-width: 850px) {
   .content-wrap { width: min(100% - 38px, 600px); }
   .topbar { width: calc(100% - 38px); height: 67px; }
@@ -355,6 +380,7 @@ h2 { font-size: clamp(45px, 6vw, 78px); font-weight: 700; }
   .directory-grid { grid-template-columns: 1fr; }
   .page-main { padding-top: 109px; padding-bottom: 65px; }
   .page-hero { padding-bottom: 60px; }
+  .page-hero h1 { max-width: 100%; font-size: clamp(44px, 13vw, 72px); overflow-wrap: anywhere; }
   .page-hero-grid, .page-columns { grid-template-columns: 1fr; gap: 30px; }
   .article-section, .fit-section { padding: 58px 0 65px; }
   .article-body { margin-top: 28px; }
@@ -368,6 +394,16 @@ h2 { font-size: clamp(45px, 6vw, 78px); font-weight: 700; }
   .page-how-it-works .article-section::before { left: 3px; }
   .page-how-it-works .article-section > .section-label { position: relative; padding-left: 17px; }
   .page-how-it-works .article-section > h2, .page-how-it-works .article-section > .article-body { margin-left: 17px; }
+  .timeline-shell { padding-top: 0; }
+  .timeline-intro, .timeline-end { grid-template-columns: 1fr; gap: 18px; }
+  .timeline-intro { padding: 25px 0 50px; }
+  .timeline-line { left: 20px; }
+  .timeline-item { grid-template-columns: 52px 1fr; gap: 21px; min-height: 0; padding: 40px 0; }
+  .timeline-marker { width: 42px; height: 42px; margin-left: 0; }
+  .timeline-copy { grid-column: 2; }
+  .timeline-artifact { grid-column: 2; min-height: 120px; }
+  .timeline-copy h2 { font-size: 35px; }
+  .timeline-end { margin-top: 15px; }
 }
 
 @media (prefers-reduced-motion: reduce) {

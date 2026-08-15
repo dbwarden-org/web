@@ -1,7 +1,8 @@
 import { StrictMode, useDeferredValue, useEffect, useState } from 'react'
 import { createRoot } from 'react-dom/client'
 import './styles.css'
-import { HowItWorksPage, ProductSurfacePage, WhyPage } from './pages.jsx'
+import { ProductSurfacePage, WhyPage } from './pages.jsx'
+import { TimelinePage } from './timeline.jsx'
 
 const logo = 'https://raw.githubusercontent.com/dbwarden-org/dbwarden/refs/heads/main/assets/icon.png'
 
@@ -84,7 +85,7 @@ function App() {
     return <WhyPage dark={dark} toggleTheme={toggleTheme} />
   }
   if (window.location.pathname.replace(/\/$/, '') === '/how-it-works') {
-    return <HowItWorksPage dark={dark} toggleTheme={toggleTheme} />
+    return <TimelinePage dark={dark} toggleTheme={toggleTheme} />
   }
   if (window.location.pathname.replace(/\/$/, '') === '/product-surface') {
     return <ProductSurfacePage dark={dark} toggleTheme={toggleTheme} />
