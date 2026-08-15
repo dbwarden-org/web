@@ -304,6 +304,7 @@ h2 { font-size: clamp(45px, 6vw, 78px); font-weight: 700; }
 .essay-body { width: min(930px, 100%); margin: 0 auto; }
 .essay-body > p { max-width: 760px; color: var(--muted); font-size: 15px; line-height: 1.85; }
 .essay-body > p + p { margin-top: 24px; }
+.comparison-inline-code { padding: 2px 5px; border: 1px solid var(--line); background: var(--surface-muted); color: var(--blue); font: .9em ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
 .comparison-prose-grid { display: grid; grid-template-columns: 1fr; gap: 30px; width: min(930px, 100%); margin: 30px auto 0; }
 .comparison-prose-grid > div { padding-top: 5px; }
 .comparison-prose-grid p { color: var(--muted); font-size: 14px; line-height: 1.8; }

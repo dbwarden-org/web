@@ -1,4 +1,5 @@
 import { PageFrame } from './pages.jsx'
+import { cloneElement, isValidElement } from 'react'
 
 const comparisons = [
   { name: 'Alembic', slug: '/compare/alembic', description: 'The established imperative migration tool for SQLAlchemy.', href: '/compare/alembic' },
@@ -67,7 +68,7 @@ export function DjangoComparisonPage({ dark, toggleTheme }) {
     <EssaySection number="05" title="Coupling and scope"><p>Django migrations are integrated with Django's app registry, settings, test runner, admin, dependency graph, and third-party ecosystem. That integration is why Django projects should use them. Replacing them inside Django would be unnecessary self-inflicted complexity.</p><p>dbwarden requires SQLAlchemy and nothing else. FastAPI, Flask, Litestar, queue workers, scripts, and data pipelines can use it. The official FastAPI plugin adds session dependencies and health routes, while the core remains framework-independent.</p></EssaySection>
     <EssaySection number="06" title="Beyond the Django playbook"><p>dbwarden adds application-aware impact analysis, sandbox replay, offline state, safe type changes, and reverse engineering into SQLAlchemy models. It also treats ClickHouse as a first-class backend alongside PostgreSQL, MySQL, MariaDB, and SQLite.</p><p>Django has stronger integrated data migrations, app-scoped dependency graphs, and a mature test database experience. Those are real advantages. dbwarden is not trying to be Django outside Django; it is trying to make SQLAlchemy feel native in its own ecosystem.</p></EssaySection>
     <EssaySection number="07" title="Where each fits best"><div className="comparison-fit-grid"><div><strong>Use Django migrations when</strong><ul><li>The application is a Django project.</li><li>RunPython and historical models are central.</li><li>App-scoped migration dependencies matter.</li></ul></div><div><strong>Use dbwarden when</strong><ul><li>The application uses SQLAlchemy outside Django.</li><li>Final SQL and rollback must be visible together.</li><li>Multiple database engines share one workflow.</li><li>Offline generation and application impact checks matter.</li></ul></div></div></EssaySection>
-    <EssaySection number="08" title="Renames and execution"><p>Django's interactive questioner asks whether a disappeared field was renamed and writes a `RenameField`. dbwarden makes the same intent explicit and automation-friendly:</p><ComparisonCode>{'dbwarden make-migrations "rename name" --rename users.name:full_name\ndbwarden make-migrations "rename orders" --rename-table order:orders'}</ComparisonCode><p>Django's `migrate`, `showmigrations`, `--fake`, and `--plan` form a mature app-aware toolkit. dbwarden mirrors the core workflow with `status`, `history`, `--baseline`, `--dry-run`, `--count`, `--to-version`, and `--all`. It also has `runs_always` and `runs_on_change` migration types for grants and maintenance SQL.</p></EssaySection>
+    <EssaySection number="08" title="Renames and execution"><p>Django's interactive questioner asks whether a disappeared field was renamed and writes a <InlineCode>RenameField</InlineCode>. dbwarden makes the same intent explicit and automation-friendly:</p><ComparisonCode>{'dbwarden make-migrations "rename name" --rename users.name:full_name\ndbwarden make-migrations "rename orders" --rename-table order:orders'}</ComparisonCode><p>Django's <InlineCode>migrate</InlineCode>, <InlineCode>showmigrations</InlineCode>, <InlineCode>--fake</InlineCode>, and <InlineCode>--plan</InlineCode> form a mature app-aware toolkit. dbwarden mirrors the core workflow with <InlineCode>status</InlineCode>, <InlineCode>history</InlineCode>, <InlineCode>--baseline</InlineCode>, <InlineCode>--dry-run</InlineCode>, <InlineCode>--count</InlineCode>, <InlineCode>--to-version</InlineCode>, and <InlineCode>--all</InlineCode>. It also has <InlineCode>runs_always</InlineCode> and <InlineCode>runs_on_change</InlineCode> migration types for grants and maintenance SQL.</p></EssaySection>
     <EssaySection number="09" title="State: implicit chain versus explicit files"><p>Django reconstructs schema state by replaying its migration chain in memory. That makes generation database-free, but makes every migration file load-bearing forever. `squashmigrations` exists to manage that growing chain.</p><p>dbwarden stores checksummed snapshots in `.dbwarden/schemas/` and exported model state such as `.dbwarden/model_state.primary.json`. Old SQL receipts can be deleted because models and state hold the authority, but state files must be backed up and recovered carefully.</p></EssaySection>
     <EssaySection number="10" title="What dbwarden adds"><p>Impact analysis scans Python and templates before destructive changes. Sandbox replay, `--dry-run`, `--with-backup`, offline state, reverse engineering, and `--safe-type-change` make the workflow more operationally explicit. Official plugins cover Testcontainers sandboxes and seeds.</p><p>It also treats ClickHouse as a first-class backend, alongside PostgreSQL, MySQL, MariaDB, and SQLite, with backend-specific typed Meta classes and model round-tripping.</p></EssaySection>
     <EssaySection number="11" title="Questions worth answering"><p><strong>Can dbwarden replace Django migrations inside Django?</strong> No. Django's migrations are integrated with its ORM, app registry, tests, admin, and ecosystem. Use Django migrations for Django.</p><p><strong>Is it Django migrations for FastAPI?</strong> As an elevator pitch, yes: models, generate, review, apply. The actual artifacts are SQL, rollback is a contract, and the tool is SQLAlchemy-native.</p><p><strong>Can a Django app move to SQLAlchemy?</strong> Generate SQLAlchemy models from the existing database, create a baseline, and mark it applied. The old `django_migrations` table becomes historical.</p><p><strong>What about testing and seeds?</strong> Use sandbox replay and the Testcontainers plugin for real database validation; `dbwarden-seeds` separates seed data from schema migration state.</p></EssaySection>
@@ -76,7 +77,7 @@ export function DjangoComparisonPage({ dark, toggleTheme }) {
 }
 
 function EssaySection({ number, title, children }) {
-  return <section className="comparison-block essay-section"><div className="section-label">/ {number} <span>{title}</span></div><div className="essay-body">{children}</div></section>
+  return <section className="comparison-block essay-section"><div className="section-label">/ {number} <span>{title}</span></div><div className="essay-body">{formatInlineCode(children)}</div></section>
 }
 
 function ComparisonBlock({ number, title, children }) {
@@ -85,6 +86,24 @@ function ComparisonBlock({ number, title, children }) {
 
 function ComparisonCode({ children }) {
   return <pre className="comparison-code"><code>{children}</code></pre>
+}
+
+function InlineCode({ children }) {
+  return <code className="comparison-inline-code">{children}</code>
+}
+
+function formatInlineCode(node) {
+  if (typeof node === 'string') {
+    const parts = node.split(/(`[^`]+`)/g)
+    return parts.map((part, index) => part.startsWith('`') && part.endsWith('`')
+      ? <InlineCode key={index}>{part.slice(1, -1)}</InlineCode>
+      : part)
+  }
+  if (Array.isArray(node)) return node.map(formatInlineCode)
+  if (isValidElement(node) && node.type !== ComparisonCode) {
+    return cloneElement(node, undefined, formatInlineCode(node.props.children))
+  }
+  return node
 }
 
 function ComparisonCard({ comparison, index }) {
