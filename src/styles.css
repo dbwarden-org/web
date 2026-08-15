@@ -321,6 +321,7 @@ h2 { font-size: clamp(45px, 6vw, 78px); font-weight: 700; }
 .page-product-surface .section-plugins .section-doc { color: var(--gold); }
 .page-product-surface .surface-section { border-top: 0; padding-top: 90px; }
 .page-product-surface .surface-safety { background: var(--surface-muted); margin-left: calc((100% - 100vw) / 2); margin-right: calc((100% - 100vw) / 2); padding-left: max(36px, calc((100vw - 1180px) / 2)); padding-right: max(36px, calc((100vw - 1180px) / 2)); }
+.page-product-surface .surface-safety .article-body { max-width: 1180px; margin-left: auto; margin-right: auto; }
 .safety-accordion { border-top: 1px solid var(--line); }
 .safety-card { border-bottom: 1px solid var(--line); }
 .safety-card button { width: 100%; display: grid; grid-template-columns: 45px 1fr 30px; gap: 14px; align-items: center; padding: 23px 0; border: 0; background: transparent; color: var(--ink); text-align: left; cursor: pointer; }
@@ -335,6 +336,7 @@ h2 { font-size: clamp(45px, 6vw, 78px); font-weight: 700; }
 .safety-accordion { display: flex; gap: 10px; border-top: 0; align-items: stretch; }
 .safety-card { flex: 1; min-width: 0; border: 1px solid var(--line); background: var(--surface); transition: flex .35s ease, border-color .25s ease, transform .25s ease; }
 .safety-card.is-active { flex: 2.15; border-color: var(--gold); transform: translateY(-3px); }
+.safety-card, .safety-card button, .safety-detail { overflow: hidden; }
 .safety-card button { min-height: 150px; height: 100%; grid-template-columns: 30px 1fr 24px; align-items: start; padding: 20px; }
 .safety-card button strong { font-size: 18px; }
 .safety-detail { display: block; padding: 0 20px 22px 70px; }
