@@ -298,6 +298,7 @@ h2 { font-size: clamp(45px, 6vw, 78px); font-weight: 700; }
 .page-how-it-works .article-code { border-left: 3px solid var(--gold); }
 
 .page-product-surface .page-hero { padding-bottom: 72px; }
+.page-product-surface .page-hero { padding-top: 34px; }
 .page-product-surface .page-hero-grid { grid-template-columns: 1fr .8fr; }
 .page-product-surface .article-section:nth-of-type(even) { background: var(--surface-muted); margin-left: calc((100% - 100vw) / 2); margin-right: calc((100% - 100vw) / 2); padding-left: max(36px, calc((100vw - 1180px) / 2)); padding-right: max(36px, calc((100vw - 1180px) / 2)); }
 .page-product-surface .article-section:nth-of-type(even) .surface-card { min-height: 230px; border-top: 3px solid var(--blue); }
