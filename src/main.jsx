@@ -40,18 +40,19 @@ const features = [
 ]
 
 const plugins = [
-  'PostgreSQL types',
-  'RBAC and grants',
-  'PostgreSQL extensions',
-  'ClickHouse RBAC',
-  'FastAPI lifecycle',
-  'Seeds',
-  'Sandbox validation',
+  { name: 'FastAPI lifecycle', detail: 'Wire migrations into application startup and keep database readiness visible.' },
+  { name: 'PostgreSQL types', detail: 'Keep enums, domains, and backend-specific types in the same declarative contract.' },
+  { name: 'RBAC and grants', detail: 'Express roles and permissions as reviewable database metadata.' },
+  { name: 'PostgreSQL extensions', detail: 'Manage extension dependencies alongside the schema that uses them.' },
+  { name: 'ClickHouse RBAC', detail: 'Apply analytical database access rules without leaving the migration workflow.' },
+  { name: 'Seeds', detail: 'Create deterministic baseline data for local, test, and sandbox environments.' },
+  { name: 'Sandbox validation', detail: 'Exercise generated SQL before it reaches a production connection.' },
 ]
 
 function App() {
   const [dark, setDark] = useState(() => localStorage.getItem('dbwarden-theme') === 'dark')
   const [menuOpen, setMenuOpen] = useState(false)
+  const [activePlugin, setActivePlugin] = useState(0)
 
   useEffect(() => {
     document.documentElement.dataset.theme = dark ? 'dark' : 'light'
@@ -75,7 +76,7 @@ function App() {
         </nav>
         <div className="top-actions">
           <button className="theme-button" type="button" onClick={toggleTheme} aria-label="Toggle color theme">
-            <span className={dark ? 'theme-icon sun' : 'theme-icon moon'} />
+            <span className="theme-icon" aria-hidden="true">{dark ? '☀' : '☾'}</span>
           </button>
           <a className="github-link" href="https://github.com/dbwarden-org/dbwarden" target="_blank" rel="noreferrer">GitHub <span className="arrow">↗</span></a>
           <button className="menu-button" type="button" onClick={() => setMenuOpen((value) => !value)} aria-label="Toggle navigation">{menuOpen ? 'Close' : 'Menu'}</button>
@@ -154,7 +155,7 @@ function App() {
 
         <section className="section content-wrap plugin-section">
           <div className="section-label">/ 05 <span>extend the contract</span></div>
-          <div className="plugin-layout"><div><h2>Core stays<br /><em>composable.</em></h2><p>Plugins add typed metadata, database objects, seeds, RBAC, FastAPI lifecycle helpers, and sandbox validation without turning the migration surface into a black box.</p><a className="text-link" href="https://docs.dbwarden.org/plugins/" target="_blank" rel="noreferrer">Explore plugins <span>↗</span></a></div><div className="plugin-list">{plugins.map((plugin, index) => <div key={plugin}><span>0{index + 1}</span><strong>{plugin}</strong><span className="plugin-mark">+</span></div>)}</div></div>
+           <div className="plugin-layout"><div><h2>Core stays<br /><em>composable.</em></h2><p>Plugins add typed metadata, database objects, seeds, RBAC, FastAPI lifecycle helpers, and sandbox validation without turning the migration surface into a black box.</p><a className="text-link" href="https://docs.dbwarden.org/plugins/" target="_blank" rel="noreferrer">Explore plugins <span>↗</span></a></div><div className="plugin-list">{plugins.map((plugin, index) => <div className={activePlugin === index ? 'plugin-item is-active' : 'plugin-item'} key={plugin.name}><button type="button" aria-expanded={activePlugin === index} onClick={() => setActivePlugin(index)}><span>0{index + 1}</span><strong>{plugin.name}</strong><span className="plugin-mark">{activePlugin === index ? '−' : '+'}</span></button>{activePlugin === index && <p>{plugin.detail}</p>}</div>)}</div></div>
         </section>
 
         <section className="section correctness-section">
