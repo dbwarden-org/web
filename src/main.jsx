@@ -203,14 +203,7 @@ function App() {
             <div><h2>Small commands.<br /><em>Serious control.</em></h2><p>Keep the daily workflow legible. The generated artifacts carry the complexity, not a hidden runtime.</p></div>
             <div className="terminal">
               <div className="terminal-bar"><span /><span /><span /><b>dbwarden / primary</b></div>
-              <pre><code><i>$</i> dbwarden init
-<em>created</em> dbwarden.toml
-<em>created</em> migrations/
-
-<i>$</i> dbwarden make-migrations
-<span className="terminal-good">✓ migration 0001_initial.sql generated</span>
-<span className="terminal-good">✓ rollback section included</span>
-<span className="terminal-good">✓ convergence check passed</span></code></pre>
+              <pre><code><span className="terminal-line"><i>$</i> dbwarden init</span><span className="terminal-line"><em>created</em> dbwarden.py</span><span className="terminal-line"><em>created</em> migrations/</span><span className="terminal-gap" /><span className="terminal-line"><i>$</i> dbwarden make-migrations</span><span className="terminal-good">✓ migration 0001_initial.sql generated</span><span className="terminal-good">✓ rollback section included</span><span className="terminal-good">✓ convergence check passed</span></code></pre>
             </div>
           </div>
         </section>

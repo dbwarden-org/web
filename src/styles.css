@@ -189,6 +189,8 @@ h2 { font-size: clamp(45px, 6vw, 78px); font-weight: 700; }
 .terminal code { display: block; min-width: 0; white-space: inherit; }
 .terminal code i { color: var(--gold); font-style: normal; }
 .terminal code em { color: #8db5ff; font-style: normal; }
+.terminal-line { display: block; }
+.terminal-gap { display: block; height: 1em; }
 .terminal-good { display: block; color: #68d3a7; }
 .cta-section { color: var(--inverse-ink); background: var(--cta-bg); padding: 80px 0; }
 .cta-inner { display: grid; grid-template-columns: 55px 1fr auto; align-items: center; gap: 34px; }
