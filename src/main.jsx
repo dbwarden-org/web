@@ -58,7 +58,6 @@ const pluginDirectory = [
   { name: 'dbwarden-ch-rbac', tier: 'official', description: 'ClickHouse access control and RBAC metadata.', repository: 'https://github.com/dbwarden-org/dbwarden-ch-rbac' },
   { name: 'dbwarden-seeds', tier: 'official', description: 'Deterministic seed data with migration-aware rollback.', repository: 'https://github.com/dbwarden-org/dbwarden-seeds' },
   { name: 'dbwarden-sandbox', tier: 'official', description: 'Validate generated SQL in an isolated sandbox before deploy.', repository: 'https://github.com/dbwarden-org/dbwarden-sandbox' },
-  { name: 'dbwarden-acme', tier: 'community', description: 'Example community plugin discovered through the dbwarden plugin contract.', repository: null },
 ]
 
 function App() {
@@ -234,10 +233,11 @@ function PluginDirectory({ dark, toggleTheme }) {
     </header>
     <main className="directory-main content-wrap">
       <div className="directory-kicker">/ plugin directory</div>
-      <div className="directory-intro"><div><h1>Extend the<br /><em>contract.</em></h1></div><p>Official and community plugins add database objects, lifecycle hooks, seeds, and validation without changing the declarative core.</p></div>
+       <div className="directory-intro"><div><h1>Extend the<br /><em>contract.</em></h1></div><p>Official and community plugins add database objects, lifecycle hooks, seeds, and validation without changing the declarative core.</p></div>
+       <div className="directory-template-note">All plugins follow the <a href="https://github.com/dbwarden-org/dbwarden-plugin-template" target="_blank" rel="noreferrer">dbwarden plugin template <span>↗</span></a>.</div>
       <div className="directory-toolbar"><div className="filter-group" aria-label="Filter plugins">{['all', 'official', 'community'].map((option) => <button type="button" className={filter === option ? 'filter-button is-active' : 'filter-button'} key={option} onClick={() => setFilter(option)}>{option}</button>)}</div><label className="plugin-search"><span>⌕</span><input type="search" value={search} onChange={(event) => setSearch(event.target.value)} placeholder="Search plugins" aria-label="Search plugins" /></label></div>
       <div className="directory-count">{visiblePlugins.length} {visiblePlugins.length === 1 ? 'plugin' : 'plugins'} found</div>
-      <div className="directory-grid">{visiblePlugins.map((plugin, index) => <article className="directory-card" key={plugin.name}><div className="directory-card-top"><span>0{index + 1}</span><span className={`tier-badge ${plugin.tier}`}>{plugin.tier}</span></div><h2>{plugin.name}</h2><p>{plugin.description}</p>{plugin.repository ? <a className="text-link" href={plugin.repository} target="_blank" rel="noreferrer">View repository <span>↗</span></a> : <span className="directory-note">Discover through the plugin contract</span>}</article>)}</div>
+       {filter === 'community' && !deferredSearch ? <div className="community-empty">There are no community plugins yet. Want to <a href="https://github.com/dbwarden-org/dbwarden-plugin-template" target="_blank" rel="noreferrer">create the first one? <span>↗</span></a></div> : <div className="directory-grid">{visiblePlugins.map((plugin, index) => <article className="directory-card" key={plugin.name}><div className="directory-card-top"><span>0{index + 1}</span><span className={`tier-badge ${plugin.tier}`}>{plugin.tier}</span></div><h2>{plugin.name}</h2><p>{plugin.description}</p><a className="text-link" href={plugin.repository} target="_blank" rel="noreferrer">View repository <span>↗</span></a></article>)}</div>}
     </main>
     <footer className="footer content-wrap"><div className="brand footer-brand"><img src={logo} alt="" /><span>dbwarden</span></div><span>Declarative database migration infrastructure.</span><div className="footer-links"><a href="/">Home</a><a href="https://docs.dbwarden.org/plugins/" target="_blank" rel="noreferrer">Docs ↗</a></div></footer>
   </div>

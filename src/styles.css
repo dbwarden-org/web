@@ -196,6 +196,8 @@ h2 { font-size: clamp(45px, 6vw, 78px); font-weight: 700; }
 .directory-intro { display: grid; grid-template-columns: 1fr .58fr; gap: 100px; align-items: end; padding: 24px 0 70px; }
 .directory-intro h1 { font-size: clamp(58px, 8vw, 106px); }
 .directory-intro p { max-width: 400px; color: var(--muted); font-size: 15px; line-height: 1.7; }
+.directory-template-note { margin: -35px 0 35px; padding: 15px 18px; border-left: 3px solid var(--gold); background: var(--surface-muted); color: var(--muted); font-size: 12px; line-height: 1.6; }
+.directory-template-note a, .community-empty a { color: var(--blue); font-weight: 800; }
 .directory-toolbar { display: flex; justify-content: space-between; align-items: center; gap: 20px; padding: 17px 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
 .filter-group { display: flex; gap: 8px; }
 .filter-button { padding: 9px 13px; border: 1px solid var(--line); background: transparent; color: var(--muted); cursor: pointer; font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: .1em; }
@@ -212,6 +214,7 @@ h2 { font-size: clamp(45px, 6vw, 78px); font-weight: 700; }
 .directory-card p { max-width: 420px; margin-top: 12px; color: var(--muted); font-size: 12px; line-height: 1.6; }
 .directory-card .text-link { margin-top: auto; }
 .directory-note { margin-top: auto; color: var(--muted); font-size: 10px; }
+.community-empty { padding: 55px 25px; border: 1px dashed var(--gold); background: var(--surface-muted); color: var(--muted); font-size: 15px; line-height: 1.7; }
 .page-main { padding-top: 140px; padding-bottom: 100px; }
 .page-hero { padding: 4px 0 95px; }
 .page-hero-grid { display: grid; grid-template-columns: 1fr .62fr; gap: 100px; align-items: end; padding-top: 24px; }
