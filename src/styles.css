@@ -342,6 +342,8 @@ h2 { font-size: clamp(45px, 6vw, 78px); font-weight: 700; }
 .surface-state-and-operations .article-body, .surface-backends .article-body { max-width: 100%; }
 .surface-state-and-operations .operations-surface, .surface-backends .backend-surface { max-width: 1040px; margin-left: auto; margin-right: auto; }
 .operations-copy p { max-width: 390px; color: var(--muted); font-size: 14px; line-height: 1.75; }
+.operations-note { margin-top: 18px; font-size: 12px !important; }
+.operations-note a { color: var(--blue); font-weight: 800; }
 .operations-board { display: grid; grid-template-columns: 1fr 1fr; border-top: 2px solid var(--blue); border-left: 1px solid var(--line); }
 .operations-board > div { min-height: 118px; display: flex; flex-direction: column; justify-content: space-between; padding: 18px 20px; border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); background: var(--surface); }
 .operations-board span { color: var(--muted); font-size: 9px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; }

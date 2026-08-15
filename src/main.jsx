@@ -122,7 +122,7 @@ function App() {
           <div className="hero-grid">
             <div className="hero-copy">
               <h1>Your models are<br /><em>your migrations.</em></h1>
-              <p className="hero-lede">dbwarden turns the schema you declare into plain SQL, explicit rollback paths, and a database state you can verify before it ships.</p>
+              <p className="hero-lede">dbwarden turns the schema you declare into plain SQL, explicit rollback paths, and a database state you can verify before it ships. Fully open source.</p>
               <div className="hero-actions">
                 <a className="button button-primary" href="https://docs.dbwarden.org/getting-started/setup/" target="_blank" rel="noreferrer">Get started <span>↗</span></a>
                 <a className="button button-quiet" href="https://github.com/dbwarden-org/dbwarden" target="_blank" rel="noreferrer">View source <span>↗</span></a>
