@@ -1,7 +1,7 @@
 import { StrictMode, useDeferredValue, useEffect, useState } from 'react'
 import { createRoot } from 'react-dom/client'
 import './styles.css'
-import { WhyPage } from './pages.jsx'
+import { PageHeader, WhyPage } from './pages.jsx'
 import { ProductSurfacePage } from './surface.jsx'
 import { TimelinePage } from './timeline.jsx'
 
@@ -229,11 +229,7 @@ function PluginDirectory({ dark, toggleTheme }) {
   })
 
   return <div className="site-shell plugin-directory-page">
-    <header className="topbar">
-      <a className="brand" href="/" aria-label="dbwarden home"><img src={logo} alt="" /><span>dbwarden</span></a>
-      <nav className="directory-nav" aria-label="Plugin directory navigation"><a href="/">Home</a><a href="https://docs.dbwarden.org/plugins/" target="_blank" rel="noreferrer">Plugin docs <span className="arrow">↗</span></a></nav>
-      <div className="top-actions"><button className="theme-button" type="button" onClick={toggleTheme} aria-label="Toggle color theme"><span className="theme-icon" aria-hidden="true">{dark ? '☀' : '☾'}</span></button><a className="github-link" href="https://github.com/dbwarden-org" target="_blank" rel="noreferrer">GitHub <span className="arrow">↗</span></a></div>
-    </header>
+    <PageHeader dark={dark} toggleTheme={toggleTheme} />
     <main className="directory-main content-wrap">
       <div className="directory-kicker">/ plugin directory</div>
        <div className="directory-intro"><div><h1>Extend the<br /><em>contract.</em></h1></div><p>Official and community plugins add database objects, lifecycle hooks, seeds, and validation without changing the declarative core.</p></div>

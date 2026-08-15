@@ -7,7 +7,7 @@ export function PageFrame({ dark, toggleTheme, eyebrow, title, intro, children }
   return <div className={`site-shell content-page ${pageClass}`}><PageHeader dark={dark} toggleTheme={toggleTheme} /><main className="content-wrap page-main"><div className="page-hero"><div className="directory-kicker">/ {eyebrow}</div><div className="page-hero-grid"><h1>{title}</h1><p>{intro}</p></div></div>{children}</main><footer className="footer content-wrap"><div className="brand footer-brand"><img src={logo} alt="" /><span>dbwarden</span></div><span>Declarative database migration infrastructure.</span><div className="footer-links"><a href="/">Home</a><a href="https://docs.dbwarden.org" target="_blank" rel="noreferrer">Docs ↗</a></div></footer></div>
 }
 
-function PageHeader({ dark, toggleTheme }) {
+export function PageHeader({ dark, toggleTheme }) {
   const [menuOpen, setMenuOpen] = useState(false)
   useEffect(() => { document.body.style.overflow = menuOpen ? 'hidden' : ''; return () => { document.body.style.overflow = '' } }, [menuOpen])
   const closeMenu = () => setMenuOpen(false)
