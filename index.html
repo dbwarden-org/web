@@ -3,7 +3,18 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="theme-color" content="#f7f9fc" />
+    <meta name="theme-color" content="#20242b" />
+    <script>
+      (function () {
+        var theme = 'dark'
+        try {
+          theme = localStorage.getItem('dbwarden-theme') === 'light' ? 'light' : 'dark'
+        } catch (e) {}
+        document.documentElement.dataset.theme = theme
+        var meta = document.querySelector('meta[name="theme-color"]')
+        if (meta) meta.content = theme === 'light' ? '#f7f9fc' : '#20242b'
+      })()
+    </script>
     <meta name="author" content="dbwarden" />
     <meta name="keywords" content="dbwarden, SQLAlchemy migrations, Alembic alternative, which migration tool, declarative database migrations, plain SQL migrations, schema drift, database safety" />
     <meta name="description" content="dbwarden is a declarative migration tool for SQLAlchemy: models define the schema, and it derives reviewable plain-SQL migrations with rollback and convergence." />

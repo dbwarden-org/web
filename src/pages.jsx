@@ -21,7 +21,22 @@ export function PageFrame({ dark, toggleTheme, eyebrow, title, intro, install, c
       })
     } else { done() }
   }
-  return <div className={`site-shell content-page ${pageClass}`}><PageHeader dark={dark} toggleTheme={toggleTheme} /><main className="content-wrap page-main"><div className="page-hero"><div className="directory-kicker">/ {eyebrow}</div><div className="page-hero-grid"><h1>{title}</h1><div>{intro ? <p>{typeof intro === 'string' ? renderInline(intro) : intro}</p> : null}{install ? <button className="hero-install page-install" type="button" onClick={copyInstall} title="Copy install command" aria-label="Copy install command"><i>$</i> {install}{copied ? <span className="copy-pop">copied</span> : null}</button> : null}</div></div></div>{children}</main><footer className="footer content-wrap"><div className="brand footer-brand"><img src={logo} alt="" width="29" height="29" /><span>dbwarden</span></div><span>Fully open source. MIT licensed.</span><div className="footer-links"><a href="/">Home</a><a href="/fastapi">FastAPI</a><a href="/databases">Databases</a><a href="/correctness">Correctness</a><a href="https://docs.dbwarden.org" target="_blank" rel="noreferrer">Docs ↗</a></div></footer></div>
+  return <div className={`site-shell content-page ${pageClass}`}><PageHeader dark={dark} toggleTheme={toggleTheme} /><main className="content-wrap page-main"><div className="page-hero"><div className="directory-kicker">/ {eyebrow}</div><div className="page-hero-grid"><h1>{title}</h1><div>{intro ? <p>{typeof intro === 'string' ? renderInline(intro) : intro}</p> : null}{install ? <button className="hero-install page-install" type="button" onClick={copyInstall} title="Copy install command" aria-label="Copy install command"><i>$</i> {install}{copied ? <span className="copy-pop">copied</span> : null}</button> : null}</div></div></div>{children}</main><SiteFooter /></div>
+}
+
+export function SiteFooter() {
+  return (
+    <footer className="footer content-wrap">
+      <div className="footer-brand-row"><div className="brand footer-brand"><img src={logo} alt="" width="29" height="29" /><span>dbwarden</span></div><span className="footer-tagline">Declarative database migration infrastructure for SQLAlchemy.</span></div>
+      <div className="footer-grid">
+        <div className="footer-col"><h4>Tool scope</h4><a href="/why">Why dbwarden</a><a href="/how-it-works">How it works</a><a href="/tool-scope">Tool scope</a><a href="/cli">CLI reference</a></div>
+        <div className="footer-col"><h4>Databases & apps</h4><a href="/databases">Databases</a><a href="/fastapi">FastAPI</a><a href="/correctness">Correctness</a><a href="/plugins">Plugins</a></div>
+        <div className="footer-col"><h4>Compare</h4><a href="/compare/alembic">vs Alembic</a><a href="/compare/atlas">vs Atlas</a><a href="/compare/django-migrations">vs Django migrations</a><a href="/migrate-from-alembic">Migrate from Alembic</a></div>
+        <div className="footer-col"><h4>Community</h4><a href="https://github.com/dbwarden-org/dbwarden" target="_blank" rel="noreferrer">GitHub ↗</a><a href="https://docs.dbwarden.org" target="_blank" rel="noreferrer">Docs ↗</a><a href="https://harness.dbwarden.org" target="_blank" rel="noreferrer">Harness ↗</a><a href="https://github.com/dbwarden-org/dbwarden/issues" target="_blank" rel="noreferrer">Issues ↗</a></div>
+      </div>
+      <div className="footer-bottom"><span>Fully open source. MIT licensed.</span></div>
+    </footer>
+  )
 }
 
 export function ThemeSwitch({ dark, toggleTheme }) {

@@ -1,8 +1,8 @@
-import { lazy, StrictMode, Suspense, useDeferredValue, useEffect, useState } from 'react'
+import { lazy, StrictMode, Suspense, useDeferredValue, useEffect, useRef, useState } from 'react'
 import { createRoot } from 'react-dom/client'
 import '@fontsource-variable/inter'
 import './styles.css'
-import { AccessibilityMenu, NavLinks, PageHeader, ThemeSwitch, WhyPage } from './pages.jsx'
+import { AccessibilityMenu, Faq, NavLinks, PageHeader, SiteFooter, ThemeSwitch, WhyPage } from './pages.jsx'
 import { Seo } from './seo.jsx'
 
 // Route-level code splitting: only the home page (shell + pages.jsx) ships in the
@@ -55,8 +55,95 @@ function RouteFallback() {
   return <div className="route-fallback" aria-hidden="true" />
 }
 
+// The animated daily-loop terminal, modeled on the portfolio's dbwarden terminal:
+// a window with a blinking cursor that types each command, reveals its output,
+// clears, and loops. With prefers-reduced-motion it renders the whole session
+// statically instead of animating.
+const LOOP_SESSIONS = [
+  [
+    { cmd: 'dbwarden init', out: ['Initialized project structure', 'Created migrations/', 'Created dbwarden.py'] },
+  ],
+  [
+    { cmd: 'dbwarden make-migrations "add posts table"', out: ['Generated changes:', '  + CREATE TABLE posts', 'Created: primary__0002_add_posts_table.sql'] },
+  ],
+  [
+    { cmd: 'dbwarden migrate', out: ['Applying primary__0002_add_posts_table.sql', 'Applied in 24ms'] },
+    { cmd: 'dbwarden status', out: ['Applied:  2', 'Pending:  0', 'Status:   up-to-date'] },
+  ],
+  [
+    { cmd: 'dbwarden check', out: ['Schema matches the models.'] },
+  ],
+]
+
+const LOOP_STATIC = LOOP_SESSIONS.flatMap((block) => [
+  ...block.flatMap((entry) => [{ kind: 'cmd', text: entry.cmd }, ...entry.out.map((text) => ({ kind: 'out', text }))]),
+  { kind: 'cmd', text: 'clear' },
+])
+
+function LoopTerminal() {
+  const [lines, setLines] = useState([])
+  const cancelledRef = useRef(false)
+
+  useEffect(() => {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      setLines(LOOP_STATIC)
+      return
+    }
+    const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
+    const type = async (text) => {
+      for (let i = 1; i <= text.length; i += 1) {
+        if (cancelledRef.current) return
+        await sleep(42 + Math.random() * 55)
+        setLines((prev) => [...prev.slice(0, -1), { kind: 'cmd', text: text.slice(0, i) }])
+      }
+    }
+    const run = async () => {
+      await sleep(500)
+      while (!cancelledRef.current) {
+        for (const block of LOOP_SESSIONS) {
+          for (let i = 0; i < block.length; i += 1) {
+            if (cancelledRef.current) return
+            const entry = block[i]
+            setLines((prev) => [...prev, { kind: 'cmd', text: '' }])
+            await type(entry.cmd)
+            if (cancelledRef.current) return
+            await sleep(280 + Math.random() * 220)
+            for (const out of entry.out) {
+              if (cancelledRef.current) return
+              await sleep(110 + Math.random() * 90)
+              setLines((prev) => [...prev, { kind: 'out', text: out }])
+            }
+            await sleep(i === block.length - 1 ? 900 + Math.random() * 800 : 650 + Math.random() * 350)
+          }
+          if (cancelledRef.current) return
+          setLines((prev) => [...prev, { kind: 'cmd', text: '' }])
+          await type('clear')
+          if (cancelledRef.current) return
+          await sleep(1600)
+          setLines([])
+          await sleep(450)
+        }
+      }
+    }
+    run()
+    return () => { cancelledRef.current = true }
+  }, [])
+
+  return (
+    <div className="loop-terminal" aria-label="The dbwarden daily loop: init, make-migrations, migrate, status, check.">
+      <div className="terminal-bar"><span /><span /><span /><b>the daily loop</b></div>
+      <div className="loop-terminal-body">
+        {lines.map((line, index) => (
+          <div className={`loop-line ${line.kind}`} key={index}>{line.kind === 'cmd' ? <span className="loop-prompt">$&nbsp;</span> : null}{line.text}</div>
+        ))}
+        <div className="loop-line loop-cursor" aria-hidden="true">▊</div>
+      </div>
+    </div>
+  )
+}
+
 function App() {
-  const [dark, setDark] = useState(() => localStorage.getItem('dbwarden-theme') === 'dark')
+  const [dark, setDark] = useState(() => localStorage.getItem('dbwarden-theme') !== 'light')
   const [menuOpen, setMenuOpen] = useState(false)
   const [copied, setCopied] = useState(false)
 
@@ -86,6 +173,8 @@ function App() {
   useEffect(() => {
     document.documentElement.dataset.theme = dark ? 'dark' : 'light'
     localStorage.setItem('dbwarden-theme', dark ? 'dark' : 'light')
+    const meta = document.querySelector('meta[name="theme-color"]')
+    if (meta) meta.content = dark ? '#20242b' : '#f7f9fc'
   }, [dark])
 
   useEffect(() => {
@@ -179,7 +268,7 @@ function App() {
         <NavLinks onNavigate={() => setMenuOpen(false)} />
       </nav>
 
-      <main id="top">
+      <main id="top" className="home-main">
         <section className="hero">
           <div className="content-wrap">
             <div className="hero-grid">
@@ -194,20 +283,22 @@ function App() {
                 </div>
               </div>
               <div className="hero-demo" aria-label="Example: a model change and the migration dbwarden generates from it">
-                <div className="proof-header"><span>the loop</span><span>model change → generated SQL</span></div>
-                <div className="hero-panels">
-                  <div className="hero-panel">
-                    <span className="hero-panel-label">the model change</span>
+                <div className="hero-command"><i>$</i> dbwarden make-migrations "drop username, widen bio"</div>
+                <div className="hero-files">
+                  <div className="hero-file">
+                    <div className="hero-file-bar"><span className="hero-file-bar-dots"><i /><i /><i /></span><span className="hero-file-bar-name">app/models.py</span><b className="muted">the model change</b></div>
                     <pre className="hero-code"><code>
                       <span>class User(Base):</span>
                       <span>&nbsp;&nbsp;&nbsp;&nbsp;id = Column(Integer, primary_key=True)</span>
                       <span>&nbsp;&nbsp;&nbsp;&nbsp;email = Column(String, unique=True)</span>
                       <span className="diff-remove">-&nbsp;&nbsp;&nbsp;username = Column(String(50))</span>
-                      <span className="diff-mod">~&nbsp;&nbsp;&nbsp;bio = Column(Text)</span>
+                      <span className="diff-remove">-&nbsp;&nbsp;&nbsp;bio = Column(String)</span>
+                      <span className="diff-add">+&nbsp;&nbsp;&nbsp;bio = Column(Text)</span>
                     </code></pre>
                   </div>
-                  <div className="hero-panel hero-panel-accent">
-                    <span className="hero-panel-label">the generated migration</span>
+                  <div className="hero-flow-arrow" aria-hidden="true"><svg viewBox="0 0 16 16" width="13" height="13" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round"><path d="M8 2v10M5 9l3 3 3-3" /></svg></div>
+                  <div className="hero-file">
+                    <div className="hero-file-bar"><span className="hero-file-bar-dots"><i /><i /><i /></span><span className="hero-file-bar-name">migrations/0003_add_bio.sql</span><b>upgrade + rollback in one file</b></div>
                     <pre className="hero-code"><code>
                       <span className="sql-comment">-- upgrade</span>
                       <span>ALTER TABLE users DROP COLUMN username;</span>
@@ -219,7 +310,6 @@ function App() {
                     </code></pre>
                   </div>
                 </div>
-                <div className="proof-footer"><span>make-migrations "drop username, widen bio"</span><b>upgrade + rollback in one file</b></div>
               </div>
             </div>
           </div>
@@ -229,8 +319,9 @@ function App() {
            <div className="section-label">/ 01 <span>how it works</span><a className="section-doc" href="https://docs.dbwarden.org/features/" target="_blank" rel="noreferrer">Read the guide ↗</a></div>
           <div className="split-heading"><h2>The schema lives<br /><em>in the models.</em></h2><p>Most migration workflows describe the schema twice (once in the models, once in the migration scripts), and nothing checks the two stay in agreement. The disagreement usually turns up in production.<br /><br />dbwarden derives the scripts from the models. There's one definition to maintain, and the generated SQL is easy to review and safe to delete.</p></div>
           <div className="declarative-split"><div><span className="comparison-label">declarative</span><strong>You declare the state.</strong><p>SQLAlchemy models describe what the schema should be. dbwarden generates the migration SQL, the rollback, and the checks from that one definition.</p></div><div><span className="comparison-label muted">imperative</span><strong>You write every step.</strong><p>Revision scripts describe how to get from one schema version to the next. The script chain becomes the schema's effective definition.</p></div></div>
-          <div className="principle-grid"><div className="principle"><span>01</span><h3>Models, not migration scripts</h3><p>Describe the database with SQLAlchemy models and typed metadata. That's the whole schema.</p></div><div className="principle"><span>02</span><h3>Review the SQL</h3><p><code className="inline-code">make-migrations</code> produces a versioned SQL file with upgrade and rollback, ready for the pull request.</p></div><div className="principle"><span>03</span><h3>Check the database</h3><p>Snapshots and live comparisons tell you whether “migration succeeded” actually means the schema matches.</p></div>
+          <div className="principle-grid"><div className="principle"><span>01</span><h3>Models, not migration scripts</h3><p>Describe the database with SQLAlchemy models and typed metadata. That's the whole schema.</p><pre className="principle-code"><code><span>class Post(Base):</span><span>&nbsp;&nbsp;&nbsp;&nbsp;id = Column(Integer, primary_key=True)</span><span>&nbsp;&nbsp;&nbsp;&nbsp;title = Column(String(255), nullable=False)</span></code></pre></div><div className="principle"><span>02</span><h3>Review the SQL</h3><p><code className="inline-code">dbwarden make-migrations</code> produces a versioned SQL file with upgrade and rollback, ready for the pull request.</p><pre className="principle-code"><code><span className="sql-comment">-- upgrade</span><span>CREATE TABLE posts (</span><span>&nbsp;&nbsp;&nbsp;&nbsp;id SERIAL PRIMARY KEY,</span><span>&nbsp;&nbsp;&nbsp;&nbsp;title VARCHAR(255) NOT NULL</span><span>);</span><span className="sql-gap" /><span className="sql-comment">-- rollback</span><span>DROP TABLE posts;</span></code></pre></div><div className="principle"><span>03</span><h3>Check the database</h3><p>Snapshots and live comparisons tell you whether “migration succeeded” actually means the schema matches.</p><pre className="principle-code"><code><span><span className="loop-prompt">$&nbsp;</span>dbwarden check</span><span className="loop-good">Schema matches the models.</span></code></pre></div>
           </div>
+          <div className="loop-block"><span className="loop-caption">the loop, as you'd run it</span><LoopTerminal /></div>
         </section>
 
         <section className="section content-wrap verified-section">
@@ -258,10 +349,19 @@ function App() {
           <div className="docs-more"><span>already using dbwarden?</span>{docsLinks.map((link) => <a key={link.title} href={link.href} target="_blank" rel="noreferrer">{link.title} <span>↗</span></a>)}<a href="https://docs.dbwarden.org" target="_blank" rel="noreferrer">All docs <span>↗</span></a></div>
         </section>
 
+        <div className="content-wrap home-faq"><Faq items={[
+          { q: 'Does dbwarden work with an existing database and schema?', a: 'Yes. `generate-models` reverse-engineers the current schema into SQLAlchemy models, and `recover-model-state` rebuilds model state when the revision chain is gone. Your database is never rebuilt; you replace the migration workflow, not the schema. The `Migrate from Alembic` page walks through the six-step path.' },
+          { q: 'Which databases are supported?', a: 'PostgreSQL, MySQL, MariaDB, SQLite, and ClickHouse. Each backend has typed metadata options and its own feature matrix, and dev mode runs the same loop against SQLite. The `Databases` page lists what each backend supports.' },
+          { q: 'How is dbwarden different from Alembic?', a: 'Alembic keeps schema truth in a hand-maintained chain of revision scripts. dbwarden keeps it in the models and derives plain SQL migrations from them, so the migration file is reviewable output rather than the source of truth. The comparison page shows the difference with code.' },
+          { q: 'Can migrations be generated without a database connection?', a: 'Yes. `make-migrations` works from committed model state, so it runs anywhere: locally, in CI, or in a sandbox. Snapshots and live checks can run against a real database when you want them to.' },
+          { q: 'How are migrations verified?', a: 'Checksums pin each migration to the model state it was derived from, a harness replays upgrade and rollback round-trips against real databases, and the convergence gate replays the full history on an empty database and fails the build on any drift. See the `Correctness` page.' },
+          { q: 'Is dbwarden tied to a framework?', a: 'No. It works with any SQLAlchemy 2.0 stack. The optional `dbwarden-fastapi` plugin adds sessions, health checks, and `@auto_schema` request models for FastAPI apps.' },
+        ]} /></div>
+
         <section className="cta-section community-section"><div className="content-wrap community-inner"><div><div className="section-label">/ 04 <span>open source</span></div><h2>Open source,<br /><em>MIT licensed.</em></h2><p>The code lives on GitHub. Read it, report a bug, or build a plugin with the template.</p></div><div className="community-actions"><a className="button button-primary" href="https://github.com/dbwarden-org/dbwarden" target="_blank" rel="noreferrer">Source on GitHub <span>↗</span></a><div className="community-links"><a href="https://github.com/dbwarden-org/dbwarden/issues" target="_blank" rel="noreferrer">Issues ↗</a><a href="https://github.com/dbwarden-org/dbwarden/releases" target="_blank" rel="noreferrer">Releases ↗</a><a href="https://github.com/dbwarden-org/dbwarden-plugin-template" target="_blank" rel="noreferrer">Plugin template ↗</a></div></div></div></section>
       </main>
 
-      <footer className="footer content-wrap"><div className="brand footer-brand"><img src={logo} alt="" /><span>dbwarden</span></div><span>Declarative database migration infrastructure.</span><div className="footer-links"><a href="/fastapi">FastAPI</a><a href="/databases">Databases</a><a href="/correctness">Correctness</a><a href="https://github.com/dbwarden-org/dbwarden" target="_blank" rel="noreferrer">GitHub ↗</a><a href="https://docs.dbwarden.org" target="_blank" rel="noreferrer">Docs ↗</a></div></footer>
+      <SiteFooter />
     </div>
   )
 }
@@ -288,7 +388,7 @@ function PluginDirectory({ dark, toggleTheme }) {
       <div className="directory-count">{visiblePlugins.length} {visiblePlugins.length === 1 ? 'plugin' : 'plugins'} found</div>
        {filter === 'community' && !deferredSearch ? <div className="community-empty">There are no community plugins yet. Want to <a href="https://github.com/dbwarden-org/dbwarden-plugin-template" target="_blank" rel="noreferrer">create the first one? <span>↗</span></a></div> : <div className="directory-grid">{visiblePlugins.map((plugin, index) => <article className="directory-card" key={plugin.name}><div className="directory-card-top"><span>0{index + 1}</span><span className={`tier-badge ${plugin.tier}`}>{plugin.tier}</span></div><h2><span className="plugin-name">{plugin.name}</span></h2><p>{plugin.description}</p><a className="text-link" href={plugin.repository} target="_blank" rel="noreferrer">View repository <span>↗</span></a></article>)}</div>}
     </main>
-    <footer className="footer content-wrap"><div className="brand footer-brand"><img src={logo} alt="" /><span>dbwarden</span></div><span>Declarative database migration infrastructure.</span><div className="footer-links"><a href="/">Home</a><a href="https://docs.dbwarden.org/plugins/" target="_blank" rel="noreferrer">Docs ↗</a></div></footer>
+    <SiteFooter />
   </div>
 }
 
