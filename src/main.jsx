@@ -165,7 +165,7 @@ function App() {
           <img src={logo} alt="" width="29" height="29" />
           <span>dbwarden</span>
         </a>
-        <nav className={menuOpen ? 'main-nav is-open' : 'main-nav'} aria-label="Primary navigation">
+        <nav className="main-nav" aria-label="Primary navigation">
           <NavLinks onNavigate={() => setMenuOpen(false)} />
         </nav>
         <div className="top-actions">
@@ -175,6 +175,9 @@ function App() {
           <button className={menuOpen ? 'menu-button is-open' : 'menu-button'} type="button" onClick={() => setMenuOpen((value) => !value)} aria-expanded={menuOpen} aria-label={menuOpen ? 'Close navigation' : 'Open navigation'}><span /><span /><span /></button>
         </div>
       </header>
+      <nav className={menuOpen ? 'mobile-menu is-open' : 'mobile-menu'} aria-label="Primary navigation">
+        <NavLinks onNavigate={() => setMenuOpen(false)} />
+      </nav>
 
       <main id="top">
         <section className="hero">
