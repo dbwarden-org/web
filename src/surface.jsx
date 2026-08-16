@@ -1,43 +1,66 @@
-import { useEffect, useState } from 'react'
-import { PageFrame } from './pages.jsx'
+import { PageFrame, PageSection, CodeBlock, Faq } from './pages.jsx'
 
-const safetyCards = [
-  { title: 'Safety classifier', icon: 'shield', body: 'Classifies operations as SAFE, INFO, WARN, or CRITICAL before generation or apply.', detail: 'Destructive intent is visible before the file reaches review.', doc: 'https://docs.dbwarden.org/correctness/safety-classifier/' },
-  { title: 'Impact analysis', icon: 'search', body: 'Scans Python code and templates for references to objects a destructive change would remove.', detail: 'Schema safety and application safety are checked together.', doc: 'https://docs.dbwarden.org/cookbook/06-safety-impact/' },
-  { title: 'Safe type changes', icon: 'ouroboros', body: 'Expands risky type changes into an add, backfill, swap, and drop sequence when requested.', detail: 'The boring multi-step path is generated instead of improvised.', doc: 'https://docs.dbwarden.org/correctness/safety-classifier/' },
-]
-
-const backends = ['PostgreSQL', 'MySQL', 'MariaDB', 'SQLite', 'ClickHouse']
-const backendPairs = [
-  { lead: 'same models', result: 'one tool' },
-  { lead: 'two databases', result: 'one source' },
-  { lead: 'five engines', result: 'one contract' },
+const features = [
+  { href: '/tool-scope/generation', title: 'Generation', description: 'Models to versioned SQL with upgrade and rollback, and offline generation from committed state.' },
+  { href: '/tool-scope/safety', title: 'Safety', description: 'Safety classification, impact analysis, and safe type changes.' },
+  { href: '/tool-scope/state', title: 'State and operations', description: 'Status, history, snapshots, diffs, and reverse engineering an existing database.' },
+  { href: '/tool-scope/repeatable-migrations', title: 'Repeatable migrations', description: 'Runs-always and runs-on-change classes for views, grants, functions, and triggers.' },
+  { href: '/tool-scope/seeds', title: 'Seeds', description: 'Deterministic reference data, tracked like migrations.' },
+  { href: '/tool-scope/observability', title: 'Observability', description: 'Prometheus metrics, JSON logs, and trace-level SQL.' },
 ]
 
 export function ProductSurfacePage({ dark, toggleTheme }) {
-  const [activeSafety, setActiveSafety] = useState(0)
-  const [activePair, setActivePair] = useState(0)
+  return <PageFrame dark={dark} toggleTheme={toggleTheme} eyebrow="tool scope" title={<>What the tool<br /><em>covers.</em></>} intro="dbwarden derives migrations, rollbacks, snapshots, and safety checks from one definition: the SQLAlchemy models. This page maps the architecture, and each area of the tool gets its own page below.">
+    <PageSection number="01" label="Architecture" title="Layers, from CLI to SQL execution." doc="https://docs.dbwarden.org/architecture-deep-dive/">
+      <div className="why-split"><div><p>dbwarden is a layered tool: the CLI parses arguments and global flags, the commands layer orchestrates workflows (<code className="inline-code">migrate</code>, <code className="inline-code">rollback</code>, <code className="inline-code">make-migrations</code>, <code className="inline-code">status</code>, <code className="inline-code">check</code>, and the rest), and the engine below it handles the actual work: model discovery, snapshot extraction, diffing, versioning, checksums, and safety classification. Repositories persist migration and lock metadata, and the database layer executes SQL through backend-aware connections.</p><p>The metadata layer is kept deliberately database-agnostic. <code className="inline-code">schema/</code> holds dialect-agnostic constructs (<code className="inline-code">TableMeta</code>, <code className="inline-code">IndexSpec</code>, the runtime metadata container attached to each model), while <code className="inline-code">databases/</code> holds the concrete backend specs for ClickHouse, MySQL, PostgreSQL, MariaDB, and SQLite. The import rule is one-way: <code className="inline-code">schema/</code> never imports from <code className="inline-code">databases/</code>, so the metadata layer stays portable and each backend plugs into the same pipeline.</p><p>Each backend exposes a small handler contract: <code className="inline-code">extract</code>, <code className="inline-code">model_spec_from_tables</code>, <code className="inline-code">canonicalize</code>, <code className="inline-code">diff</code>, and <code className="inline-code">emit</code>. A registry driver runs that contract in order for every object type: extract the snapshot state, derive the model state, canonicalize both sides, diff into typed operations, and emit backend SQL. That is why one workflow covers PostgreSQL tables, ClickHouse engines, and MySQL row formats alike.</p></div><div><span className="comparison-label">the layers</span><CodeBlock lang="plain">{`CLI (Typer)
+  -> Commands layer
+    -> Engine layer (planning, parsing,
+       version, checksum, model discovery)
+      -> Repository layer (migration
+         + lock records)
+        -> Database layer (SQLAlchemy
+           connection + SQL execution)`}</CodeBlock><span className="comparison-label">per-backend handler contract</span><CodeBlock lang="plain">{`extract(snapshot)          raw backend state
+model_spec_from_tables()  model state
+canonicalize(spec)        normalized form
+diff(a, b)                typed operations
+emit(op)                  backend SQL`}</CodeBlock></div></div>
+    </PageSection>
+    <PageSection number="02" label="One config" title="One typed source, many databases." doc="https://docs.dbwarden.org/configuration/quick-start/">
+      <div className="why-split"><div><p>Configuration is a single <code className="inline-code">dbwarden.py</code> at the project root. Each database is a <code className="inline-code">DbwardenDatabase</code> subclass declaring its name, type, sync URL, and which model paths it owns; the <code className="inline-code">database_config(...)</code> function form is equivalent and supported for plugins and integrations. Ambiguous sources fail fast: duplicate database names, unknown tables in <code className="inline-code">model_tables</code>, or model paths that resolve to nothing are rejected at load time.</p><p>When the config is requested, dbwarden discovers the source, imports it, registers every database, validates uniqueness and model-path rules, and resolves the selected database. The <code className="inline-code">--dev</code> flag swaps a configured database to its <code className="inline-code">dev_database_url</code> (usually SQLite) for local work, with type translation where the dev backend can't represent the production type.</p><p>Each database keeps its own migration directory, its own versioned sequence, and its own lock and history records. <code className="inline-code">--database</code> targets one of them; <code className="inline-code">--all</code> operates every database in the config in one run.</p></div><div><span className="comparison-label">two databases, one config</span><CodeBlock label="dbwarden.py">{`from dbwarden import DbwardenDatabase
 
-  useEffect(() => {
-    const timer = window.setInterval(() => setActivePair((value) => (value + 1) % backendPairs.length), 3000)
-    return () => window.clearInterval(timer)
-  }, [])
+class Primary(DbwardenDatabase):
+    database_name = "primary"
+    default = True
+    database_type = "postgresql"
+    database_url_sync = "postgresql://localhost/main"
+    model_paths = ["app.models"]
 
-  return <PageFrame dark={dark} toggleTheme={toggleTheme} eyebrow="product surface" title={<>The migration is<br /><em>only the center.</em></>} intro="dbwarden surrounds generated SQL with the controls needed to understand, verify, and operate schema change across real Python systems.">
-    <SurfaceSection number="01" label="Generation" title="From model metadata to plain SQL." doc="https://docs.dbwarden.org/features/"><p>Model-driven generation covers ordinary columns and relationships, then extends into PostgreSQL indexes and policies, MySQL engines and charsets, and ClickHouse engines, codecs, projections, views, and TTLs. The metadata stays close to the model it describes.</p></SurfaceSection>
-    <SurfaceSection number="02" label="Safety" title="Know what a change means before it ships." doc="https://docs.dbwarden.org/correctness/safety-classifier/"><div className="safety-accordion">{safetyCards.map((card, index) => <article className={activeSafety === index ? 'safety-card is-active' : 'safety-card'} onClick={() => setActiveSafety(index)} key={card.title}><button type="button" aria-expanded={activeSafety === index} onClick={() => setActiveSafety(index)}><span>0{index + 1}</span><strong>{card.title}</strong>{activeSafety !== index && <b>+</b>}</button>{activeSafety !== index && <div className="safety-closed-icon"><SafetyIcon type={card.icon} /></div>}<div className={activeSafety === index ? 'safety-detail is-visible' : 'safety-detail'}><p>{card.body}</p><span>{card.detail}</span><a href={card.doc} target="_blank" rel="noreferrer">Read the documentation ↗</a></div></article>)}</div></SurfaceSection>
-    <SurfaceSection number="03" label="State and operations" title="See the system at a glance." doc="https://docs.dbwarden.org/commands/status/"><div className="operations-surface"><div className="operations-copy"><p>Status, history, diff, snapshot, and check-db turn the workflow into an observable system. Generate-models can reverse-engineer an existing database into SQLAlchemy models.</p><p className="operations-note">The companion <a href="https://github.com/dbwarden-org/dbwarden-harness" target="_blank" rel="noreferrer">dbwarden test harness</a> exercises migration convergence across real database backends.</p><a className="text-link" href="https://docs.dbwarden.org/commands/status/" target="_blank" rel="noreferrer">Explore the command surface <span>↗</span></a></div><div className="operations-board"><div><span>primary</span><strong>converged</strong><b>100%</b></div><div><span>analytics</span><strong>snapshot ready</strong><b>04</b></div><div><span>pending delta</span><strong>add bio</strong><b>01</b></div><div><span>generation mode</span><strong>offline capable</strong><b>CI</b></div></div></div></SurfaceSection>
-    <SurfaceSection number="04" label="Backends" title="One contract. Different engines." doc="https://docs.dbwarden.org/databases/"><div className="backend-surface"><div className="backend-orbit"><div className="backend-orbit-copy" key={activePair}><span>{backendPairs[activePair].lead}</span><strong>{backendPairs[activePair].result}</strong></div><i>automatically in sync</i></div><div className="backend-stack">{backends.map((backend, index) => <div key={backend}><span>0{index + 1}</span><strong>{backend}</strong><em>{index === 4 ? 'analytical' : 'relational'}</em></div>)}</div></div></SurfaceSection>
-    <section className="surface-plugin-callout"><div className="section-label">/ 05 <span>plugins</span></div><div><h2>Keep the core focused.<br /><em>Extend the contract.</em></h2><div><p>Official plugins add FastAPI lifecycle helpers, PostgreSQL types and extensions, RBAC, ClickHouse RBAC, seeds, and sandbox validation. The whole project is fully open source under the MIT license.</p><a className="surface-doc-link" href="https://docs.dbwarden.org/plugins/developing/overview/" target="_blank" rel="noreferrer">Want to create plugins? See the docs <span>↗</span></a></div><a className="button button-primary" href="/plugins">Browse the plugin directory <span>↗</span></a></div></section>
+class Analytics(DbwardenDatabase):
+    database_name = "analytics"
+    database_type = "clickhouse"
+    database_url_sync = "clickhouse://localhost:8123/analytics"
+    model_paths = ["app.analytics_models"]`}</CodeBlock><span className="comparison-label">operate one or all</span><CodeBlock>{`$ dbwarden migrate --database primary
+$ dbwarden migrate --database analytics
+$ dbwarden status --all`}</CodeBlock></div></div>
+    </PageSection>
+    <PageSection number="03" label="The loop" title="Model to SQL to verified database." doc="https://docs.dbwarden.org/getting-started/first-migration/">
+      <div className="why-split"><div><p><code className="inline-code">make-migrations</code> runs the model-to-SQL pipeline: discover the model paths, import the modules, extract table and column metadata, and load the latest schema snapshot from <code className="inline-code">.dbwarden/schemas/</code>. When a snapshot exists, generation diffs against it; without one, dbwarden takes a full snapshot from the live database and runs the same diff pipeline, minus rename detection. The diff produces typed operations, which are ordered and assembled into upgrade and rollback SQL, then written as the migration file with a companion <code className="inline-code">.plan.json</code>.</p><p><code className="inline-code">migrate</code> executes the result: ensure the metadata and lock tables exist, acquire the lock, build the pending execution plan, run the SQL statements, record migration metadata and checksums, and release the lock. Rollback uses the same lock discipline, selecting rollback SQL from applied files in reverse order. <code className="inline-code">check</code> inspects the plan next to pending migrations before anything runs, classifying every operation as INFO, WARNING, or ERROR.</p><p>Each step leaves something inspectable: the config, the models, the generated SQL file, the plan, the applied state, and the live schema. The per-feature pages below cover each stage in detail.</p></div><div><span className="comparison-label">generate</span><CodeBlock>{`$ dbwarden make-migrations "add bio" --database primary
+Created migration: migrations/primary/primary__0002_add_bio.sql`}</CodeBlock><span className="comparison-label">apply</span><CodeBlock>{`$ dbwarden migrate --database primary
+Applying migration: primary__0002_add_bio.sql
+Migration applied successfully`}</CodeBlock><span className="comparison-label">verify</span><CodeBlock>{`$ dbwarden status --database primary
+Database: primary
+Applied migrations: 2
+Pending migrations: 0`}</CodeBlock></div></div>
+    </PageSection>
+    <section className="fit-section"><div className="section-label">/ the pages</div><div className="surface-index">{features.map((feature) => <FeatureCard key={feature.href} feature={feature} />)}</div></section>
+    <Faq items={[
+      { q: 'How is dbwarden structured?', a: 'CLI, commands, engine, repositories, and database layers. The engine handles model discovery, snapshot extraction, diffing, versioning, checksums, and safety; the database layer executes SQL through backend-aware connections.' },
+      { q: 'Can several databases share one config?', a: 'Yes. Each `DbwardenDatabase` subclass gets its own migration directory, versioned sequence, and lock records. `--database` targets one; `--all` operates every database in the config.' },
+      { q: 'What is the difference between schema/ and databases/?', a: '`schema/` is the dialect-agnostic metadata layer (`TableMeta`, `IndexSpec`). `databases/` holds the concrete backend specs. The import rule is one-way, so the metadata layer stays portable across backends.' },
+    ]} />
   </PageFrame>
 }
 
-function SurfaceSection({ number, label, title, doc, children }) {
-  return <section className={`article-section surface-section surface-${label.toLowerCase().replaceAll(' ', '-')}`}><div className="section-label">/ {number} <span>{label}</span><a className="section-doc" href={doc} target="_blank" rel="noreferrer">Read the docs ↗</a></div><h2>{title}</h2><div className="article-body">{children}</div></section>
-}
-
-function SafetyIcon({ type }) {
-  if (type === 'shield') return <span className="safety-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 3 19 6v5c0 4.7-2.9 8.1-7 10-4.1-1.9-7-5.3-7-10V6l7-3Z" /></svg></span>
-  if (type === 'search') return <span className="safety-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="5.5" /><path d="m15 15 5 5" /></svg></span>
-  return <span className="safety-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M20 11a8 8 0 0 0-14-5L4 8" /><path d="M4 4v4h4" /><path d="M4 13a8 8 0 0 0 14 5l2-2" /><path d="M20 20v-4h-4" /></svg></span>
+function FeatureCard({ feature }) {
+  return <a className="surface-index-card" href={feature.href}><span>↗</span><h3>{feature.title}</h3><p>{feature.description}</p></a>
 }
