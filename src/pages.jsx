@@ -99,14 +99,14 @@ export function NavLinks({ onNavigate }) {
     <a href="/how-it-works" onClick={onNavigate}>How it works</a>
     <div className={openGroup === 'tool-scope' ? 'nav-item has-dropdown is-open' : 'nav-item has-dropdown'}>
       <a href="/tool-scope" onClick={(e) => toggleGroup('tool-scope', e)}>Tool scope <span className="nav-caret" aria-hidden="true">▾</span></a>
-      <div className="nav-dropdown"><div className="nav-dropdown-inner"><span className="nav-dropdown-label">tool scope</span>{toolScopeLinks.map((link) => <a key={link.href} href={link.href} onClick={onNavigate}>{link.label}</a>)}</div></div>
+      <div className="nav-dropdown"><div className="nav-dropdown-inner">{toolScopeLinks.map((link) => <a key={link.href} href={link.href} onClick={onNavigate}>{link.label}</a>)}</div></div>
     </div>
     <a href="/databases" onClick={onNavigate}>Databases</a>
     <a href="/fastapi" onClick={onNavigate}>FastAPI</a>
     <a href="/plugins" onClick={onNavigate}>Plugins</a>
     <div className={openGroup === 'compare' ? 'nav-item has-dropdown is-open' : 'nav-item has-dropdown'}>
       <a href="/compare" onClick={(e) => toggleGroup('compare', e)}>Compare <span className="nav-caret" aria-hidden="true">▾</span></a>
-      <div className="nav-dropdown"><div className="nav-dropdown-inner"><span className="nav-dropdown-label">compare</span>{compareLinks.map((link) => <a key={link.href} href={link.href} onClick={onNavigate}>{link.label}</a>)}</div></div>
+      <div className="nav-dropdown"><div className="nav-dropdown-inner">{compareLinks.map((link) => <a key={link.href} href={link.href} onClick={onNavigate}>{link.label}</a>)}</div></div>
     </div>
     <a href="https://docs.dbwarden.org" target="_blank" rel="noreferrer" onClick={onNavigate}>Docs <span className="arrow">↗</span></a>
   </>

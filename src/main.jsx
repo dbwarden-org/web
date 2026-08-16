@@ -1,4 +1,4 @@
-import { lazy, StrictMode, Suspense, useDeferredValue, useEffect, useRef, useState } from 'react'
+import { lazy, StrictMode, Suspense, useDeferredValue, useEffect, useState } from 'react'
 import { createRoot } from 'react-dom/client'
 import '@fontsource-variable/inter'
 import './styles.css'
@@ -53,93 +53,6 @@ const pluginDirectory = [
 
 function RouteFallback() {
   return <div className="route-fallback" aria-hidden="true" />
-}
-
-// The animated daily-loop terminal, modeled on the portfolio's dbwarden terminal:
-// a window with a blinking cursor that types each command, reveals its output,
-// clears, and loops. With prefers-reduced-motion it renders the whole session
-// statically instead of animating.
-const LOOP_SESSIONS = [
-  [
-    { cmd: 'dbwarden init', out: ['Initialized project structure', 'Created migrations/', 'Created dbwarden.py'] },
-  ],
-  [
-    { cmd: 'dbwarden make-migrations "add posts table"', out: ['Generated changes:', '  + CREATE TABLE posts', 'Created: primary__0002_add_posts_table.sql'] },
-  ],
-  [
-    { cmd: 'dbwarden migrate', out: ['Applying primary__0002_add_posts_table.sql', 'Applied in 24ms'] },
-    { cmd: 'dbwarden status', out: ['Applied:  2', 'Pending:  0', 'Status:   up-to-date'] },
-  ],
-  [
-    { cmd: 'dbwarden check', out: ['Schema matches the models.'] },
-  ],
-]
-
-const LOOP_STATIC = LOOP_SESSIONS.flatMap((block) => [
-  ...block.flatMap((entry) => [{ kind: 'cmd', text: entry.cmd }, ...entry.out.map((text) => ({ kind: 'out', text }))]),
-  { kind: 'cmd', text: 'clear' },
-])
-
-function LoopTerminal() {
-  const [lines, setLines] = useState([])
-  const cancelledRef = useRef(false)
-
-  useEffect(() => {
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      setLines(LOOP_STATIC)
-      return
-    }
-    const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
-    const type = async (text) => {
-      for (let i = 1; i <= text.length; i += 1) {
-        if (cancelledRef.current) return
-        await sleep(42 + Math.random() * 55)
-        setLines((prev) => [...prev.slice(0, -1), { kind: 'cmd', text: text.slice(0, i) }])
-      }
-    }
-    const run = async () => {
-      await sleep(500)
-      while (!cancelledRef.current) {
-        for (const block of LOOP_SESSIONS) {
-          for (let i = 0; i < block.length; i += 1) {
-            if (cancelledRef.current) return
-            const entry = block[i]
-            setLines((prev) => [...prev, { kind: 'cmd', text: '' }])
-            await type(entry.cmd)
-            if (cancelledRef.current) return
-            await sleep(280 + Math.random() * 220)
-            for (const out of entry.out) {
-              if (cancelledRef.current) return
-              await sleep(110 + Math.random() * 90)
-              setLines((prev) => [...prev, { kind: 'out', text: out }])
-            }
-            await sleep(i === block.length - 1 ? 900 + Math.random() * 800 : 650 + Math.random() * 350)
-          }
-          if (cancelledRef.current) return
-          setLines((prev) => [...prev, { kind: 'cmd', text: '' }])
-          await type('clear')
-          if (cancelledRef.current) return
-          await sleep(1600)
-          setLines([])
-          await sleep(450)
-        }
-      }
-    }
-    run()
-    return () => { cancelledRef.current = true }
-  }, [])
-
-  return (
-    <div className="loop-terminal" aria-label="The dbwarden daily loop: init, make-migrations, migrate, status, check.">
-      <div className="terminal-bar"><span /><span /><span /><b>the daily loop</b></div>
-      <div className="loop-terminal-body">
-        {lines.map((line, index) => (
-          <div className={`loop-line ${line.kind}`} key={index}>{line.kind === 'cmd' ? <span className="loop-prompt">$&nbsp;</span> : null}{line.text}</div>
-        ))}
-        <div className="loop-line loop-cursor" aria-hidden="true">▊</div>
-      </div>
-    </div>
-  )
 }
 
 function App() {
@@ -319,9 +232,8 @@ function App() {
            <div className="section-label">/ 01 <span>how it works</span><a className="section-doc" href="https://docs.dbwarden.org/features/" target="_blank" rel="noreferrer">Read the guide ↗</a></div>
           <div className="split-heading"><h2>The schema lives<br /><em>in the models.</em></h2><p>Most migration workflows describe the schema twice (once in the models, once in the migration scripts), and nothing checks the two stay in agreement. The disagreement usually turns up in production.<br /><br />dbwarden derives the scripts from the models. There's one definition to maintain, and the generated SQL is easy to review and safe to delete.</p></div>
           <div className="declarative-split"><div><span className="comparison-label">declarative</span><strong>You declare the state.</strong><p>SQLAlchemy models describe what the schema should be. dbwarden generates the migration SQL, the rollback, and the checks from that one definition.</p></div><div><span className="comparison-label muted">imperative</span><strong>You write every step.</strong><p>Revision scripts describe how to get from one schema version to the next. The script chain becomes the schema's effective definition.</p></div></div>
-          <div className="principle-grid"><div className="principle"><span>01</span><h3>Models, not migration scripts</h3><p>Describe the database with SQLAlchemy models and typed metadata. That's the whole schema.</p><pre className="principle-code"><code><span>class Post(Base):</span><span>&nbsp;&nbsp;&nbsp;&nbsp;id = Column(Integer, primary_key=True)</span><span>&nbsp;&nbsp;&nbsp;&nbsp;title = Column(String(255), nullable=False)</span></code></pre></div><div className="principle"><span>02</span><h3>Review the SQL</h3><p><code className="inline-code">dbwarden make-migrations</code> produces a versioned SQL file with upgrade and rollback, ready for the pull request.</p><pre className="principle-code"><code><span className="sql-comment">-- upgrade</span><span>CREATE TABLE posts (</span><span>&nbsp;&nbsp;&nbsp;&nbsp;id SERIAL PRIMARY KEY,</span><span>&nbsp;&nbsp;&nbsp;&nbsp;title VARCHAR(255) NOT NULL</span><span>);</span><span className="sql-gap" /><span className="sql-comment">-- rollback</span><span>DROP TABLE posts;</span></code></pre></div><div className="principle"><span>03</span><h3>Check the database</h3><p>Snapshots and live comparisons tell you whether “migration succeeded” actually means the schema matches.</p><pre className="principle-code"><code><span><span className="loop-prompt">$&nbsp;</span>dbwarden check</span><span className="loop-good">Schema matches the models.</span></code></pre></div>
+          <div className="principle-grid"><div className="principle"><span>01</span><h3>Models, not migration scripts</h3><p>Describe the database with SQLAlchemy models and typed metadata. That's the whole schema.</p></div><div className="principle"><span>02</span><h3>Review the SQL</h3><p><code className="inline-code">dbwarden make-migrations</code> produces a versioned SQL file with upgrade and rollback, ready for the pull request.</p></div><div className="principle"><span>03</span><h3>Check the database</h3><p>Snapshots and live comparisons tell you whether “migration succeeded” actually means the schema matches.</p></div>
           </div>
-          <div className="loop-block"><span className="loop-caption">the loop, as you'd run it</span><LoopTerminal /></div>
         </section>
 
         <section className="section content-wrap verified-section">
@@ -369,6 +281,7 @@ function App() {
 function PluginDirectory({ dark, toggleTheme }) {
   const [filter, setFilter] = useState('all')
   const [search, setSearch] = useState('')
+  const [activeTier, setActiveTier] = useState(null)
   const deferredSearch = useDeferredValue(search)
   const visiblePlugins = pluginDirectory.filter((plugin) => {
     const matchesTier = filter === 'all' || plugin.tier === filter
@@ -381,7 +294,7 @@ function PluginDirectory({ dark, toggleTheme }) {
     <main className="directory-main content-wrap">
       <div className="directory-kicker">/ plugin directory</div>
        <div className="directory-intro"><div><h1>Plugins that<br /><em>leave the core alone.</em></h1></div><p>Official plugins add database objects, lifecycle hooks, seeds, and sandbox validation. Anyone can write more with the plugin template. Everything is open source and MIT licensed.</p></div>
-      <section className="directory-trust"><div className="section-label">/ how trust works</div><div className="trust-split"><div className="trust-copy"><p>dbwarden classifies every plugin before loading it. Official plugins are built and provenance-verified by the dbwarden organization. Community plugins are never imported until you consent to that exact version in .dbwarden/consent.toml.</p></div><div className="trust-grid"><div className="trust-card"><span className="trust-card-label">Official</span><p>Built by the dbwarden org. Provenance verified at install time; installs fail closed when verification is unavailable.</p></div><div className="trust-card"><span className="trust-card-label">Verified</span><p>Community plugins that passed the dbwarden plugin test standard and manual review.</p></div><div className="trust-card"><span className="trust-card-label">Community</span><p>Any other entry point. Loaded only with explicit, version-specific consent.</p></div></div></div></section>
+      <section className="directory-trust"><div className="section-label">/ how trust works</div><div className="trust-split"><div className="trust-copy"><p>dbwarden classifies every plugin before loading it. Official plugins are built and provenance-verified by the dbwarden organization. Community plugins are never imported until you consent to that exact version in .dbwarden/consent.toml.</p></div><div className="trust-grid">{[{ label: 'Official', text: 'Built by the dbwarden org. Provenance verified at install time; installs fail closed when verification is unavailable.' }, { label: 'Verified', text: 'Community plugins that passed the dbwarden plugin test standard and manual review.' }, { label: 'Community', text: 'Any other entry point. Loaded only with explicit, version-specific consent.' }].map((tier, index) => <button key={tier.label} type="button" className={activeTier === index ? 'trust-card is-active' : 'trust-card'} onClick={() => setActiveTier(activeTier === index ? null : index)} aria-expanded={activeTier === index}><span className="trust-card-label">{tier.label}</span><span className="trust-card-body"><span className="trust-card-body-inner"><p>{tier.text}</p></span></span></button>)}</div></div></section>
        <div className="directory-template-note">All plugins follow the <a href="https://github.com/dbwarden-org/dbwarden-plugin-template" target="_blank" rel="noreferrer">dbwarden plugin template <span>↗</span></a>.</div>
        <div className="directory-create-note">Want to create plugins? <a href="https://docs.dbwarden.org/plugins/developing/overview/" target="_blank" rel="noreferrer">See the docs <span>↗</span></a>.</div>
       <div className="directory-toolbar"><div className="filter-group" aria-label="Filter plugins">{['all', 'official', 'community'].map((option) => <button type="button" className={filter === option ? 'filter-button is-active' : 'filter-button'} key={option} onClick={() => setFilter(option)}>{option}</button>)}</div><label className="plugin-search"><span>⌕</span><input type="search" value={search} onChange={(event) => setSearch(event.target.value)} placeholder="Search plugins" aria-label="Search plugins" /></label></div>
