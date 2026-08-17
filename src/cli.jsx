@@ -1,4 +1,6 @@
-import { PageFrame, PageSection, CodeBlock, renderInline } from './pages.jsx'
+import './page-styles.css'
+import { PageFrame, PageSection, renderInline } from './pages.jsx'
+import { CodeBlock } from './code.jsx'
 
 const groups = [
   { label: 'author', description: '`init`, `new`, `make-migrations`, `make-rollback`, `generate-models`, `export-models`', example: '$ dbwarden make-migrations "add bio" --rename users.name:full_name' },

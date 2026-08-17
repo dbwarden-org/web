@@ -1,4 +1,6 @@
-import { PageFrame, PageSection, CodeBlock, Faq } from './pages.jsx'
+import './page-styles.css'
+import { PageFrame, PageSection, Faq } from './pages.jsx'
+import { CodeBlock } from './code.jsx'
 
 export function GenerationPage({ dark, toggleTheme }) {
   return <PageFrame dark={dark} toggleTheme={toggleTheme} eyebrow="tool scope / generation" title={<>Migrations generated<br /><em>from the models.</em></>} intro="Migrations are derived from the models, covering ordinary columns and relationships, and can be generated offline from committed model state." install="uv add dbwarden">

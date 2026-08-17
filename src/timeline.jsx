@@ -2,7 +2,9 @@ import { useRef } from 'react'
 import { useGSAP } from '@gsap/react'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
-import { PageFrame, CodeBlock } from './pages.jsx'
+import './page-styles.css'
+import { PageFrame } from './pages.jsx'
+import { CodeBlock } from './code.jsx'
 
 gsap.registerPlugin(useGSAP, ScrollTrigger)
 

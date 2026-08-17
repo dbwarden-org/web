@@ -1,4 +1,6 @@
-import { PageFrame, highlightBlock, renderCodeParts } from './pages.jsx'
+import './page-styles.css'
+import { PageFrame } from './pages.jsx'
+import { highlightBlock, renderCodeParts } from './code.jsx'
 import { cloneElement, isValidElement } from 'react'
 
 const comparisons = [

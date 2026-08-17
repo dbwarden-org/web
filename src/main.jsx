@@ -2,12 +2,13 @@ import { lazy, StrictMode, Suspense, useDeferredValue, useEffect, useState } fro
 import { createRoot } from 'react-dom/client'
 import '@fontsource-variable/inter'
 import './styles.css'
-import { AccessibilityMenu, Faq, NavLinks, PageHeader, SiteFooter, ThemeSwitch, WhyPage } from './pages.jsx'
+import { AccessibilityMenu, Faq, NavLinks, PageHeader, SiteFooter, ThemeSwitch } from './pages.jsx'
 import { Seo } from './seo.jsx'
 
 // Route-level code splitting: only the home page (shell + pages.jsx) ships in the
 // initial bundle. Everything else loads on navigation, so gsap (~200 kB gzip) and
 // the big content pages never touch users who only visit the landing page.
+const WhyPage = lazy(() => import('./why.jsx').then((m) => ({ default: m.WhyPage })))
 const ProductSurfacePage = lazy(() => import('./surface.jsx').then((m) => ({ default: m.ProductSurfacePage })))
 const TimelinePage = lazy(() => import('./timeline.jsx').then((m) => ({ default: m.TimelinePage })))
 const ComparePage = lazy(() => import('./compare.jsx').then((m) => ({ default: m.ComparePage })))

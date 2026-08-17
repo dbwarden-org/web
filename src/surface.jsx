@@ -1,4 +1,6 @@
-import { PageFrame, PageSection, CodeBlock, Faq } from './pages.jsx'
+import './page-styles.css'
+import { PageFrame, PageSection, Faq } from './pages.jsx'
+import { CodeBlock } from './code.jsx'
 
 const features = [
   { href: '/tool-scope/generation', title: 'Generation', description: 'Models to versioned SQL with upgrade and rollback, and offline generation from committed state.' },

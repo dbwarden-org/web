@@ -1,3 +1,4 @@
+import './page-styles.css'
 import { PageFrame } from './pages.jsx'
 
 export function NotFoundPage({ dark, toggleTheme }) {

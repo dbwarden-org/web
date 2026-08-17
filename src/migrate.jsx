@@ -1,4 +1,6 @@
-import { PageFrame, PageSection, CodeBlock, Faq } from './pages.jsx'
+import './page-styles.css'
+import { PageFrame, PageSection, Faq } from './pages.jsx'
+import { CodeBlock } from './code.jsx'
 
 export function MigrateFromAlembicPage({ dark, toggleTheme }) {
   return <PageFrame dark={dark} toggleTheme={toggleTheme} eyebrow="migrate from alembic" title={<>Keep the models.<br /><em>Retire the revision chain.</em></>} intro="Alembic keeps schema truth in a chain of revision scripts; dbwarden keeps it in the models and derives plain SQL migrations from them. Your models stay exactly where they are and your database is never rebuilt; you are replacing the migration workflow, not the schema. Alembic history stays in git, which is where old revisions belong.">

@@ -1,4 +1,6 @@
-import { PageFrame, PageSection, CodeBlock, Faq } from './pages.jsx'
+import './page-styles.css'
+import { PageFrame, PageSection, Faq } from './pages.jsx'
+import { CodeBlock } from './code.jsx'
 
 export function FastapiPage({ dark, toggleTheme }) {
   return <PageFrame dark={dark} toggleTheme={toggleTheme} eyebrow="fastapi" title={<>Sessions, health, migrations,<br /><em>and request models.</em></>} intro={<>dbwarden-fastapi provides the FastAPI pieces from the same <code className="inline-code">dbwarden.py</code> file that generates your migrations: startup schema validation, session dependencies, health and migration routers, and <code className="inline-code">@auto_schema</code> for request and response models.</>} install="dbwarden plugin add dbwarden-fastapi">

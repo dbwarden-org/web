@@ -1,5 +1,7 @@
 import { useState } from 'react'
-import { PageFrame, PageSection, CodeBlock, Faq } from './pages.jsx'
+import './page-styles.css'
+import { PageFrame, PageSection, Faq } from './pages.jsx'
+import { CodeBlock } from './code.jsx'
 
 function CopyCommand({ command }) {
   const [copied, setCopied] = useState(false)

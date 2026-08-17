@@ -1,4 +1,6 @@
-import { PageFrame, PageSection, CodeBlock } from './pages.jsx'
+import './page-styles.css'
+import { PageFrame, PageSection } from './pages.jsx'
+import { CodeBlock } from './code.jsx'
 
 export function CorrectnessPage({ dark, toggleTheme }) {
   return <PageFrame dark={dark} toggleTheme={toggleTheme} eyebrow="correctness" title={<>The migrations reproduce<br /><em>the models.</em></>} intro="dbwarden verifies migrations: checksummed snapshots, deterministic diffs, a strict rollback contract, and a convergence gate that replays the full migration history against a real database.">

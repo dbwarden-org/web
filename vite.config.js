@@ -1,4 +1,4 @@
-import { mkdirSync, readFileSync, writeFileSync } from 'node:fs'
+import { mkdirSync, readFileSync, readdirSync, writeFileSync } from 'node:fs'
 import { dirname, join } from 'node:path'
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
@@ -94,7 +94,15 @@ function prerenderSeo() {
     name: 'dbwarden-prerender-seo',
     closeBundle() {
       const outDir = 'dist'
-      const template = readFileSync(join(outDir, 'index.html'), 'utf8')
+      let template = readFileSync(join(outDir, 'index.html'), 'utf8')
+      // Preload the only font the English site actually uses (the latin subset
+      // of the Inter variable font) so it downloads in parallel with the CSS
+      // and JS instead of after first paint.
+      const latin = readdirSync(join(outDir, 'assets')).find((name) => name.startsWith('inter-latin-wght-') && name.endsWith('.woff2'))
+      if (latin && !template.includes('rel="preload" as="font"')) {
+        const preload = `<link rel="preload" href="/assets/${latin}" as="font" type="font/woff2" crossorigin />`
+        template = template.replace('<link rel="stylesheet"', `${preload}\n    <link rel="stylesheet"`)
+      }
       for (const path of Object.keys(pages)) {
         const html = applyHead(template, path)
         const file = path === '/' ? join(outDir, 'index.html') : join(outDir, path, 'index.html')
@@ -109,6 +117,14 @@ function prerenderSeo() {
 
 export default defineConfig({
   plugins: [react(), prerenderSeo()],
+  resolve: {
+    alias: {
+      react: 'preact/compat',
+      'react-dom': 'preact/compat',
+      'react-dom/client': 'preact/compat',
+      'react/jsx-runtime': 'preact/jsx-runtime',
+    },
+  },
   css: {
     transformer: 'lightningcss',
   },
