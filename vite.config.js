@@ -105,6 +105,10 @@ function prerenderSeo() {
         const css = readFileSync(join(outDir, cssLink[1].replace(/^\//, '')), 'utf8')
         template = template.replace(cssLink[0], `<style>${css}</style>`)
       }
+      // Subset the Inter latin variable font to just the characters the site
+      // renders (plus a safety margin), keeping the variable axes so every
+      // weight still works. src/font-chars.txt must be refreshed if new copy
+      // introduces characters outside it. Requires fonttools (pyftsubset).
       const latin = readdirSync(join(outDir, 'assets')).find((name) => name.startsWith('inter-latin-wght-') && name.endsWith('.woff2'))
       if (latin) {
         const temp = join(outDir, 'assets', `.${latin}.subset`)
