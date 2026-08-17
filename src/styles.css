@@ -441,6 +441,32 @@ p code, li code, summary code { padding: 2px 5px; border: 1px solid var(--line);
 
 .home-faq { padding: 0 0 120px; }
 
+/* Banded home sections: alternating full-bleed tints give the landing page rhythm and depth. */
+.verified-section, .home-faq {
+  margin-left: calc((100% - 100vw) / 2);
+  margin-right: calc((100% - 100vw) / 2);
+  padding-left: max(36px, calc((100vw - 1180px) / 2));
+  padding-right: max(36px, calc((100vw - 1180px) / 2));
+  width: auto;
+  max-width: none;
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+}
+.verified-section { background: var(--surface-muted); }
+.home-faq {
+  background:
+    radial-gradient(58% 66% at 82% 18%, var(--hero-glow), transparent 72%),
+    var(--blue-wash);
+}
+.home-faq .faq-section { border-top: 0; padding-top: 96px; }
+@media (max-width: 850px) {
+  .verified-section, .home-faq {
+    margin-left: -19px;
+    margin-right: -19px;
+    padding-left: 19px;
+    padding-right: 19px;
+  }
+}
 .copy-pop { position: absolute; top: calc(100% + 8px); left: 50%; transform: translateX(-50%); padding: 4px 10px; border-radius: 4px; background: var(--ink); color: var(--bg); font: 700 10px/1 'Inter Variable', Inter, sans-serif; letter-spacing: .04em; white-space: nowrap; pointer-events: none; z-index: 5; animation: copy-pop-in .15s ease; }
 .copy-pop::after { content: ''; position: absolute; top: -4px; left: 50%; transform: translateX(-50%) rotate(45deg); width: 8px; height: 8px; background: var(--ink); }
 @keyframes copy-pop-in { from { opacity: 0; transform: translateX(-50%) translateY(3px); } to { opacity: 1; transform: translateX(-50%) translateY(0); } }
