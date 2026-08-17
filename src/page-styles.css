@@ -131,6 +131,17 @@
 .timeline-track { position: relative; padding: 10px 0 20px; }
 .timeline-line { position: absolute; top: 0; bottom: 0; left: 88px; width: 1px; background: var(--line); }
 .timeline-progress { width: 2px; height: 100%; background: var(--gold); transform: scaleY(0); transform-origin: top center; }
+/* Timeline reveals (replaced the GSAP build; timeline.jsx toggles is-visible). */
+.timeline-intro > * { opacity: 0; transform: translateY(24px); transition: opacity .75s ease, transform .75s ease; }
+.timeline-intro.is-visible > * { opacity: 1; transform: none; }
+.timeline-intro.is-visible > *:nth-child(2) { transition-delay: .12s; }
+.timeline-intro.is-visible > *:nth-child(3) { transition-delay: .24s; }
+.timeline-item { opacity: 0; transform: translateY(34px); transition: opacity .7s ease, transform .7s ease; }
+.timeline-item.is-visible { opacity: 1; transform: none; }
+@media (prefers-reduced-motion: reduce) {
+  .timeline-intro > *, .timeline-item { opacity: 1; transform: none; transition: none; }
+  .timeline-progress { transform: none; }
+}
 .timeline-item { display: grid; grid-template-columns: 178px minmax(0, 1fr) minmax(250px, .72fr); gap: 50px; align-items: center; min-height: 300px; padding: 52px 0; position: relative; border-top: 1px solid var(--line); }
 .timeline-item:first-of-type { border-top: 0; }
 .timeline-marker { display: grid; place-items: center; width: 50px; height: 50px; margin-left: 63px; border: 1px solid var(--line); border-radius: 50%; background: var(--bg); color: var(--blue); font-size: 11px; font-weight: 800; position: relative; z-index: 1; }

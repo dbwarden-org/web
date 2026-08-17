@@ -1,4 +1,5 @@
-import { mkdirSync, readFileSync, readdirSync, writeFileSync } from 'node:fs'
+import { mkdirSync, readFileSync, readdirSync, rmSync, writeFileSync } from 'node:fs'
+import { spawnSync } from 'node:child_process'
 import { dirname, join } from 'node:path'
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
@@ -95,13 +96,37 @@ function prerenderSeo() {
     closeBundle() {
       const outDir = 'dist'
       let template = readFileSync(join(outDir, 'index.html'), 'utf8')
-      // Preload the only font the English site actually uses (the latin subset
-      // of the Inter variable font) so it downloads in parallel with the CSS
-      // and JS instead of after first paint.
+      // Inline the single stylesheet into every prerendered page so nothing
+      // render-blocks first paint. The CSS is ~7 kB gzipped and shared by all
+      // routes, so the copy cost per page is negligible and the render-blocking
+      // request disappears.
+      const cssLink = template.match(/<link rel="stylesheet"[^>]*?href="([^"]+)"/)
+      if (cssLink) {
+        const css = readFileSync(join(outDir, cssLink[1].replace(/^\//, '')), 'utf8')
+        template = template.replace(cssLink[0], `<style>${css}</style>`)
+      }
       const latin = readdirSync(join(outDir, 'assets')).find((name) => name.startsWith('inter-latin-wght-') && name.endsWith('.woff2'))
+      if (latin) {
+        const temp = join(outDir, 'assets', `.${latin}.subset`)
+        const subset = spawnSync('pyftsubset', [
+          join(outDir, 'assets', latin),
+          `--text-file=${join('src', 'font-chars.txt')}`,
+          '--flavor=woff2',
+          `--output-file=${temp}`,
+        ], { encoding: 'utf8' })
+        if (subset.status === 0) {
+          writeFileSync(join(outDir, 'assets', latin), readFileSync(temp))
+          rmSync(temp)
+        } else {
+          console.warn(`prerender: font subset failed (${subset.stderr?.slice(0, 120) ?? 'unknown'}), shipping full latin font`)
+        }
+      }
+      // Preload the only font the English site actually uses (the latin subset
+      // of the Inter variable font) so it downloads in parallel with the JS
+      // instead of after first paint.
       if (latin && !template.includes('rel="preload" as="font"')) {
         const preload = `<link rel="preload" href="/assets/${latin}" as="font" type="font/woff2" crossorigin />`
-        template = template.replace('<link rel="stylesheet"', `${preload}\n    <link rel="stylesheet"`)
+        template = template.replace('<script type="module"', `${preload}\n    <script type="module"`)
       }
       for (const path of Object.keys(pages)) {
         const html = applyHead(template, path)

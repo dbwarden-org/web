@@ -1,12 +1,7 @@
-import { useRef } from 'react'
-import { useGSAP } from '@gsap/react'
-import gsap from 'gsap'
-import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import { useEffect, useRef } from 'preact/hooks'
 import './page-styles.css'
 import { PageFrame } from './pages.jsx'
 import { CodeBlock } from './code.jsx'
-
-gsap.registerPlugin(useGSAP, ScrollTrigger)
 
 function inline(text) {
   const parts = String(text).split(/(`[^`]+`)/g)
@@ -81,26 +76,65 @@ const steps = [
 export function TimelinePage({ dark, toggleTheme }) {
   const timelineRef = useRef(null)
 
-  useGSAP(() => {
-    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
-    if (reduced) return
+  useEffect(() => {
+    const shell = timelineRef.current
+    if (!shell) return
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
 
-    gsap.from('.timeline-intro > *', { opacity: 0, y: 24, duration: .75, stagger: .12, ease: 'power2.out' })
-    gsap.from('.timeline-item', {
-      opacity: 0,
-      y: 34,
-      duration: .7,
-      stagger: .12,
-      ease: 'power2.out',
-      scrollTrigger: { trigger: '.timeline-track', start: 'top 78%', once: true },
-    })
-    gsap.to('.timeline-progress', {
-      scaleY: 1,
-      transformOrigin: 'top center',
-      ease: 'none',
-      scrollTrigger: { trigger: '.timeline-track', start: 'top 68%', end: 'bottom 72%', scrub: 1 },
-    })
-  }, { scope: timelineRef })
+    // Intro fades in on load, the same as the old gsap.from.
+    const intro = shell.querySelector('.timeline-intro')
+    if (intro) requestAnimationFrame(() => intro.classList.add('is-visible'))
+
+    // Each step fades in the first time it scrolls into view.
+    const items = shell.querySelectorAll('.timeline-item')
+    const reveal = new IntersectionObserver((entries) => {
+      for (const entry of entries) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('is-visible')
+          reveal.unobserve(entry.target)
+        }
+      }
+    }, { threshold: 0.15 })
+    items.forEach((item) => reveal.observe(item))
+
+    // The gold progress line fills as the track scrolls past, mirroring the
+    // old ScrollTrigger scrub (start: track top at 68% vh, end: track bottom
+    // at 72% vh). One rAF-throttled handler, only active while in view.
+    const track = shell.querySelector('.timeline-track')
+    const progress = shell.querySelector('.timeline-progress')
+    let onScroll = null
+    let raf = 0
+    let progressInView = null
+    if (track && progress) {
+      const fill = () => {
+        raf = 0
+        const rect = track.getBoundingClientRect()
+        const vh = window.innerHeight
+        const distance = rect.height - vh * 0.04
+        if (distance <= 0) return
+        const amount = Math.min(1, Math.max(0, (vh * 0.68 - rect.top) / distance))
+        progress.style.transform = `scaleY(${amount})`
+      }
+      onScroll = () => { if (!raf) raf = requestAnimationFrame(fill) }
+      progressInView = new IntersectionObserver((entries) => {
+        if (entries[0].isIntersecting) {
+          onScroll()
+          window.addEventListener('scroll', onScroll, { passive: true })
+        } else {
+          window.removeEventListener('scroll', onScroll)
+        }
+      }, { rootMargin: '20% 0px' })
+      progressInView.observe(track)
+      fill()
+    }
+
+    return () => {
+      reveal.disconnect()
+      if (progressInView) progressInView.disconnect()
+      if (onScroll) window.removeEventListener('scroll', onScroll)
+      if (raf) cancelAnimationFrame(raf)
+    }
+  }, [])
 
   return <PageFrame dark={dark} toggleTheme={toggleTheme} eyebrow="how it works" title={<>The same loop,<br /><em>every change.</em></>} intro="Configure the database once. After that, every change follows the same loop: declare the schema in the models, derive the SQL, review it, apply it, and confirm the database matches.">
     <div className="timeline-shell" ref={timelineRef}>
