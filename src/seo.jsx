@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect } from 'preact/hooks'
 import { breadcrumbFor, canonicalFor, imageUrl, ogTypeFor, pages, schemaFor, siteUrl } from './seo-data.js'
 
 function setMeta(attribute, key, content) {

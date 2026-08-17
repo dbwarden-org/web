@@ -1,5 +1,6 @@
-import { lazy, StrictMode, Suspense, useDeferredValue, useEffect, useState } from 'react'
-import { createRoot } from 'react-dom/client'
+import { useEffect, useState } from 'preact/hooks'
+import { render } from 'preact'
+import { lazyLoad, useDeferredValue } from './react-shims.jsx'
 import '@fontsource-variable/inter'
 import './styles.css'
 import { AccessibilityMenu, Faq, NavLinks, PageHeader, SiteFooter, ThemeSwitch } from './pages.jsx'
@@ -8,25 +9,25 @@ import { Seo } from './seo.jsx'
 // Route-level code splitting: only the home page (shell + pages.jsx) ships in the
 // initial bundle. Everything else loads on navigation, so gsap (~200 kB gzip) and
 // the big content pages never touch users who only visit the landing page.
-const WhyPage = lazy(() => import('./why.jsx').then((m) => ({ default: m.WhyPage })))
-const ProductSurfacePage = lazy(() => import('./surface.jsx').then((m) => ({ default: m.ProductSurfacePage })))
-const TimelinePage = lazy(() => import('./timeline.jsx').then((m) => ({ default: m.TimelinePage })))
-const ComparePage = lazy(() => import('./compare.jsx').then((m) => ({ default: m.ComparePage })))
-const AlembicComparisonPage = lazy(() => import('./compare.jsx').then((m) => ({ default: m.AlembicComparisonPage })))
-const AtlasComparisonPage = lazy(() => import('./compare.jsx').then((m) => ({ default: m.AtlasComparisonPage })))
-const DjangoComparisonPage = lazy(() => import('./compare.jsx').then((m) => ({ default: m.DjangoComparisonPage })))
-const FastapiPage = lazy(() => import('./fastapi.jsx').then((m) => ({ default: m.FastapiPage })))
-const GenerationPage = lazy(() => import('./features.jsx').then((m) => ({ default: m.GenerationPage })))
-const SafetyPage = lazy(() => import('./features.jsx').then((m) => ({ default: m.SafetyPage })))
-const StatePage = lazy(() => import('./features.jsx').then((m) => ({ default: m.StatePage })))
-const RepeatableMigrationsPage = lazy(() => import('./features.jsx').then((m) => ({ default: m.RepeatableMigrationsPage })))
-const SeedsPage = lazy(() => import('./features.jsx').then((m) => ({ default: m.SeedsPage })))
-const ObservabilityPage = lazy(() => import('./features.jsx').then((m) => ({ default: m.ObservabilityPage })))
-const CorrectnessPage = lazy(() => import('./correctness.jsx').then((m) => ({ default: m.CorrectnessPage })))
-const DatabasesPage = lazy(() => import('./databases.jsx').then((m) => ({ default: m.DatabasesPage })))
-const MigrateFromAlembicPage = lazy(() => import('./migrate.jsx').then((m) => ({ default: m.MigrateFromAlembicPage })))
-const CliPage = lazy(() => import('./cli.jsx').then((m) => ({ default: m.CliPage })))
-const NotFoundPage = lazy(() => import('./notfound.jsx').then((m) => ({ default: m.NotFoundPage })))
+const WhyPage = lazyLoad(() => import('./why.jsx').then((m) => ({ default: m.WhyPage })))
+const ProductSurfacePage = lazyLoad(() => import('./surface.jsx').then((m) => ({ default: m.ProductSurfacePage })))
+const TimelinePage = lazyLoad(() => import('./timeline.jsx').then((m) => ({ default: m.TimelinePage })))
+const ComparePage = lazyLoad(() => import('./compare.jsx').then((m) => ({ default: m.ComparePage })))
+const AlembicComparisonPage = lazyLoad(() => import('./compare.jsx').then((m) => ({ default: m.AlembicComparisonPage })))
+const AtlasComparisonPage = lazyLoad(() => import('./compare.jsx').then((m) => ({ default: m.AtlasComparisonPage })))
+const DjangoComparisonPage = lazyLoad(() => import('./compare.jsx').then((m) => ({ default: m.DjangoComparisonPage })))
+const FastapiPage = lazyLoad(() => import('./fastapi.jsx').then((m) => ({ default: m.FastapiPage })))
+const GenerationPage = lazyLoad(() => import('./features.jsx').then((m) => ({ default: m.GenerationPage })))
+const SafetyPage = lazyLoad(() => import('./features.jsx').then((m) => ({ default: m.SafetyPage })))
+const StatePage = lazyLoad(() => import('./features.jsx').then((m) => ({ default: m.StatePage })))
+const RepeatableMigrationsPage = lazyLoad(() => import('./features.jsx').then((m) => ({ default: m.RepeatableMigrationsPage })))
+const SeedsPage = lazyLoad(() => import('./features.jsx').then((m) => ({ default: m.SeedsPage })))
+const ObservabilityPage = lazyLoad(() => import('./features.jsx').then((m) => ({ default: m.ObservabilityPage })))
+const CorrectnessPage = lazyLoad(() => import('./correctness.jsx').then((m) => ({ default: m.CorrectnessPage })))
+const DatabasesPage = lazyLoad(() => import('./databases.jsx').then((m) => ({ default: m.DatabasesPage })))
+const MigrateFromAlembicPage = lazyLoad(() => import('./migrate.jsx').then((m) => ({ default: m.MigrateFromAlembicPage })))
+const CliPage = lazyLoad(() => import('./cli.jsx').then((m) => ({ default: m.CliPage })))
+const NotFoundPage = lazyLoad(() => import('./notfound.jsx').then((m) => ({ default: m.NotFoundPage })))
 
 const logo = '/icon.webp'
 
@@ -51,10 +52,6 @@ const pluginDirectory = [
   { name: 'dbwarden-seeds', tier: 'official', description: 'Deterministic seed data with migration-aware rollback.', repository: 'https://github.com/dbwarden-org/dbwarden-seeds' },
   { name: 'dbwarden-sandbox', tier: 'official', description: 'Validate generated SQL in an isolated sandbox before deploy.', repository: 'https://github.com/dbwarden-org/dbwarden-sandbox' },
 ]
-
-function RouteFallback() {
-  return <div className="route-fallback" aria-hidden="true" />
-}
 
 function App() {
   const [dark, setDark] = useState(() => localStorage.getItem('dbwarden-theme') !== 'light')
@@ -98,7 +95,7 @@ function App() {
 
   const toggleTheme = () => setDark((value) => !value)
 
-  const route = (node) => <Suspense fallback={<RouteFallback />}>{node}</Suspense>
+  const route = (node) => node
 
   if (window.location.pathname.replace(/\/$/, '') === '/plugins') {
     return <PluginDirectory dark={dark} toggleTheme={toggleTheme} />
@@ -306,4 +303,4 @@ function PluginDirectory({ dark, toggleTheme }) {
   </div>
 }
 
-createRoot(document.getElementById('root')).render(<StrictMode><><Seo /><App /></></StrictMode>)
+render(<><Seo /><App /></>, document.getElementById('root'))

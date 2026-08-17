@@ -1,7 +1,7 @@
 import './page-styles.css'
 import { PageFrame } from './pages.jsx'
 import { highlightBlock, renderCodeParts } from './code.jsx'
-import { cloneElement, isValidElement } from 'react'
+import { cloneElement, isValidElement } from 'preact'
 
 const comparisons = [
   { name: 'vs Alembic', description: 'The established imperative migration tool for SQLAlchemy. Revision scripts versus derived SQL.', href: '/compare/alembic' },

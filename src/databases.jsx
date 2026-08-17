@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState } from 'preact/hooks'
 import './page-styles.css'
 import { PageFrame, PageSection, Faq } from './pages.jsx'
 import { CodeBlock } from './code.jsx'
