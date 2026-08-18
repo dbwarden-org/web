@@ -1,7 +1,8 @@
 import { mkdirSync, readFileSync, readdirSync, rmSync, writeFileSync } from 'node:fs'
 import { spawnSync } from 'node:child_process'
 import { dirname, join } from 'node:path'
-import { defineConfig } from 'vite'
+import { pathToFileURL } from 'node:url'
+import { build, defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import { breadcrumbFor, canonicalFor, ogTypeFor, pages, schemaFor, siteUrl } from './src/seo-data.js'
 
@@ -93,9 +94,22 @@ function apply404(template) {
 function prerenderSeo() {
   return {
     name: 'dbwarden-prerender-seo',
-    closeBundle() {
+    async closeBundle() {
       const outDir = 'dist'
       let template = readFileSync(join(outDir, 'index.html'), 'utf8')
+      // Build the server bundle (src/ssr.jsx) so every route can be rendered to
+      // full HTML at build time; content then paints before any JavaScript runs.
+      await build({
+        configFile: false,
+        root: process.cwd(),
+        plugins: [react()],
+        resolve: { alias: { react: 'preact/compat', 'react-dom': 'preact/compat', 'react-dom/client': 'preact/compat', 'react/jsx-runtime': 'preact/jsx-runtime' } },
+        build: { ssr: 'src/ssr.jsx', outDir: 'dist-ssr', emptyOutDir: true, minify: false },
+        logLevel: 'silent',
+      })
+      const ssrBundle = join('dist-ssr', 'ssr.js')
+      const ssr = await import(pathToFileURL(ssrBundle).href + `?t=${Date.now()}`)
+      const renderRoute = (path) => ssr.renderRoute(path)
       // Inline the single stylesheet into every prerendered page so nothing
       // render-blocks first paint. The CSS is ~7 kB gzipped and shared by all
       // routes, so the copy cost per page is negligible and the render-blocking
@@ -133,12 +147,13 @@ function prerenderSeo() {
         template = template.replace('<script type="module"', `${preload}\n    <script type="module"`)
       }
       for (const path of Object.keys(pages)) {
-        const html = applyHead(template, path)
+        const body = renderRoute(path)
+        const html = applyHead(template.replace('<div id="root"></div>', `<div id="root">${body}</div>`), path)
         const file = path === '/' ? join(outDir, 'index.html') : join(outDir, path, 'index.html')
         mkdirSync(dirname(file), { recursive: true })
         writeFileSync(file, html)
       }
-      writeFileSync(join(outDir, '404.html'), apply404(template))
+      writeFileSync(join(outDir, '404.html'), apply404(template.replace('<div id="root"></div>', `<div id="root">${renderRoute('/this-page-does-not-exist')}</div>`)))
       console.log(`prerendered ${Object.keys(pages).length} routes + 404.html with per-page SEO`)
     },
   }

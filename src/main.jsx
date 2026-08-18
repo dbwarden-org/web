@@ -1,33 +1,78 @@
 import { useEffect, useState } from 'preact/hooks'
 import { render } from 'preact'
-import { lazyLoad, useDeferredValue } from './react-shims.jsx'
+import { lazyLoad, registerRoute, useDeferredValue } from './react-shims.jsx'
 import '@fontsource-variable/inter'
 import './styles.css'
 import { AccessibilityMenu, Faq, NavLinks, PageHeader, SiteFooter, ThemeSwitch } from './pages.jsx'
 import { Seo } from './seo.jsx'
 
 // Route-level code splitting: only the home page (shell + pages.jsx) ships in the
-// initial bundle. Everything else loads on navigation, so gsap (~200 kB gzip) and
-// the big content pages never touch users who only visit the landing page.
-const WhyPage = lazyLoad(() => import('./why.jsx').then((m) => ({ default: m.WhyPage })))
-const ProductSurfacePage = lazyLoad(() => import('./surface.jsx').then((m) => ({ default: m.ProductSurfacePage })))
-const TimelinePage = lazyLoad(() => import('./timeline.jsx').then((m) => ({ default: m.TimelinePage })))
-const ComparePage = lazyLoad(() => import('./compare.jsx').then((m) => ({ default: m.ComparePage })))
-const AlembicComparisonPage = lazyLoad(() => import('./compare.jsx').then((m) => ({ default: m.AlembicComparisonPage })))
-const AtlasComparisonPage = lazyLoad(() => import('./compare.jsx').then((m) => ({ default: m.AtlasComparisonPage })))
-const DjangoComparisonPage = lazyLoad(() => import('./compare.jsx').then((m) => ({ default: m.DjangoComparisonPage })))
-const FastapiPage = lazyLoad(() => import('./fastapi.jsx').then((m) => ({ default: m.FastapiPage })))
-const GenerationPage = lazyLoad(() => import('./features.jsx').then((m) => ({ default: m.GenerationPage })))
-const SafetyPage = lazyLoad(() => import('./features.jsx').then((m) => ({ default: m.SafetyPage })))
-const StatePage = lazyLoad(() => import('./features.jsx').then((m) => ({ default: m.StatePage })))
-const RepeatableMigrationsPage = lazyLoad(() => import('./features.jsx').then((m) => ({ default: m.RepeatableMigrationsPage })))
-const SeedsPage = lazyLoad(() => import('./features.jsx').then((m) => ({ default: m.SeedsPage })))
-const ObservabilityPage = lazyLoad(() => import('./features.jsx').then((m) => ({ default: m.ObservabilityPage })))
-const CorrectnessPage = lazyLoad(() => import('./correctness.jsx').then((m) => ({ default: m.CorrectnessPage })))
-const DatabasesPage = lazyLoad(() => import('./databases.jsx').then((m) => ({ default: m.DatabasesPage })))
-const MigrateFromAlembicPage = lazyLoad(() => import('./migrate.jsx').then((m) => ({ default: m.MigrateFromAlembicPage })))
-const CliPage = lazyLoad(() => import('./cli.jsx').then((m) => ({ default: m.CliPage })))
-const NotFoundPage = lazyLoad(() => import('./notfound.jsx').then((m) => ({ default: m.NotFoundPage })))
+// initial bundle. Everything else loads on navigation, so the big content pages
+// never touch users who only visit the landing page. Each loader is exported so
+// the SSR pass (src/ssr.jsx) and the client boot can register the resolved
+// component under the same key and render it on first paint.
+export const loadWhy = () => import('./why.jsx').then((m) => ({ default: m.WhyPage }))
+export const loadProductSurface = () => import('./surface.jsx').then((m) => ({ default: m.ProductSurfacePage }))
+export const loadTimeline = () => import('./timeline.jsx').then((m) => ({ default: m.TimelinePage }))
+export const loadCompare = () => import('./compare.jsx').then((m) => ({ default: m.ComparePage }))
+export const loadAlembicComparison = () => import('./compare.jsx').then((m) => ({ default: m.AlembicComparisonPage }))
+export const loadAtlasComparison = () => import('./compare.jsx').then((m) => ({ default: m.AtlasComparisonPage }))
+export const loadDjangoComparison = () => import('./compare.jsx').then((m) => ({ default: m.DjangoComparisonPage }))
+export const loadFastapi = () => import('./fastapi.jsx').then((m) => ({ default: m.FastapiPage }))
+export const loadGeneration = () => import('./features.jsx').then((m) => ({ default: m.GenerationPage }))
+export const loadSafety = () => import('./features.jsx').then((m) => ({ default: m.SafetyPage }))
+export const loadState = () => import('./features.jsx').then((m) => ({ default: m.StatePage }))
+export const loadRepeatableMigrations = () => import('./features.jsx').then((m) => ({ default: m.RepeatableMigrationsPage }))
+export const loadSeeds = () => import('./features.jsx').then((m) => ({ default: m.SeedsPage }))
+export const loadObservability = () => import('./features.jsx').then((m) => ({ default: m.ObservabilityPage }))
+export const loadCorrectness = () => import('./correctness.jsx').then((m) => ({ default: m.CorrectnessPage }))
+export const loadDatabases = () => import('./databases.jsx').then((m) => ({ default: m.DatabasesPage }))
+export const loadMigrateFromAlembic = () => import('./migrate.jsx').then((m) => ({ default: m.MigrateFromAlembicPage }))
+export const loadCli = () => import('./cli.jsx').then((m) => ({ default: m.CliPage }))
+export const loadNotFound = () => import('./notfound.jsx').then((m) => ({ default: m.NotFoundPage }))
+
+const WhyPage = lazyLoad(loadWhy)
+const ProductSurfacePage = lazyLoad(loadProductSurface)
+const TimelinePage = lazyLoad(loadTimeline)
+const ComparePage = lazyLoad(loadCompare)
+const AlembicComparisonPage = lazyLoad(loadAlembicComparison)
+const AtlasComparisonPage = lazyLoad(loadAtlasComparison)
+const DjangoComparisonPage = lazyLoad(loadDjangoComparison)
+const FastapiPage = lazyLoad(loadFastapi)
+const GenerationPage = lazyLoad(loadGeneration)
+const SafetyPage = lazyLoad(loadSafety)
+const StatePage = lazyLoad(loadState)
+const RepeatableMigrationsPage = lazyLoad(loadRepeatableMigrations)
+const SeedsPage = lazyLoad(loadSeeds)
+const ObservabilityPage = lazyLoad(loadObservability)
+const CorrectnessPage = lazyLoad(loadCorrectness)
+const DatabasesPage = lazyLoad(loadDatabases)
+const MigrateFromAlembicPage = lazyLoad(loadMigrateFromAlembic)
+const CliPage = lazyLoad(loadCli)
+const NotFoundPage = lazyLoad(loadNotFound)
+
+// Current-route loaders, used by the boot to preload before first render (so
+// the SSR'd content is never blanked by a null placeholder) and by the SSR pass.
+export const routeLoaders = {
+  '/why': loadWhy,
+  '/tool-scope': loadProductSurface,
+  '/how-it-works': loadTimeline,
+  '/compare': loadCompare,
+  '/compare/alembic': loadAlembicComparison,
+  '/compare/atlas': loadAtlasComparison,
+  '/compare/django-migrations': loadDjangoComparison,
+  '/fastapi': loadFastapi,
+  '/tool-scope/generation': loadGeneration,
+  '/tool-scope/safety': loadSafety,
+  '/tool-scope/state': loadState,
+  '/tool-scope/repeatable-migrations': loadRepeatableMigrations,
+  '/tool-scope/seeds': loadSeeds,
+  '/tool-scope/observability': loadObservability,
+  '/correctness': loadCorrectness,
+  '/databases': loadDatabases,
+  '/migrate-from-alembic': loadMigrateFromAlembic,
+  '/cli': loadCli,
+}
 
 const logo = '/icon.webp'
 
@@ -53,8 +98,11 @@ const pluginDirectory = [
   { name: 'dbwarden-sandbox', tier: 'official', description: 'Validate generated SQL in an isolated sandbox before deploy.', repository: 'https://github.com/dbwarden-org/dbwarden-sandbox' },
 ]
 
-function App() {
-  const [dark, setDark] = useState(() => localStorage.getItem('dbwarden-theme') !== 'light')
+export function App({ path: pathProp }) {
+  // SSR renders with a path prop; the client reads it from the URL. The
+  // localStorage initializer is guarded so renderToString can run in Node.
+  const path = pathProp ?? (typeof window !== 'undefined' ? window.location.pathname.replace(/\/$/, '') : '') || '/'
+  const [dark, setDark] = useState(() => (typeof localStorage !== 'undefined' ? localStorage.getItem('dbwarden-theme') !== 'light' : true))
   const [menuOpen, setMenuOpen] = useState(false)
   const [copied, setCopied] = useState(false)
 
@@ -97,64 +145,64 @@ function App() {
 
   const route = (node) => node
 
-  if (window.location.pathname.replace(/\/$/, '') === '/plugins') {
+  if (path === '/plugins') {
     return <PluginDirectory dark={dark} toggleTheme={toggleTheme} />
   }
-  if (window.location.pathname.replace(/\/$/, '') === '/compare') {
+  if (path === '/compare') {
     return route(<ComparePage dark={dark} toggleTheme={toggleTheme} />)
   }
-  if (window.location.pathname.replace(/\/$/, '') === '/compare/alembic') {
+  if (path === '/compare/alembic') {
     return route(<AlembicComparisonPage dark={dark} toggleTheme={toggleTheme} />)
   }
-  if (window.location.pathname.replace(/\/$/, '') === '/compare/atlas') {
+  if (path === '/compare/atlas') {
     return route(<AtlasComparisonPage dark={dark} toggleTheme={toggleTheme} />)
   }
-  if (window.location.pathname.replace(/\/$/, '') === '/compare/django-migrations') {
+  if (path === '/compare/django-migrations') {
     return route(<DjangoComparisonPage dark={dark} toggleTheme={toggleTheme} />)
   }
-  if (window.location.pathname.replace(/\/$/, '') === '/fastapi') {
+  if (path === '/fastapi') {
     return route(<FastapiPage dark={dark} toggleTheme={toggleTheme} />)
   }
-  if (window.location.pathname.replace(/\/$/, '') === '/correctness') {
+  if (path === '/correctness') {
     return route(<CorrectnessPage dark={dark} toggleTheme={toggleTheme} />)
   }
-  if (window.location.pathname.replace(/\/$/, '') === '/databases') {
+  if (path === '/databases') {
     return route(<DatabasesPage dark={dark} toggleTheme={toggleTheme} />)
   }
-  if (window.location.pathname.replace(/\/$/, '') === '/migrate-from-alembic') {
+  if (path === '/migrate-from-alembic') {
     return route(<MigrateFromAlembicPage dark={dark} toggleTheme={toggleTheme} />)
   }
-  if (window.location.pathname.replace(/\/$/, '') === '/cli') {
+  if (path === '/cli') {
     return route(<CliPage dark={dark} toggleTheme={toggleTheme} />)
   }
-  if (window.location.pathname.replace(/\/$/, '') === '/why') {
+  if (path === '/why') {
     return route(<WhyPage dark={dark} toggleTheme={toggleTheme} />)
   }
-  if (window.location.pathname.replace(/\/$/, '') === '/how-it-works') {
+  if (path === '/how-it-works') {
     return route(<TimelinePage dark={dark} toggleTheme={toggleTheme} />)
   }
-  if (window.location.pathname.replace(/\/$/, '') === '/tool-scope/generation') {
+  if (path === '/tool-scope/generation') {
     return route(<GenerationPage dark={dark} toggleTheme={toggleTheme} />)
   }
-  if (window.location.pathname.replace(/\/$/, '') === '/tool-scope/safety') {
+  if (path === '/tool-scope/safety') {
     return route(<SafetyPage dark={dark} toggleTheme={toggleTheme} />)
   }
-  if (window.location.pathname.replace(/\/$/, '') === '/tool-scope/state') {
+  if (path === '/tool-scope/state') {
     return route(<StatePage dark={dark} toggleTheme={toggleTheme} />)
   }
-  if (window.location.pathname.replace(/\/$/, '') === '/tool-scope/repeatable-migrations') {
+  if (path === '/tool-scope/repeatable-migrations') {
     return route(<RepeatableMigrationsPage dark={dark} toggleTheme={toggleTheme} />)
   }
-  if (window.location.pathname.replace(/\/$/, '') === '/tool-scope/seeds') {
+  if (path === '/tool-scope/seeds') {
     return route(<SeedsPage dark={dark} toggleTheme={toggleTheme} />)
   }
-  if (window.location.pathname.replace(/\/$/, '') === '/tool-scope/observability') {
+  if (path === '/tool-scope/observability') {
     return route(<ObservabilityPage dark={dark} toggleTheme={toggleTheme} />)
   }
-  if (window.location.pathname.replace(/\/$/, '') === '/tool-scope') {
+  if (path === '/tool-scope') {
     return route(<ProductSurfacePage dark={dark} toggleTheme={toggleTheme} />)
   }
-  if (window.location.pathname.replace(/\/$/, '') !== '') {
+  if (path !== '/') {
     return route(<NotFoundPage dark={dark} toggleTheme={toggleTheme} />)
   }
 
@@ -303,4 +351,16 @@ function PluginDirectory({ dark, toggleTheme }) {
   </div>
 }
 
-render(<><Seo /><App /></>, document.getElementById('root'))
+if (typeof document !== 'undefined') {
+  ;(async () => {
+    // Preload the current route so the SSR'd content is not blanked by a null
+    // placeholder while its chunk resolves.
+    const current = window.location.pathname.replace(/\/$/, '') || '/'
+    const loader = routeLoaders[current]
+    if (loader) {
+      const mod = await loader()
+      registerRoute(loader, mod.default)
+    }
+    render(<><Seo /><App /></>, document.getElementById('root'))
+  })()
+}

@@ -45,8 +45,9 @@ export function ThemeSwitch({ dark, toggleTheme }) {
 
 export function AccessibilityMenu() {
   const [open, setOpen] = useState(false)
-  const [fontSize, setFontSize] = useState(() => localStorage.getItem('dbwarden-font-size') === 'large' ? 'large' : 'normal')
-  const [contrast, setContrast] = useState(() => localStorage.getItem('dbwarden-contrast') === 'high')
+  // localStorage is guarded so renderToString can run these initializers in Node.
+  const [fontSize, setFontSize] = useState(() => (typeof localStorage !== 'undefined' ? localStorage.getItem('dbwarden-font-size') : null) === 'large' ? 'large' : 'normal')
+  const [contrast, setContrast] = useState(() => (typeof localStorage !== 'undefined' ? localStorage.getItem('dbwarden-contrast') : null) === 'high')
   const wrapRef = useRef(null)
   useEffect(() => { document.documentElement.dataset.fontSize = fontSize; localStorage.setItem('dbwarden-font-size', fontSize) }, [fontSize])
   useEffect(() => { document.documentElement.dataset.contrast = contrast ? 'high' : 'normal'; localStorage.setItem('dbwarden-contrast', contrast ? 'high' : 'normal') }, [contrast])
