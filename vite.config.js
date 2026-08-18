@@ -1,6 +1,5 @@
 import { createHash } from 'node:crypto'
-import { mkdirSync, readFileSync, readdirSync, rmSync, writeFileSync } from 'node:fs'
-import { spawnSync } from 'node:child_process'
+import { mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs'
 import { dirname, join } from 'node:path'
 import { pathToFileURL } from 'node:url'
 import { build, defineConfig } from 'vite'
@@ -117,23 +116,11 @@ function prerenderSeo() {
       // request disappears.
       const cssLink = template.match(/<link rel="stylesheet"[^>]*?href="([^"]+)"/)
       if (cssLink) {
-        let css = readFileSync(join(outDir, cssLink[1].replace(/^\//, '')), 'utf8')
-        // The site is English-only; @fontsource ships @font-face rules for
-        // every Inter subset (cyrillic, greek, vietnamese, latin-ext...).
-        // Keep only the latin face and delete the other woff2 assets, or the
-        // host ships ~170 kB of fonts the pages can never render.
-        const kept = []
-        css = css.replace(/@font-face\{[^}]*\}/g, (face) => {
-          const url = face.match(/url\(([^)]+)\)/)
-          const file = url ? url[1].split('/').pop() : ''
-          if (file.startsWith('inter-latin-wght-')) {
-            kept.push(file)
-            return face
-          }
-          if (file.endsWith('.woff2')) rmSync(join(outDir, 'assets', file), { force: true })
-          return ''
-        })
+        const cssPath = join(outDir, cssLink[1].replace(/^\//, ''))
+        const css = readFileSync(cssPath, 'utf8')
         template = template.replace(cssLink[0], `<style>${css}</style>`)
+        // The stylesheet is now inlined; the asset is dead weight on the host.
+        rmSync(cssPath, { force: true })
         // Pin the inlined stylesheet's hash in the CSP. The site's CSP is
         // strict (style-src 'self'), so an unpinned inline <style> would be
         // silently blocked; the hash keeps the CSP strict and the page
@@ -144,31 +131,12 @@ function prerenderSeo() {
         if (!headers.includes('__STYLE_SHA256__')) throw new Error('prerender: __STYLE_SHA256__ placeholder not found in _headers')
         writeFileSync(headersFile, headers.replace('__STYLE_SHA256__', hash))
       }
-      // Subset the Inter latin variable font to just the characters the site
-      // renders (plus a safety margin), keeping the variable axes so every
-      // weight still works. src/font-chars.txt must be refreshed if new copy
-      // introduces characters outside it. Requires fonttools (pyftsubset).
-      const latin = readdirSync(join(outDir, 'assets')).find((name) => name.startsWith('inter-latin-wght-') && name.endsWith('.woff2'))
-      if (latin) {
-        const temp = join(outDir, 'assets', `.${latin}.subset`)
-        const subset = spawnSync('pyftsubset', [
-          join(outDir, 'assets', latin),
-          `--text-file=${join('src', 'font-chars.txt')}`,
-          '--flavor=woff2',
-          `--output-file=${temp}`,
-        ], { encoding: 'utf8' })
-        if (subset.status === 0) {
-          writeFileSync(join(outDir, 'assets', latin), readFileSync(temp))
-          rmSync(temp)
-        } else {
-          console.warn(`prerender: font subset failed (${subset.stderr?.slice(0, 120) ?? 'unknown'}), shipping full latin font`)
-        }
-      }
-      // Preload the only font the English site actually uses (the latin subset
-      // of the Inter variable font) so it downloads in parallel with the JS
-      // instead of after first paint.
-      if (latin && !template.includes('rel="preload" as="font"')) {
-        const preload = `<link rel="preload" href="/assets/${latin}" as="font" type="font/woff2" crossorigin />`
+      // Preload the only font the English site actually uses (the committed
+      // latin subset of the Inter variable font, public/fonts/) so it downloads
+      // in parallel with the JS instead of after first paint. The font itself
+      // is committed, so no font tooling is needed at build time.
+      if (!template.includes('rel="preload" as="font"')) {
+        const preload = `<link rel="preload" href="/fonts/inter-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin />`
         template = template.replace('<script type="module"', `${preload}\n    <script type="module"`)
       }
       for (const path of Object.keys(pages)) {

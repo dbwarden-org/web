@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'preact/hooks'
 import { render } from 'preact'
 import { lazyLoad, registerRoute, useDeferredValue } from './react-shims.jsx'
-import '@fontsource-variable/inter'
 import './styles.css'
 import { AccessibilityMenu, Faq, NavLinks, PageHeader, SiteFooter, ThemeSwitch } from './pages.jsx'
 import { Seo } from './seo.jsx'

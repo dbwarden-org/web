@@ -1,3 +1,15 @@
+/* The latin subset of the Inter variable font, committed at a stable path so
+   the build needs no font tooling and the URL is cache-safe: a new subset
+   ships under this same name only when the file changes, so bump the
+   filename if font-chars.txt gains characters. */
+@font-face {
+  font-family: 'Inter Variable';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 100 900;
+  src: url(/fonts/inter-latin-wght-normal.woff2) format('woff2-variations');
+}
+
 :root {
   font-family: 'Inter Variable', Inter, sans-serif;
   color: #122039;
