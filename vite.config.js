@@ -1,3 +1,4 @@
+import { createHash } from 'node:crypto'
 import { mkdirSync, readFileSync, readdirSync, rmSync, writeFileSync } from 'node:fs'
 import { spawnSync } from 'node:child_process'
 import { dirname, join } from 'node:path'
@@ -116,8 +117,32 @@ function prerenderSeo() {
       // request disappears.
       const cssLink = template.match(/<link rel="stylesheet"[^>]*?href="([^"]+)"/)
       if (cssLink) {
-        const css = readFileSync(join(outDir, cssLink[1].replace(/^\//, '')), 'utf8')
+        let css = readFileSync(join(outDir, cssLink[1].replace(/^\//, '')), 'utf8')
+        // The site is English-only; @fontsource ships @font-face rules for
+        // every Inter subset (cyrillic, greek, vietnamese, latin-ext...).
+        // Keep only the latin face and delete the other woff2 assets, or the
+        // host ships ~170 kB of fonts the pages can never render.
+        const kept = []
+        css = css.replace(/@font-face\{[^}]*\}/g, (face) => {
+          const url = face.match(/url\(([^)]+)\)/)
+          const file = url ? url[1].split('/').pop() : ''
+          if (file.startsWith('inter-latin-wght-')) {
+            kept.push(file)
+            return face
+          }
+          if (file.endsWith('.woff2')) rmSync(join(outDir, 'assets', file), { force: true })
+          return ''
+        })
         template = template.replace(cssLink[0], `<style>${css}</style>`)
+        // Pin the inlined stylesheet's hash in the CSP. The site's CSP is
+        // strict (style-src 'self'), so an unpinned inline <style> would be
+        // silently blocked; the hash keeps the CSP strict and the page
+        // styled. The theme bootstrap hash stays pinned in public/_headers.
+        const hash = `'sha256-${createHash('sha256').update(css).digest('base64')}'`
+        const headersFile = join(outDir, '_headers')
+        const headers = readFileSync(headersFile, 'utf8')
+        if (!headers.includes('__STYLE_SHA256__')) throw new Error('prerender: __STYLE_SHA256__ placeholder not found in _headers')
+        writeFileSync(headersFile, headers.replace('__STYLE_SHA256__', hash))
       }
       // Subset the Inter latin variable font to just the characters the site
       // renders (plus a safety margin), keeping the variable axes so every
@@ -154,6 +179,11 @@ function prerenderSeo() {
         writeFileSync(file, html)
       }
       writeFileSync(join(outDir, '404.html'), apply404(template.replace('<div id="root"></div>', `<div id="root">${renderRoute('/this-page-does-not-exist')}</div>`)))
+      // The CSP must pin a real style hash by now, or the strict CSP would
+      // block the inlined stylesheet silently. Fail the build instead.
+      const finalHeaders = readFileSync(join(outDir, '_headers'), 'utf8')
+      if (finalHeaders.includes('__STYLE_SHA256__')) throw new Error('prerender: _headers still has the __STYLE_SHA256__ placeholder')
+      if (!finalHeaders.includes("style-src 'self' 'sha256-")) throw new Error('prerender: _headers CSP is missing the inlined style hash')
       console.log(`prerendered ${Object.keys(pages).length} routes + 404.html with per-page SEO`)
     },
   }
