@@ -63,7 +63,7 @@ app.include_router(DBWardenRouter(), prefix="/db")`}</CodeBlock></div></div>
     </PageSection>
     <section className="comparison-example-section"><div className="section-label">/ fastapi + sqlalchemy + postgresql</div><div className="essay-body">
       <p>The strongest combination for most projects is <strong>FastAPI + SQLAlchemy + PostgreSQL</strong>. DBWarden's PostgreSQL backend provides full round-trip support: identity columns, generated columns, partitioning, row-level security, exclusion constraints, advanced indexes, enums, domains, composite types, sequences, functions, triggers, roles, and event triggers all round-trip from models to SQL and back.</p>
-      <p>The FastAPI plugin adds async session dependencies backed by <code className="inline-code">postgresql+asyncpg://</code>, health endpoints for Kubernetes probes, and Prometheus metrics — all wired to the same <code className="inline-code">DbwardenDatabase</code> config that drives migrations. Your PostgreSQL-specific options (fill factor, schema, identity) live in typed metadata on the models, not in a separate HCL or SQL file.</p>
+      <p>The FastAPI plugin adds async session dependencies backed by <code className="inline-code">postgresql+asyncpg://</code>, health endpoints for Kubernetes probes, and Prometheus metrics: all wired to the same <code className="inline-code">DbwardenDatabase</code> config that drives migrations. Your PostgreSQL-specific options (fill factor, schema, identity) live in typed metadata on the models, not in a separate HCL or SQL file.</p>
       <CodeBlock label="dbwarden.py">{`from dbwarden import DbwardenDatabase
 
 class Primary(DbwardenDatabase):
