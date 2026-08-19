@@ -1,6 +1,6 @@
 import { createHash } from 'node:crypto'
 import { mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs'
-import { dirname, join } from 'node:path'
+import { dirname, join, resolve } from 'node:path'
 import { pathToFileURL } from 'node:url'
 import { build, defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
@@ -102,9 +102,21 @@ function prerenderSeo() {
       await build({
         configFile: false,
         root: process.cwd(),
-        plugins: [react()],
-        resolve: { alias: { react: 'preact/compat', 'react-dom': 'preact/compat', 'react-dom/client': 'preact/compat', 'react/jsx-runtime': 'preact/jsx-runtime' } },
+        plugins: [
+          {
+            name: 'preact-alias',
+            resolveId(source) {
+              if (source === 'react/jsx-runtime') return join(process.cwd(), 'node_modules/preact/jsx-runtime/dist/jsxRuntime.module.js')
+              if (source === 'react') return join(process.cwd(), 'node_modules/preact/compat')
+              if (source === 'react-dom') return join(process.cwd(), 'node_modules/preact/compat')
+              if (source === 'react-dom/client') return join(process.cwd(), 'node_modules/preact/compat')
+              return null
+            },
+          },
+          react(),
+        ],
         build: { ssr: 'src/ssr.jsx', outDir: 'dist-ssr', emptyOutDir: true, minify: false },
+        ssr: { noExternal: ['preact-render-to-string'] },
         logLevel: 'silent',
       })
       const ssrBundle = join('dist-ssr', 'ssr.js')
