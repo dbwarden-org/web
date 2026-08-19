@@ -303,8 +303,8 @@ export function App({ path: pathProp }) {
           <div className="section-label">/ 03 <span>choosing a tool</span><a className="section-doc" href="/compare">All comparisons <span>↗</span></a></div>
           <div className="split-heading"><h2>Which migration tool<br /><em>should you use?</em></h2><p>Deciding between migration tools? The comparisons live on this site: where schema truth lives, what gets reviewed, and where each tool fits. The docs are for people who already chose.</p></div>
           <div className="docs-grid">
-            <a className="docs-link" href="/alembic-alternative"><strong>Alembic alternative</strong><p>Why dbwarden is the declarative alternative for SQLAlchemy projects.</p><span className="card-arrow">↗</span></a>
-            <a className="docs-link" href="/compare/alembic"><strong>dbwarden vs Alembic</strong><p>Revision scripts versus derived SQL, with honest tradeoffs.</p><span className="card-arrow">↗</span></a>
+            <a className="docs-link" href="/compare/alembic"><strong>dbwarden vs Alembic</strong><p>Revision scripts versus derived SQL, with honest tradeoffs and a six-step migration path.</p><span className="card-arrow">↗</span></a>
+            <a className="docs-link" href="/compare/atlas"><strong>vs Atlas</strong><p>Language-agnostic HCL schemas versus a SQLAlchemy-native declarative workflow.</p><span className="card-arrow">↗</span></a>
             <a className="docs-link" href="/compare"><strong>Compare migration tools</strong><p>Models as authority, plain SQL as the artifact, and where it doesn't fit.</p><span className="card-arrow">↗</span></a>
             <a className="docs-link" href="/fastapi"><strong>FastAPI migrations</strong><p>Sessions, health checks, and migrations for FastAPI + SQLAlchemy.</p><span className="card-arrow">↗</span></a>
             <a className="docs-link" href="/migrate-from-alembic"><strong>Migrate from Alembic</strong><p>Six steps, none destructive, from revision chain to models.</p><span className="card-arrow">↗</span></a>

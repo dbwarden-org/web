@@ -131,7 +131,7 @@ export const pages = {
   },
   '/compare/alembic': {
     title: 'dbwarden vs Alembic | A Declarative SQLAlchemy Migration Alternative',
-    description: 'An honest comparison of dbwarden and Alembic: source of truth, generated artifacts, rollback contracts, drift detection, and offline CI.',
+    description: 'An honest comparison of dbwarden and Alembic: source of truth, generated artifacts, rollback contracts, drift detection, offline CI, and a six-step migration path.',
     type: 'Article',
     label: 'vs Alembic',
     crumb: [{ name: 'Compare', path: '/compare' }],
