@@ -116,7 +116,13 @@ function prerenderSeo() {
           react(),
         ],
         build: { ssr: 'src/ssr.jsx', outDir: 'dist-ssr', emptyOutDir: true, minify: false },
-        ssr: { noExternal: ['preact-render-to-string'] },
+        // Bundle preact (and its jsx-runtime) into the SSR pass so the measured
+        // preact alias can never be discarded as an external. If preact is
+        // externalized, vite emits the bare `react/jsx-runtime` import and a
+        // stray react package anywhere up the parent directory tree makes the
+        // prerendered pages render empty shells instead of full HTML.
+        ssr: { noExternal: ['preact-render-to-string', 'preact'] },
+        resolve: { alias: { react: 'preact/compat', 'react-dom': 'preact/compat', 'react-dom/client': 'preact/compat', 'react/jsx-runtime': 'preact/jsx-runtime' } },
         logLevel: 'silent',
       })
       const ssrBundle = join('dist-ssr', 'ssr.js')
