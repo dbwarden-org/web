@@ -199,7 +199,7 @@ $ DBWARDEN_LOG_JSON=true dbwarden migrate \
       { q: 'Why is deterministic output important?', a: 'If two machines generate different SQL for the same models, review churns on fake changes and CI can\u2019t be trusted. dbwarden canonicalizes both sides of the diff before comparing, so the same model state and snapshot produce the same SQL every run.' },
     ]} />
     <section className="fit-section"><div className="section-label">/ honest fit</div><div className="fit-grid"><div><strong>Choose dbwarden when</strong><p>You use SQLAlchemy and want the models to be the schema, with the SQL you approve, frozen in the repo.</p></div><div><strong>Choose something else when</strong><p>You need one platform across several languages, or you're building with Django and should use its own migrations.</p></div></div></section>
-    <section className="article-links"><div className="section-label">/ keep reading</div><div><a href="/tool-scope">Tool scope overview <span>↗</span></a><a href="/compare/alembic">dbwarden vs Alembic <span>↗</span></a><a href="/compare/atlas">dbwarden vs Atlas <span>↗</span></a><a href="/compare/django-migrations">dbwarden vs Django migrations <span>↗</span></a></div></section>
+    <section className="article-links"><div className="section-label">/ keep reading</div><div><a href="/how-it-works">How declarative migrations work <span>↗</span></a><a href="/compare/alembic">DBWarden vs Alembic <span>↗</span></a><a href="/alembic-alternative">Alembic alternative <span>↗</span></a><a href="/tool-scope">Tool scope overview <span>↗</span></a></div></section>
   </PageFrame>
 }
 

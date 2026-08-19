@@ -136,7 +136,7 @@ export function TimelinePage({ dark, toggleTheme }) {
     }
   }, [])
 
-  return <PageFrame dark={dark} toggleTheme={toggleTheme} eyebrow="how it works" title={<>The same loop,<br /><em>every change.</em></>} intro="Configure the database once. After that, every change follows the same loop: declare the schema in the models, derive the SQL, review it, apply it, and confirm the database matches.">
+  return <PageFrame dark={dark} toggleTheme={toggleTheme} eyebrow="how it works" title={<>How Declarative Database<br /><em>Migrations Work.</em></>} intro="SQLAlchemy models → schema state → deterministic diff → SQL migration → rollback → verification. Configure the database once, then every change follows the same loop.">
     <div className="timeline-shell" ref={timelineRef}>
       <div className="timeline-intro"><span>the operating sequence</span><strong>Every step leaves something<br />you can inspect.</strong><p>No step happens invisibly: each one produces a file or a state you can open and check.</p></div>
       <div className="timeline-track"><div className="timeline-line"><div className="timeline-progress" /></div>{steps.map((step) => <article className="timeline-item" key={step.number}><div className="timeline-marker"><span>{step.number}</span></div><div className="timeline-copy"><div className="timeline-label">{step.label}</div><h2>{step.title}</h2><p>{inline(step.body)}</p><a href={step.doc} target="_blank" rel="noreferrer">Read the guide <span>↗</span></a></div><div className="timeline-code"><span>example / {step.number}</span>{step.blocks.map((block) => <CodeBlock key={block.label} label={block.label} lang={block.lang}>{block.text}</CodeBlock>)}</div></article>)}</div>

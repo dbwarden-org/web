@@ -19,7 +19,7 @@ const flags = [
 ]
 
 export function CliPage({ dark, toggleTheme }) {
-  return <PageFrame dark={dark} toggleTheme={toggleTheme} eyebrow="cli reference" title={<>The whole command<br /><em>surface.</em></>} intro="Five command groups and a handful of global flags. The daily loop is a few commands; the rest of the surface is there when you need it.">
+  return <PageFrame dark={dark} toggleTheme={toggleTheme} eyebrow="cli reference" title={<>DBWarden CLI<br /><em>Reference.</em></>} intro="Five command groups and a handful of global flags. The daily loop is a few commands; the rest of the surface is there when you need it.">
     <PageSection number="01" label="Command groups" title="Author, operate, inspect, lock, extend." doc="https://docs.dbwarden.org/cli-reference/"><div className="comparison-command-grid">{groups.map((group) => <div key={group.label}><span className="comparison-label">{group.label}</span><p>{renderInline(group.description)}</p><CodeBlock>{group.example}</CodeBlock></div>)}</div></PageSection>
     <PageSection number="02" label="Global flags" title="Structured output, diagnostics, and dev mode everywhere." doc="https://docs.dbwarden.org/cli-reference/"><div className="comparison-command-grid">{flags.map((flag) => <div key={flag.label}><span className="comparison-label">{flag.label}</span><p>{renderInline(flag.description)}</p></div>)}</div></PageSection>
     <section className="fit-section"><div className="section-label">/ reference</div><div className="fit-grid"><div><strong>The CLI reference</strong><p>Full syntax, options, and examples for every command live in the docs.</p></div><div><strong>JSON output</strong><p>Display commands accept the global `--json` flag for pipelines and dashboards.</p></div></div></section>

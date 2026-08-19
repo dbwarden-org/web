@@ -238,6 +238,7 @@ export function App({ path: pathProp }) {
             <div className="hero-grid">
               <div className="hero-copy">
                 <h1>Your models are<br /><em>your migrations.</em></h1>
+                <div className="hero-subtitle">A modern Alembic alternative for SQLAlchemy.</div>
                 <div className="hero-title-kicker">declarative schema infrastructure <span>for SQLAlchemy</span></div>
                 <p className="hero-lede">Declare the schema once, in SQLAlchemy models. dbwarden derives plain SQL migrations with upgrade and rollback in the same file, and checks the result against the database. Fully open source.</p>
                 <div className="hero-actions">
@@ -302,12 +303,12 @@ export function App({ path: pathProp }) {
           <div className="section-label">/ 03 <span>choosing a tool</span><a className="section-doc" href="/compare">All comparisons <span>↗</span></a></div>
           <div className="split-heading"><h2>Which migration tool<br /><em>should you use?</em></h2><p>Deciding between migration tools? The comparisons live on this site: where schema truth lives, what gets reviewed, and where each tool fits. The docs are for people who already chose.</p></div>
           <div className="docs-grid">
-            <a className="docs-link" href="/compare"><strong>Why dbwarden</strong><p>Models as authority, plain SQL as the artifact, and where it doesn't fit.</p><span className="card-arrow">↗</span></a>
-            <a className="docs-link" href="/compare/alembic"><strong>dbwarden vs Alembic</strong><p>Revision scripts versus derived SQL.</p><span className="card-arrow">↗</span></a>
-            <a className="docs-link" href="/compare/atlas"><strong>dbwarden vs Atlas</strong><p>A declarative platform versus model-native schema management.</p><span className="card-arrow">↗</span></a>
-            <a className="docs-link" href="/compare/django-migrations"><strong>dbwarden vs Django migrations</strong><p>The model-driven workflow, for non-Django SQLAlchemy stacks.</p><span className="card-arrow">↗</span></a>
+            <a className="docs-link" href="/alembic-alternative"><strong>Alembic alternative</strong><p>Why DBWarden is the declarative alternative for SQLAlchemy projects.</p><span className="card-arrow">↗</span></a>
+            <a className="docs-link" href="/compare/alembic"><strong>DBWarden vs Alembic</strong><p>Revision scripts versus derived SQL, with honest tradeoffs.</p><span className="card-arrow">↗</span></a>
+            <a className="docs-link" href="/compare"><strong>Compare migration tools</strong><p>Models as authority, plain SQL as the artifact, and where it doesn't fit.</p><span className="card-arrow">↗</span></a>
+            <a className="docs-link" href="/fastapi"><strong>FastAPI migrations</strong><p>Sessions, health checks, and migrations for FastAPI + SQLAlchemy.</p><span className="card-arrow">↗</span></a>
             <a className="docs-link" href="/migrate-from-alembic"><strong>Migrate from Alembic</strong><p>Six steps, none destructive, from revision chain to models.</p><span className="card-arrow">↗</span></a>
-            <a className="docs-link" href="/how-it-works"><strong>How dbwarden works</strong><p>The whole loop on one page, from model change to verified database.</p><span className="card-arrow">↗</span></a>
+            <a className="docs-link" href="/correctness"><strong>Correctness</strong><p>Convergence, rollback verification, and real database testing.</p><span className="card-arrow">↗</span></a>
           </div>
           <div className="docs-more"><span>already using dbwarden?</span>{docsLinks.map((link) => <a key={link.title} href={link.href} target="_blank" rel="noreferrer">{link.title} <span>↗</span></a>)}<a href="https://docs.dbwarden.org" target="_blank" rel="noreferrer">All docs <span>↗</span></a></div>
         </section>
@@ -344,7 +345,7 @@ function PluginDirectory({ dark, toggleTheme }) {
     <PageHeader dark={dark} toggleTheme={toggleTheme} />
     <main className="directory-main content-wrap">
       <div className="directory-kicker">/ plugin directory</div>
-       <div className="directory-intro"><div><h1>Plugins that<br /><em>leave the core alone.</em></h1></div><p>Official plugins add database objects, lifecycle hooks, seeds, and sandbox validation. Anyone can write more with the plugin template. Everything is open source and MIT licensed.</p></div>
+       <div className="directory-intro"><div><h1>DBWarden Plugins<br /><em>and Extensions.</em></h1></div><p>Official plugins add database objects, lifecycle hooks, seeds, and sandbox validation. Anyone can write more with the plugin template. Everything is open source and MIT licensed.</p></div>
       <section className="directory-trust"><div className="section-label">/ how trust works</div><div className="trust-split"><div className="trust-copy"><p>dbwarden classifies every plugin before loading it. Official plugins are built and provenance-verified by the dbwarden organization. Community plugins are never imported until you consent to that exact version in .dbwarden/consent.toml.</p></div><div className="trust-grid">{[{ label: 'Official', text: 'Built by the dbwarden org. Provenance verified at install time; installs fail closed when verification is unavailable.' }, { label: 'Verified', text: 'Community plugins that passed the dbwarden plugin test standard and manual review.' }, { label: 'Community', text: 'Any other entry point. Loaded only with explicit, version-specific consent.' }].map((tier, index) => <button key={tier.label} type="button" className={activeTier === index ? 'trust-card is-active' : 'trust-card'} onClick={() => setActiveTier(activeTier === index ? null : index)} aria-expanded={activeTier === index}><span className="trust-card-label">{tier.label}</span><span className="trust-card-body"><span className="trust-card-body-inner"><p>{tier.text}</p></span></span></button>)}</div></div></section>
        <div className="directory-template-note">All plugins follow the <a href="https://github.com/dbwarden-org/dbwarden-plugin-template" target="_blank" rel="noreferrer">dbwarden plugin template <span>↗</span></a>.</div>
        <div className="directory-create-note">Want to create plugins? <a href="https://docs.dbwarden.org/plugins/developing/overview/" target="_blank" rel="noreferrer">See the docs <span>↗</span></a>.</div>

@@ -275,6 +275,7 @@ h1 em, h2 em { color: var(--blue); font-style: normal; }
 .hero-lede { font-size: 17px; line-height: 1.6; color: var(--muted); max-width: 515px; margin-top: 29px; }
 .hero-title-kicker { margin-top: 20px; color: var(--blue); font-size: 10px; font-weight: 800; letter-spacing: .13em; text-transform: uppercase; }
 .hero-title-kicker span { color: var(--muted); margin-left: 9px; }
+.hero-subtitle { font-size: 18px; line-height: 1.5; color: var(--text); margin-top: 14px; font-weight: 500; }
 .hero-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin-top: 33px; }
 .hero-actions .button { gap: 9px; }
 .hero-actions .button svg { flex: none; }
