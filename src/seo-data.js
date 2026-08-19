@@ -6,123 +6,146 @@ export const imageUrl = `${siteUrl}/og-image.png`
 
 export const pages = {
   '/': {
-    title: 'dbwarden | Declarative database migrations for SQLAlchemy',
-    description: 'dbwarden is a declarative migration tool for SQLAlchemy: models define the schema, and it derives reviewable plain-SQL migrations with rollback and convergence.',
+    title: 'DBWarden — The Modern Alembic Alternative for SQLAlchemy',
+    description: 'Declarative database migrations for SQLAlchemy. DBWarden derives reviewable SQL migrations, rollbacks, schema checks, and safety analysis from your models.',
     type: 'WebSite',
   },
-  '/why': {
-    title: 'Why dbwarden | Model-native database migrations',
-    description: 'Understand why dbwarden keeps SQLAlchemy models as the schema authority and treats generated SQL migrations as reviewable artifacts.',
+  '/alembic-alternative': {
+    title: 'Alembic Alternative for SQLAlchemy — DBWarden',
+    description: 'Looking for an Alembic alternative? DBWarden takes a declarative, model-native approach to SQLAlchemy migrations. Compare workflows, artifacts, and rollback guarantees.',
     type: 'Article',
+    label: 'Alembic alternative',
+    crumb: [],
+  },
+  '/why': {
+    title: 'Why DBWarden? Declarative Database Migrations for SQLAlchemy',
+    description: 'Understand why DBWarden keeps SQLAlchemy models as the schema authority and treats generated SQL migrations as reviewable artifacts.',
+    type: 'Article',
+    label: 'Why dbwarden',
+    crumb: [],
   },
   '/how-it-works': {
-    title: 'How dbwarden works | Declare, derive, verify',
-    description: 'Follow dbwarden from typed database configuration and SQLAlchemy models through deterministic generation, review, application, and convergence.',
+    title: 'How Declarative Database Migrations Work | DBWarden',
+    description: 'Follow DBWarden from typed database configuration and SQLAlchemy models through deterministic generation, review, application, and convergence.',
     type: 'HowTo',
+    label: 'How it works',
+    crumb: [],
   },
   '/tool-scope': {
-    title: 'dbwarden tool scope | Generation, safety, state, backends',
-    description: 'What dbwarden covers around the generated migration: generation from models, safety classification, impact analysis, state, multi-database support, and plugins.',
+    title: 'DBWarden Database Migration Features | SQLAlchemy',
+    description: 'What DBWarden covers around the generated migration: generation from models, safety classification, impact analysis, state, multi-database support, and plugins.',
     type: 'Product',
     label: 'Tool scope',
     crumb: [],
   },
   '/tool-scope/generation': {
-    title: 'Generation | How dbwarden derives migrations from models',
-    description: 'How dbwarden generates versioned SQL migrations from SQLAlchemy models: the derived artifact, typed metadata, and offline generation from committed state.',
+    title: 'SQLAlchemy Migration Generation — Generate SQL from Models | DBWarden',
+    description: 'How DBWarden generates versioned SQL migrations from SQLAlchemy models: the derived artifact, typed metadata, and offline generation from committed state.',
     type: 'Article',
     label: 'Generation',
     crumb: [{ name: 'Tool scope', path: '/tool-scope' }],
   },
   '/tool-scope/safety': {
-    title: 'Safety | Classification, impact, and rollback in dbwarden',
-    description: 'How dbwarden keeps schema changes safe: operation classification, application-aware impact analysis, safe type changes, and a strict rollback contract.',
+    title: 'Database Migration Safety & Impact Analysis | DBWarden',
+    description: 'How DBWarden keeps schema changes safe: operation classification, application-aware impact analysis, safe type changes, and a strict rollback contract.',
     type: 'Article',
     label: 'Safety',
     crumb: [{ name: 'Tool scope', path: '/tool-scope' }],
   },
   '/tool-scope/state': {
-    title: 'State and operations | Inspect dbwarden migrations',
-    description: 'Inspect dbwarden state: status and history, checksummed snapshots, deterministic diffs, and reverse engineering an existing database into SQLAlchemy models.',
+    title: 'Database Schema State & Drift Detection | DBWarden',
+    description: 'Inspect DBWarden state: status and history, checksummed snapshots, deterministic diffs, schema drift detection, and reverse engineering an existing database into SQLAlchemy models.',
     type: 'Article',
     label: 'State and operations',
     crumb: [{ name: 'Tool scope', path: '/tool-scope' }],
   },
   '/tool-scope/repeatable-migrations': {
-    title: 'Repeatable migrations | Runs-always and runs-on-change',
-    description: 'dbwarden migration classes: versioned, runs-always (RA__) for views and grants, and runs-on-change (ROC__) for functions, triggers, and policies.',
+    title: 'Repeatable Database Migrations | DBWarden',
+    description: 'DBWarden migration classes: versioned, runs-always (RA__) for views and grants, and runs-on-change (ROC__) for functions, triggers, and policies.',
     type: 'Article',
     label: 'Repeatable migrations',
     crumb: [{ name: 'Tool scope', path: '/tool-scope' }],
   },
   '/tool-scope/seeds': {
-    title: 'Seeds | Reference data tracked like migrations',
-    description: 'dbwarden seeds: code seeds with a Seed base class, file seeds, seed apply and rollback, checksum drift detection, and stateless seed export for production.',
+    title: 'Database Seeds & Reference Data Migrations | DBWarden',
+    description: 'DBWarden seeds: code seeds with a Seed base class, file seeds, seed apply and rollback, checksum drift detection, and stateless seed export for production.',
     type: 'Article',
     label: 'Seeds',
     crumb: [{ name: 'Tool scope', path: '/tool-scope' }],
   },
   '/tool-scope/observability': {
-    title: 'Observability | Metrics and logs for dbwarden',
-    description: 'dbwarden observability: Prometheus counters, gauges, and histograms from migrate and seed commands, JSON logs, and trace-level SQL output.',
+    title: 'Database Migration Observability — Metrics & Logs | DBWarden',
+    description: 'DBWarden observability: Prometheus counters, gauges, and histograms from migrate and seed commands, JSON logs, and trace-level SQL output.',
     type: 'Article',
     label: 'Observability',
     crumb: [{ name: 'Tool scope', path: '/tool-scope' }],
   },
   '/plugins': {
-    title: 'dbwarden plugins | Official and community extensions',
-    description: 'Browse official dbwarden plugins and learn how to create compatible extensions with the dbwarden plugin template.',
+    title: 'DBWarden Plugins & Extensions | SQLAlchemy',
+    description: 'Browse official DBWarden plugins and learn how to create compatible extensions with the DBWarden plugin template.',
     type: 'CollectionPage',
+    label: 'Plugins',
+    crumb: [],
   },
   '/fastapi': {
-    title: 'dbwarden for FastAPI | Sessions, health, migrations',
-    description: 'Wire dbwarden into FastAPI: startup schema validation, async session dependencies, health endpoints, on-demand migrations, and auto-generated Pydantic schemas.',
+    title: 'FastAPI Database Migrations with SQLAlchemy | DBWarden',
+    description: 'Wire DBWarden into FastAPI: startup schema validation, async session dependencies, health endpoints, on-demand migrations, and auto-generated Pydantic schemas.',
     type: 'Article',
+    label: 'FastAPI',
+    crumb: [],
   },
   '/correctness': {
-    title: 'dbwarden correctness | Convergence, rollback, verification',
-    description: 'How dbwarden verifies migrations: checksummed snapshots, deterministic diffs, a strict rollback contract, round-trip verification, and a convergence gate.',
+    title: 'Database Migration Correctness & Verification | DBWarden',
+    description: 'How DBWarden verifies migrations: checksummed snapshots, deterministic diffs, a strict rollback contract, round-trip verification, and a convergence gate.',
     type: 'Article',
+    label: 'Correctness',
+    crumb: [],
   },
   '/databases': {
-    title: 'dbwarden databases | PostgreSQL, MySQL, ClickHouse, SQLite',
+    title: 'SQLAlchemy Database Migrations — PostgreSQL, MySQL, SQLite & ClickHouse',
     description: 'One model-driven workflow across PostgreSQL, MySQL, MariaDB, SQLite, and ClickHouse, with backend-specific metadata and dev-mode SQL translation.',
     type: 'Article',
+    label: 'Databases',
+    crumb: [],
   },
   '/migrate-from-alembic': {
-    title: 'Migrate from Alembic to dbwarden | Step by step',
-    description: 'Switch from Alembic to dbwarden: map concepts to equivalents, baseline an existing database, verify convergence, and retire revision scripts.',
+    title: 'Migrate from Alembic to DBWarden — SQLAlchemy Migration Guide',
+    description: 'Switch from Alembic to DBWarden: map concepts to equivalents, baseline an existing database, verify convergence, and retire revision scripts.',
     type: 'HowTo',
+    label: 'Migrate from Alembic',
+    crumb: [],
   },
   '/cli': {
-    title: 'dbwarden CLI reference | Commands and flags',
-    description: 'The full dbwarden command surface: authoring, execution, inspection, seeds, locking, and plugin management, with global flags for JSON output and dev mode.',
+    title: 'DBWarden CLI Reference — SQLAlchemy Migration Commands',
+    description: 'The full DBWarden command surface: authoring, execution, inspection, seeds, locking, and plugin management, with global flags for JSON output and dev mode.',
     type: 'WebPage',
+    label: 'CLI reference',
+    crumb: [],
   },
   '/compare': {
-    title: 'Which migration tool should I use? | dbwarden vs Alembic, Atlas, Django',
-    description: 'Which migration tool should you use? Compare dbwarden with Alembic, Atlas, and Django: schema truth, review artifacts, rollback guarantees, and ecosystem fit.',
+    title: 'Database Migration Tools for SQLAlchemy — Compare DBWarden, Alembic & Atlas',
+    description: 'Which migration tool should you use? Compare DBWarden with Alembic, Atlas, and Django: schema truth, review artifacts, rollback guarantees, and ecosystem fit.',
     type: 'CollectionPage',
     label: 'Compare',
     crumb: [],
   },
   '/compare/alembic': {
-    title: 'dbwarden vs Alembic | Declarative SQLAlchemy migrations',
-    description: 'An honest comparison of dbwarden and Alembic: source of truth, generated artifacts, rollback contracts, drift detection, and offline CI.',
+    title: 'DBWarden vs Alembic — A Declarative SQLAlchemy Migration Alternative',
+    description: 'An honest comparison of DBWarden and Alembic: source of truth, generated artifacts, rollback contracts, drift detection, and offline CI.',
     type: 'Article',
     label: 'vs Alembic',
     crumb: [{ name: 'Compare', path: '/compare' }],
   },
   '/compare/atlas': {
-    title: 'dbwarden vs Atlas | Declarative schema management compared',
-    description: 'A detailed comparison of dbwarden and Atlas: schema location, runtime, declarative modes, versioned artifacts, rollback, drift, safety, CI, and ecosystem fit.',
+    title: 'DBWarden vs Atlas — SQLAlchemy Schema Management Compared',
+    description: 'A detailed comparison of DBWarden and Atlas: schema location, runtime, declarative modes, versioned artifacts, rollback, drift, safety, CI, and ecosystem fit.',
     type: 'Article',
     label: 'vs Atlas',
     crumb: [{ name: 'Compare', path: '/compare' }],
   },
   '/compare/django-migrations': {
-    title: 'dbwarden vs Django migrations | Model-driven SQLAlchemy migrations',
-    description: 'A detailed comparison of dbwarden and Django migrations: model-driven workflows, artifacts, rollback, renames, drift, coupling, and backend support.',
+    title: 'DBWarden vs Django Migrations — Model-Driven SQLAlchemy Migrations',
+    description: 'A detailed comparison of DBWarden and Django migrations: model-driven workflows, artifacts, rollback, renames, drift, coupling, and backend support.',
     type: 'Article',
     label: 'vs Django migrations',
     crumb: [{ name: 'Compare', path: '/compare' }],
@@ -141,10 +164,45 @@ export function schemaTypeFor(type) {
   return type === 'Article' ? 'Article' : type === 'CollectionPage' ? 'CollectionPage' : type === 'WebSite' ? 'WebSite' : 'WebPage'
 }
 
+const organizationSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Organization',
+  name: 'DBWarden',
+  url: siteUrl,
+  logo: { '@type': 'ImageObject', url: `${siteUrl}/icon.png` },
+  sameAs: ['https://github.com/dbwarden-org/dbwarden'],
+  description: 'Open-source declarative database migration infrastructure for SQLAlchemy.',
+}
+
+const softwareApplicationSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'SoftwareApplication',
+  name: 'DBWarden',
+  applicationCategory: 'DeveloperApplication',
+  url: siteUrl,
+  description: 'Declarative database migrations for SQLAlchemy. Derives reviewable SQL migrations, rollbacks, schema checks, and safety analysis from your models.',
+  license: 'https://opensource.org/license/mit/',
+  isAccessibleForFree: true,
+  operatingSystem: 'Linux, macOS, Windows',
+  offers: {
+    '@type': 'Offer',
+    price: '0',
+    priceCurrency: 'USD',
+  },
+  softwareVersion: 'latest',
+  applicationSuite: 'DBWarden',
+  screenshot: imageUrl,
+  featureList: 'Model-driven migration generation, rollback contracts, safety classifier, impact analysis, schema drift detection, offline generation, FastAPI integration',
+  codeRepository: 'https://github.com/dbwarden-org/dbwarden',
+  programmingLanguage: 'Python',
+  runtimePlatform: 'Python 3.12+',
+  provider: organizationSchema,
+}
+
 export function schemaFor(path) {
   const page = pages[path]
   const canonical = canonicalFor(path)
-  return {
+  const base = {
     '@context': 'https://schema.org',
     '@type': schemaTypeFor(page.type),
     name: page.title,
@@ -154,20 +212,33 @@ export function schemaFor(path) {
     license: 'https://opensource.org/license/mit/',
     isAccessibleForFree: true,
     codeRepository: 'https://github.com/dbwarden-org/dbwarden',
-    publisher: { '@type': 'Organization', name: 'dbwarden', url: siteUrl, logo: { '@type': 'ImageObject', url: `${siteUrl}/icon.png` } },
+    publisher: { '@type': 'Organization', name: 'DBWarden', url: siteUrl, logo: { '@type': 'ImageObject', url: `${siteUrl}/icon.png` } },
     mainEntityOfPage: { '@type': 'WebPage', '@id': canonical },
   }
+  if (path === '/') {
+    return {
+      '@context': 'https://schema.org',
+      '@graph': [softwareApplicationSchema, organizationSchema, base],
+    }
+  }
+  return base
 }
 
-// BreadcrumbList for hierarchically nested pages (tool scope, compare).
-// Returns null for flat pages, which get no breadcrumb markup.
+export { organizationSchema, softwareApplicationSchema }
+
+// BreadcrumbList for every non-home page.
+// Pages with crumb: [] get Home > [Page].
+// Pages with crumb entries get Home > ...parents > [Page].
+// The homepage never gets breadcrumbs.
 export function breadcrumbFor(path) {
+  if (path === '/') return null
   const page = pages[path]
-  if (!page || !('crumb' in page)) return null
+  if (!page || !page.label) return null
+  const crumbs = 'crumb' in page ? page.crumb : []
   const list = [
     { '@type': 'ListItem', position: 1, name: 'Home', item: `${siteUrl}/` },
-    ...page.crumb.map((c, i) => ({ '@type': 'ListItem', position: i + 2, name: c.name, item: `${siteUrl}${c.path}` })),
-    { '@type': 'ListItem', position: page.crumb.length + 2, name: page.label, item: canonicalFor(path) },
+    ...crumbs.map((c, i) => ({ '@type': 'ListItem', position: i + 2, name: c.name, item: `${siteUrl}${c.path}` })),
+    { '@type': 'ListItem', position: crumbs.length + 2, name: page.label, item: canonicalFor(path) },
   ]
   return {
     '@context': 'https://schema.org',
