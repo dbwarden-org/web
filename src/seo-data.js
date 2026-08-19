@@ -2,7 +2,7 @@
 // prerenderer (vite.config.js). Pure data and functions, no React, so the
 // Vite config can import it without pulling React into the build.
 export const siteUrl = 'https://dbwarden.org'
-export const imageUrl = `${siteUrl}/og-image.jpg`
+export const imageUrl = `${siteUrl}/og-image.png`
 
 export const pages = {
   '/': {
