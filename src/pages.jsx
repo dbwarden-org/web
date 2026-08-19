@@ -31,7 +31,7 @@ export function SiteFooter() {
       <div className="footer-grid">
         <div className="footer-col"><h4>Tool scope</h4><a href="/why">Why dbwarden</a><a href="/how-it-works">How it works</a><a href="/tool-scope">Tool scope</a><a href="/cli">CLI reference</a></div>
         <div className="footer-col"><h4>Databases & apps</h4><a href="/databases">Databases</a><a href="/fastapi">FastAPI</a><a href="/correctness">Correctness</a><a href="/plugins">Plugins</a></div>
-        <div className="footer-col"><h4>Compare</h4><a href="/compare/alembic">vs Alembic</a><a href="/compare/atlas">vs Atlas</a><a href="/compare/django-migrations">vs Django migrations</a><a href="/migrate-from-alembic">Migrate from Alembic</a></div>
+        <div className="footer-col"><h4>Compare</h4><a href="/alembic-alternative">Alembic alternative</a><a href="/compare/alembic">vs Alembic</a><a href="/compare/atlas">vs Atlas</a><a href="/compare/django-migrations">vs Django migrations</a><a href="/migrate-from-alembic">Migrate from Alembic</a></div>
         <div className="footer-col"><h4>Community</h4><a href="https://github.com/dbwarden-org/dbwarden" target="_blank" rel="noreferrer">GitHub ↗</a><a href="https://docs.dbwarden.org" target="_blank" rel="noreferrer">Docs ↗</a><a href="https://harness.dbwarden.org" target="_blank" rel="noreferrer">Harness ↗</a><a href="https://github.com/dbwarden-org/dbwarden/issues" target="_blank" rel="noreferrer">Issues ↗</a></div>
       </div>
       <div className="footer-bottom"><span>Fully open source. MIT licensed.</span></div>

@@ -10,6 +10,7 @@ import { Seo } from './seo.jsx'
 // never touch users who only visit the landing page. Each loader is exported so
 // the SSR pass (src/ssr.jsx) and the client boot can register the resolved
 // component under the same key and render it on first paint.
+export const loadAlembicAlternative = () => import('./alembic-alternative.jsx').then((m) => ({ default: m.AlembicAlternativePage }))
 export const loadWhy = () => import('./why.jsx').then((m) => ({ default: m.WhyPage }))
 export const loadProductSurface = () => import('./surface.jsx').then((m) => ({ default: m.ProductSurfacePage }))
 export const loadTimeline = () => import('./timeline.jsx').then((m) => ({ default: m.TimelinePage }))
@@ -30,6 +31,7 @@ export const loadMigrateFromAlembic = () => import('./migrate.jsx').then((m) => 
 export const loadCli = () => import('./cli.jsx').then((m) => ({ default: m.CliPage }))
 export const loadNotFound = () => import('./notfound.jsx').then((m) => ({ default: m.NotFoundPage }))
 
+const AlembicAlternativePage = lazyLoad(loadAlembicAlternative)
 const WhyPage = lazyLoad(loadWhy)
 const ProductSurfacePage = lazyLoad(loadProductSurface)
 const TimelinePage = lazyLoad(loadTimeline)
@@ -53,6 +55,7 @@ const NotFoundPage = lazyLoad(loadNotFound)
 // Current-route loaders, used by the boot to preload before first render (so
 // the SSR'd content is never blanked by a null placeholder) and by the SSR pass.
 export const routeLoaders = {
+  '/alembic-alternative': loadAlembicAlternative,
   '/why': loadWhy,
   '/tool-scope': loadProductSurface,
   '/how-it-works': loadTimeline,
@@ -144,6 +147,9 @@ export function App({ path: pathProp }) {
 
   const route = (node) => node
 
+  if (path === '/alembic-alternative') {
+    return route(<AlembicAlternativePage dark={dark} toggleTheme={toggleTheme} />)
+  }
   if (path === '/plugins') {
     return <PluginDirectory dark={dark} toggleTheme={toggleTheme} />
   }

@@ -6,12 +6,13 @@
 import { renderToString } from 'preact-render-to-string'
 import { registerRoute } from './react-shims.jsx'
 import {
-  App, loadAlembicComparison, loadAtlasComparison, loadCli, loadCompare,
-  loadCorrectness, loadDatabases, loadDjangoComparison, loadFastapi,
-  loadGeneration, loadMigrateFromAlembic, loadNotFound, loadObservability,
-  loadProductSurface, loadRepeatableMigrations, loadSafety, loadSeeds,
-  loadState, loadTimeline, loadWhy,
+  App, loadAlembicAlternative, loadAlembicComparison, loadAtlasComparison,
+  loadCli, loadCompare, loadCorrectness, loadDatabases, loadDjangoComparison,
+  loadFastapi, loadGeneration, loadMigrateFromAlembic, loadNotFound,
+  loadObservability, loadProductSurface, loadRepeatableMigrations, loadSafety,
+  loadSeeds, loadState, loadTimeline, loadWhy,
 } from './main.jsx'
+import { AlembicAlternativePage } from './alembic-alternative.jsx'
 import { WhyPage } from './why.jsx'
 import { ProductSurfacePage } from './surface.jsx'
 import { TimelinePage } from './timeline.jsx'
@@ -24,6 +25,7 @@ import { MigrateFromAlembicPage } from './migrate.jsx'
 import { CliPage } from './cli.jsx'
 import { NotFoundPage } from './notfound.jsx'
 
+registerRoute(loadAlembicAlternative, AlembicAlternativePage)
 registerRoute(loadWhy, WhyPage)
 registerRoute(loadProductSurface, ProductSurfacePage)
 registerRoute(loadTimeline, TimelinePage)
