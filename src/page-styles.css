@@ -63,6 +63,7 @@
 .essay-body { width: min(930px, 100%); margin: 0 auto; }
 .essay-body > p { max-width: 760px; color: var(--muted); font-size: 15px; line-height: 1.85; }
 .essay-body > p + p { margin-top: 24px; }
+.essay-body > .comparison-code + p, .essay-body > .comparison-code-grid + p { margin-top: 38px; }
 .comparison-code-grid { display: grid; grid-template-columns: 1fr; gap: 10px; width: min(930px, 100%); margin: 30px auto 0; }
 .comparison-code-grid > div { min-width: 0; padding: 25px 27px; border: 1px solid var(--line); background: var(--surface-muted); }
 .comparison-code-grid .comparison-label { display: block; margin-bottom: 18px; }
