@@ -5,6 +5,7 @@
 // the same markup.
 import { renderToString } from 'preact-render-to-string'
 import { registerRoute } from './react-shims.jsx'
+import { I18nProvider } from './i18n.jsx'
 import {
   App, loadAlembicAlternative, loadAlembicComparison, loadAtlasComparison,
   loadCli, loadCompare, loadCorrectness, loadDatabases, loadDjangoComparison,
@@ -48,5 +49,5 @@ registerRoute(loadNotFound, NotFoundPage)
 
 export function renderRoute(path) {
   const route = path.replace(/\/$/, '') || '/'
-  return renderToString(<App path={route} />)
+  return renderToString(<I18nProvider><App path={route} /></I18nProvider>)
 }
