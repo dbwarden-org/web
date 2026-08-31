@@ -7,7 +7,7 @@ export const imageUrl = `${siteUrl}/og-image.png`
 export const pages = {
   '/': {
     title: 'dbwarden | The Modern Alembic Alternative for SQLAlchemy',
-    description: 'Declarative database migrations for SQLAlchemy. dbwarden derives reviewable SQL migrations, rollbacks, schema checks, and safety analysis from your models.',
+    description: 'Declarative schema compiler for SQLAlchemy. dbwarden compiles reviewable SQL migrations, rollbacks, schema checks, and safety analysis from your models.',
     type: 'WebSite',
   },
   '/alembic-alternative': {
@@ -18,29 +18,29 @@ export const pages = {
     crumb: [],
   },
   '/why': {
-    title: 'Why dbwarden? Declarative Database Migrations for SQLAlchemy',
-    description: 'Understand why dbwarden keeps SQLAlchemy models as the schema authority and treats generated SQL migrations as reviewable artifacts.',
+    title: 'Why dbwarden? Declarative Schema Compiler for SQLAlchemy',
+    description: 'Understand why dbwarden compiles SQLAlchemy models into reviewable SQL migrations, keeping models as the source of truth.',
     type: 'Article',
     label: 'Why dbwarden',
     crumb: [],
   },
   '/how-it-works': {
-    title: 'How Declarative Database Migrations Work | dbwarden',
-    description: 'Follow dbwarden from typed database configuration and SQLAlchemy models through deterministic generation, review, application, and convergence.',
+    title: 'How Schema Compilation Works | dbwarden',
+    description: 'Follow dbwarden from typed database configuration and SQLAlchemy models through deterministic compilation, review, application, and convergence.',
     type: 'HowTo',
     label: 'How it works',
     crumb: [],
   },
   '/tool-scope': {
-    title: 'dbwarden Database Migration Features | SQLAlchemy',
-    description: 'What dbwarden covers around the generated migration: generation from models, safety classification, impact analysis, state, multi-database support, and plugins.',
+    title: 'dbwarden Schema Compilation Features | SQLAlchemy',
+    description: 'What dbwarden covers around the compiled output: compilation from models, safety classification, impact analysis, state, multi-database support, and plugins.',
     type: 'Product',
     label: 'Tool scope',
     crumb: [],
   },
   '/tool-scope/generation': {
-    title: 'SQLAlchemy Migration Generation: Generate SQL from Models | dbwarden',
-    description: 'How dbwarden generates versioned SQL migrations from SQLAlchemy models: the derived artifact, typed metadata, and offline generation from committed state.',
+    title: 'SQLAlchemy Schema Compilation: Compile SQL from Models | dbwarden',
+    description: 'How dbwarden compiles versioned SQL migrations from SQLAlchemy models: the compiled output, typed metadata, and offline compilation from committed state.',
     type: 'Article',
     label: 'Generation',
     crumb: [{ name: 'Tool scope', path: '/tool-scope' }],

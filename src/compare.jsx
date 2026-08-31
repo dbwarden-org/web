@@ -10,7 +10,7 @@ const comparisons = [
 ]
 
 export function ComparePage({ dark, toggleTheme }) {
-  return <PageFrame dark={dark} toggleTheme={toggleTheme} eyebrow="compare" title={<>Which SQLAlchemy Migration<br /><em>Tool Should You Use?</em></>} intro="Looking for an Alembic alternative? Compare dbwarden with Alembic, Atlas, and other migration approaches. Migration tools make different bets about where schema truth lives, what gets reviewed, and when risk becomes visible.">
+  return <PageFrame dark={dark} toggleTheme={toggleTheme} eyebrow="compare" title={<>Which SQLAlchemy Migration<br /><em>Tool Should You Use?</em></>} intro="Looking for an Alembic alternative? dbwarden approaches schema management as a compilation problem: models are source, SQL is the target output. Compare dbwarden with Alembic, Atlas, and other migration approaches.">
     <section className="comparison-example-section"><div className="section-label">/ the short answers</div><div className="essay-body">
       <p><strong>Is dbwarden an alternative to SQLAlchemy?</strong> No: SQLAlchemy is the ORM, and dbwarden works with it. The thing being replaced is the migration layer. For SQLAlchemy projects that layer is usually Alembic, and dbwarden is the alternative to Alembic.</p>
       <p><strong>Which migration tool should I use?</strong> If you are on SQLAlchemy, the choice is between dbwarden and Alembic (Atlas is the language-agnostic option, Django migrations are for Django). dbwarden keeps the schema in the models and derives plain SQL with rollback beside it; Alembic keeps the schema in a chain of Python revision scripts.</p>
