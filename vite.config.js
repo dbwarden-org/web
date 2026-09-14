@@ -94,7 +94,7 @@ function apply404(template) {
 function prerenderSeo() {
   return {
     name: 'dbwarden-prerender-seo',
-    async closeBundle() {
+    async writeBundle() {
       const outDir = 'dist'
       let template = readFileSync(join(outDir, 'index.html'), 'utf8')
       // Build the server bundle (src/ssr.jsx) so every route can be rendered to

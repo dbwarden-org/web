@@ -11,6 +11,8 @@
   <url><loc>https://dbwarden.org/tool-scope/repeatable-migrations</loc><priority>0.8</priority></url>
   <url><loc>https://dbwarden.org/tool-scope/seeds</loc><priority>0.8</priority></url>
   <url><loc>https://dbwarden.org/tool-scope/observability</loc><priority>0.8</priority></url>
+  <url><loc>https://dbwarden.org/tool-scope/locking</loc><priority>0.8</priority></url>
+  <url><loc>https://dbwarden.org/tool-scope/merge-handling</loc><priority>0.8</priority></url>
   <url><loc>https://dbwarden.org/plugins</loc><priority>0.8</priority></url>
   <url><loc>https://dbwarden.org/compare</loc><priority>0.8</priority></url>
   <url><loc>https://dbwarden.org/compare/alembic</loc><priority>0.8</priority></url>
@@ -21,4 +23,5 @@
   <url><loc>https://dbwarden.org/databases</loc><priority>0.8</priority></url>
   <url><loc>https://dbwarden.org/migrate-from-alembic</loc><priority>0.7</priority></url>
   <url><loc>https://dbwarden.org/cli</loc><priority>0.7</priority></url>
+  <url><loc>https://dbwarden.org/wlite</loc><priority>0.8</priority></url>
 </urlset>

@@ -11,7 +11,8 @@ import {
   loadCli, loadCompare, loadCorrectness, loadDatabases, loadDjangoComparison,
   loadFastapi, loadGeneration, loadMigrateFromAlembic, loadNotFound,
   loadObservability, loadProductSurface, loadRepeatableMigrations, loadSafety,
-  loadSeeds, loadState, loadTimeline, loadWhy,
+  loadSeeds, loadState, loadTimeline, loadWhy, loadWlite, loadLocking,
+  loadMergeHandling,
 } from './main.jsx'
 import { AlembicAlternativePage } from './alembic-alternative.jsx'
 import { WhyPage } from './why.jsx'
@@ -19,11 +20,12 @@ import { ProductSurfacePage } from './surface.jsx'
 import { TimelinePage } from './timeline.jsx'
 import { ComparePage, AlembicComparisonPage, AtlasComparisonPage, DjangoComparisonPage } from './compare.jsx'
 import { FastapiPage } from './fastapi.jsx'
-import { GenerationPage, SafetyPage, StatePage, RepeatableMigrationsPage, SeedsPage, ObservabilityPage } from './features.jsx'
+import { GenerationPage, SafetyPage, StatePage, RepeatableMigrationsPage, SeedsPage, ObservabilityPage, LockingPage, MergeHandlingPage } from './features.jsx'
 import { CorrectnessPage } from './correctness.jsx'
 import { DatabasesPage } from './databases.jsx'
 import { MigrateFromAlembicPage } from './migrate.jsx'
 import { CliPage } from './cli.jsx'
+import { WlitePage } from './wlite.jsx'
 import { NotFoundPage } from './notfound.jsx'
 
 registerRoute(loadAlembicAlternative, AlembicAlternativePage)
@@ -45,6 +47,9 @@ registerRoute(loadCorrectness, CorrectnessPage)
 registerRoute(loadDatabases, DatabasesPage)
 registerRoute(loadMigrateFromAlembic, MigrateFromAlembicPage)
 registerRoute(loadCli, CliPage)
+registerRoute(loadWlite, WlitePage)
+registerRoute(loadLocking, LockingPage)
+registerRoute(loadMergeHandling, MergeHandlingPage)
 registerRoute(loadNotFound, NotFoundPage)
 
 export function renderRoute(path) {

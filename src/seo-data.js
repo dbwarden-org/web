@@ -80,6 +80,20 @@ export const pages = {
     label: 'Observability',
     crumb: [{ name: 'Tool scope', path: '/tool-scope' }],
   },
+  '/tool-scope/locking': {
+    title: 'Database Migration Locking & Recovery | dbwarden',
+    description: 'How dbwarden prevents concurrent migrations with native database locks, heartbeats, holder diagnostics, stale-lock recovery, and Redis coordination.',
+    type: 'Article',
+    label: 'Locking',
+    crumb: [{ name: 'Tool scope', path: '/tool-scope' }],
+  },
+  '/tool-scope/merge-handling': {
+    title: 'Git Merge Reconciliation for Database Migrations | dbwarden',
+    description: 'How dbwarden reconciles divergent migration branches using merged models, merge-base state, superseded markers, rebase, and environment recovery.',
+    type: 'Article',
+    label: 'Merge handling',
+    crumb: [{ name: 'Tool scope', path: '/tool-scope' }],
+  },
   '/plugins': {
     title: 'dbwarden Plugins & Extensions | SQLAlchemy',
     description: 'Browse official dbwarden plugins and learn how to create compatible extensions with the dbwarden plugin template.',
@@ -120,6 +134,13 @@ export const pages = {
     description: 'The full dbwarden command surface: authoring, execution, inspection, seeds, locking, and plugin management, with global flags for JSON output and dev mode.',
     type: 'WebPage',
     label: 'CLI reference',
+    crumb: [],
+  },
+  '/wlite': {
+    title: 'wlite & libwlite | Portable Schema and Migration Engine',
+    description: 'Explore wlite and libwlite: a compact schema parser, planner, diff engine, SQL emitter, CLI, and C++, Python, and Rust bindings.',
+    type: 'Article',
+    label: 'wlite + libwlite',
     crumb: [],
   },
   '/compare': {
@@ -192,7 +213,7 @@ const softwareApplicationSchema = {
   softwareVersion: 'latest',
   applicationSuite: 'dbwarden',
   screenshot: imageUrl,
-  featureList: 'Model-driven migration generation, rollback contracts, safety classifier, impact analysis, schema drift detection, offline generation, FastAPI integration',
+  featureList: 'Model-driven migration generation, rollback contracts, safety classifier, impact analysis, schema drift detection, offline generation, native migration locking, Git merge reconciliation, FastAPI integration',
   codeRepository: 'https://github.com/dbwarden-org/dbwarden',
   programmingLanguage: 'Python',
   runtimePlatform: 'Python 3.12+',

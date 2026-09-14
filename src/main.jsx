@@ -26,10 +26,13 @@ export const loadState = () => import('./features.jsx').then((m) => ({ default: 
 export const loadRepeatableMigrations = () => import('./features.jsx').then((m) => ({ default: m.RepeatableMigrationsPage }))
 export const loadSeeds = () => import('./features.jsx').then((m) => ({ default: m.SeedsPage }))
 export const loadObservability = () => import('./features.jsx').then((m) => ({ default: m.ObservabilityPage }))
+export const loadLocking = () => import('./features.jsx').then((m) => ({ default: m.LockingPage }))
+export const loadMergeHandling = () => import('./features.jsx').then((m) => ({ default: m.MergeHandlingPage }))
 export const loadCorrectness = () => import('./correctness.jsx').then((m) => ({ default: m.CorrectnessPage }))
 export const loadDatabases = () => import('./databases.jsx').then((m) => ({ default: m.DatabasesPage }))
 export const loadMigrateFromAlembic = () => import('./migrate.jsx').then((m) => ({ default: m.MigrateFromAlembicPage }))
 export const loadCli = () => import('./cli.jsx').then((m) => ({ default: m.CliPage }))
+export const loadWlite = () => import('./wlite.jsx').then((m) => ({ default: m.WlitePage }))
 export const loadNotFound = () => import('./notfound.jsx').then((m) => ({ default: m.NotFoundPage }))
 
 const AlembicAlternativePage = lazyLoad(loadAlembicAlternative)
@@ -47,10 +50,13 @@ const StatePage = lazyLoad(loadState)
 const RepeatableMigrationsPage = lazyLoad(loadRepeatableMigrations)
 const SeedsPage = lazyLoad(loadSeeds)
 const ObservabilityPage = lazyLoad(loadObservability)
+const LockingPage = lazyLoad(loadLocking)
+const MergeHandlingPage = lazyLoad(loadMergeHandling)
 const CorrectnessPage = lazyLoad(loadCorrectness)
 const DatabasesPage = lazyLoad(loadDatabases)
 const MigrateFromAlembicPage = lazyLoad(loadMigrateFromAlembic)
 const CliPage = lazyLoad(loadCli)
+const WlitePage = lazyLoad(loadWlite)
 const NotFoundPage = lazyLoad(loadNotFound)
 
 // Current-route loaders, used by the boot to preload before first render (so
@@ -71,10 +77,13 @@ export const routeLoaders = {
   '/tool-scope/repeatable-migrations': loadRepeatableMigrations,
   '/tool-scope/seeds': loadSeeds,
   '/tool-scope/observability': loadObservability,
+  '/tool-scope/locking': loadLocking,
+  '/tool-scope/merge-handling': loadMergeHandling,
   '/correctness': loadCorrectness,
   '/databases': loadDatabases,
   '/migrate-from-alembic': loadMigrateFromAlembic,
   '/cli': loadCli,
+  '/wlite': loadWlite,
 }
 
 const logo = '/icon.webp'
@@ -189,6 +198,9 @@ export function App({ path: pathProp }) {
   if (path === '/cli') {
     return route(<CliPage dark={dark} toggleTheme={toggleTheme} />)
   }
+  if (path === '/wlite') {
+    return route(<WlitePage dark={dark} toggleTheme={toggleTheme} />)
+  }
   if (path === '/why') {
     return route(<WhyPage dark={dark} toggleTheme={toggleTheme} />)
   }
@@ -212,6 +224,12 @@ export function App({ path: pathProp }) {
   }
   if (path === '/tool-scope/observability') {
     return route(<ObservabilityPage dark={dark} toggleTheme={toggleTheme} />)
+  }
+  if (path === '/tool-scope/locking') {
+    return route(<LockingPage dark={dark} toggleTheme={toggleTheme} />)
+  }
+  if (path === '/tool-scope/merge-handling') {
+    return route(<MergeHandlingPage dark={dark} toggleTheme={toggleTheme} />)
   }
   if (path === '/tool-scope') {
     return route(<ProductSurfacePage dark={dark} toggleTheme={toggleTheme} />)

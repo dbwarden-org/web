@@ -35,7 +35,7 @@ export function SiteFooter() {
         <div className="footer-col"><h4>{t('footer.toolScope')}</h4><a href="/why">{t('nav.why')}</a><a href="/how-it-works">{t('nav.howItWorks')}</a><a href="/tool-scope">{t('nav.toolScope')}</a><a href="/cli">{t('nav.cliReference')}</a></div>
         <div className="footer-col"><h4>{t('footer.databasesAndApps')}</h4><a href="/databases">{t('nav.databases')}</a><a href="/fastapi">{t('nav.fastapi')}</a><a href="/correctness">{t('nav.correctness')}</a><a href="/plugins">{t('nav.plugins')}</a></div>
         <div className="footer-col"><h4>{t('footer.compare')}</h4><a href="/compare/alembic">{t('nav.vsAlembic')}</a><a href="/compare/atlas">{t('nav.vsAtlas')}</a><a href="/compare/django-migrations">{t('nav.vsDjango')}</a><a href="/migrate-from-alembic">{t('nav.migrateFromAlembic')}</a></div>
-        <div className="footer-col"><h4>{t('footer.community')}</h4><a href="https://github.com/dbwarden-org/dbwarden" target="_blank" rel="noreferrer">{t('footer.github')} ↗</a><a href="https://docs.dbwarden.org" target="_blank" rel="noreferrer">{t('footer.docs')} ↗</a><a href="https://harness.dbwarden.org" target="_blank" rel="noreferrer">{t('footer.harness')} ↗</a><a href="https://github.com/dbwarden-org/dbwarden/issues" target="_blank" rel="noreferrer">{t('footer.issues')} ↗</a></div>
+        <div className="footer-col"><h4>{t('footer.community')}</h4><a href="https://github.com/dbwarden-org/dbwarden" target="_blank" rel="noreferrer">{t('footer.github')} ↗</a><a href="/wlite">wlite + libwlite</a><a href="https://docs.dbwarden.org" target="_blank" rel="noreferrer">{t('footer.docs')} ↗</a><a href="https://harness.dbwarden.org" target="_blank" rel="noreferrer">{t('footer.harness')} ↗</a><a href="https://github.com/dbwarden-org/dbwarden/issues" target="_blank" rel="noreferrer">{t('footer.issues')} ↗</a></div>
       </div>
       <div className="footer-bottom"><span>{t('footer.openSource')}</span></div>
     </footer>
@@ -106,6 +106,8 @@ function useToolScopeLinks() {
     { label: t('nav.repeatableMigrations'), href: '/tool-scope/repeatable-migrations' },
     { label: t('nav.seeds'), href: '/tool-scope/seeds' },
     { label: t('nav.observability'), href: '/tool-scope/observability' },
+    { label: 'Locking', href: '/tool-scope/locking' },
+    { label: 'Merge handling', href: '/tool-scope/merge-handling' },
   ]
 }
 

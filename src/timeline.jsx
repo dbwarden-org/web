@@ -48,7 +48,7 @@ const steps = [
   },
   {
     number: '05', label: 'apply', title: 'Apply the pending files, under lock.',
-    body: '`migrate` resolves the config, acquires the migration lock, executes the pending SQL in order, records the migration with its checksum, and releases the lock. A schema snapshot is written for the next diff. For risky changes, `--sandbox` rehearses against a temporary database first, and `--with-backup` captures a pre-migration state before anything is applied.',
+    body: '`migrate` resolves the config, acquires the engine-native migration lock, records holder state and heartbeat progress, executes the pending SQL in order, records the migration with its checksum, and releases the lock. A schema snapshot is written for the next diff. For risky changes, `--sandbox` rehearses against a temporary database first, and `--with-backup` captures a pre-migration state before anything is applied.',
     doc: 'https://docs.dbwarden.org/getting-started/workflows/',
     blocks: [
       { label: 'terminal', lang: 'shell', text: '$ dbwarden migrate --database primary\nApplying migration: primary__0001_create_core_tables.sql\nMigration applied successfully\n\n$ dbwarden migrate --database primary --with-backup --backup-dir ./backups' },
@@ -56,7 +56,7 @@ const steps = [
   },
   {
     number: '06', label: 'verify', title: 'Confirm the database matches the models.',
-    body: '`dbwarden status` shows applied and pending counts, `dbwarden history` shows execution order and timestamps, and `check-db` reads the live schema directly. Together they answer whether the migration queue is clean and what the database actually holds. The loop closes when the models, the migration files, and the database agree.',
+    body: '`dbwarden status` shows applied and pending counts, `dbwarden history` shows execution order and timestamps, and `check-db` reads the live schema directly. Together they answer whether the migration queue is clean and what the database actually holds. After a branch merge, status also exposes `MERGE_PENDING`; resolve it with `merge` before generating another migration. The loop closes when the models, the migration files, and the database agree.',
     doc: 'https://docs.dbwarden.org/commands/status/',
     blocks: [
       { label: 'terminal', lang: 'shell', text: '$ dbwarden status --database primary\nDatabase: primary\nApplied migrations: 1\nPending migrations: 0\n\n$ dbwarden history --database primary\n1  primary__0001_create_core_tables.sql  applied' },
