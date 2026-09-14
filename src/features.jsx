@@ -160,6 +160,11 @@ $ dbwarden unlock --database primary --force`}</CodeBlock></div></div>
     <PageSection number="03" label="Distributed deployments" title="Database locks and Redis locks solve different problems." doc="https://github.com/dbwarden-org/dbwarden-redis">
       <div className="why-split"><div><p>The core database lock protects CLI migration and rollback commands using the target database itself. The official <code className="inline-code">dbwarden-redis</code> plugin provides a Redis-backed lock for application code and multiple replicas, where the entry point is outside the CLI.</p><p>Use either independently or both together: the database lock protects schema execution, while the Redis lock coordinates code paths across application instances.</p></div><div><span className="comparison-label">install the optional plugin</span><CodeBlock>{`$ dbwarden plugin add dbwarden-redis`}</CodeBlock><a className="text-link" href="https://github.com/dbwarden-org/dbwarden-redis" target="_blank" rel="noreferrer">View dbwarden-redis <span>↗</span></a></div></div>
     </PageSection>
+    <Faq items={[
+      { q: 'What happens if a migration process crashes?', a: 'The lock is released when the connection closes. On PostgreSQL, the advisory lock is session-scoped and auto-releases. On SQLite, the journal cleanup releases the write lock. On ClickHouse, the lease expires after the TTL.' },
+      { q: 'Can I check who holds the lock?', a: 'Yes. `dbwarden lock-status` shows the holder identity, PID, host, execution ID, and health state. `dbwarden unlock` is the explicit recovery command for stale locks.' },
+      { q: 'Do I need Redis for multi-replica deployments?', a: 'The core database lock protects CLI commands. For application code and multiple replicas, the `dbwarden-redis` plugin provides a Redis-backed lock that coordinates across processes.' },
+    ]} />
   </PageFrame>
 }
 
@@ -182,5 +187,10 @@ $ dbwarden merge --database primary`}</CodeBlock></div></div>
       <div className="why-split"><div><p>Superseded migrations are never deleted. They are excluded from the runnable chain and retain merge-base, branch, checksum, and environment information for review and recovery. The generated reconciliation file records what it supersedes and how it was produced.</p><p>MariaDB has incomplete snapshot support, so merge-base resolution relies on model state and rename candidates require explicit confirmation. All merge operations require Git, and manual migrations remain SQL-only.</p></div><div><span className="comparison-label">explicit rename intent</span><CodeBlock>{`$ dbwarden merge --database primary \\
     --rename-column users.name=full_name`}</CodeBlock></div></div>
     </PageSection>
+    <Faq items={[
+      { q: 'What happens when two branches add the same column?', a: 'dbwarden detects the version collision and refuses to generate until the merge is resolved. The `merge` command creates a reconciliation migration that accounts for both branches.' },
+      { q: 'Can I use merge handling with MariaDB?', a: 'MariaDB has incomplete snapshot support, so merge-base resolution relies on model state. Rename candidates require explicit confirmation with `--rename`.' },
+      { q: 'What does superseded mean?', a: 'Superseded migrations are excluded from the runnable chain but never deleted. They retain full provenance for review and recovery, and the reconciliation file records what it supersedes.' },
+    ]} />
   </PageFrame>
 }
