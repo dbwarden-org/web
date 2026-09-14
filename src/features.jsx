@@ -147,50 +147,103 @@ export function ObservabilityPage({ dark, toggleTheme }) {
 export function LockingPage({ dark, toggleTheme }) {
   return <PageFrame dark={dark} toggleTheme={toggleTheme} eyebrow="tool scope / locking" title={<>Migration Locking<br /><em>That Knows When to Stop.</em></>} intro="Every schema change runs under a database-native lock, with holder diagnostics, heartbeat state, and a deliberate recovery path when a worker disappears." install="uv add dbwarden">
     <PageSection number="01" label="Native locks" title="One lock strategy per engine." doc="https://docs.dbwarden.org/advanced/migration-locking/">
-      <div className="why-split"><div><p><code className="inline-code">migrate</code> and <code className="inline-code">rollback</code> acquire a native lock before executing SQL, write an observable status row, run a heartbeat, and release the lock on success or failure. A second runner fails immediately with holder diagnostics instead of racing the first migration.</p><p>PostgreSQL uses a session advisory lock, MySQL and MariaDB use named user locks, SQLite uses <code className="inline-code">BEGIN IMMEDIATE</code>, and ClickHouse uses a lease with a fencing token. The lock is part of the execution contract, not an optional wrapper around it.</p></div><div><span className="comparison-label">inspect before acting</span><CodeBlock>{`$ dbwarden lock-status --database primary
+      <div className="why-split"><div><p>Most migration tools assume a single process running at a time, and fail silently when that assumption breaks. dbwarden enforces mutual exclusion at the database level, using whatever locking primitive the backend provides natively. The lock is part of the execution contract, not an optional wrapper around it.</p><p>PostgreSQL uses a session-scoped advisory lock, which is released automatically if the connection drops. MySQL and MariaDB use named user locks with a configurable timeout. SQLite uses <code className="inline-code">BEGIN IMMEDIATE</code>, which acquires a write lock on the database file for the entire migration run. ClickHouse, which has no session-scoped locks, uses a lease row with a fencing token and a configurable TTL.</p><p>Before anything executes, <code className="inline-code">migrate</code> acquires the lock and writes an observable status row. A second runner sees the status, reads the holder diagnostics, and fails immediately instead of racing the first migration. The status row records the holder identity, PID, host, execution ID, migration version, and health state, so an operator can tell who is running and whether they are still making progress.</p><CodeBlock label="terminal">{`$ dbwarden lock-status --database primary
 Migration lock status
   State: RUNNING
   Health: HEALTHY
-  Migration: V042`}</CodeBlock></div></div>
+  Holder: deploy-worker-3 (PID 12345)
+  Migration: V042
+  Acquired: 2026-09-13T14:30:00Z`}</CodeBlock></div><div><span className="comparison-label">the lock is the contract</span><CodeBlock>{`-- PostgreSQL: session advisory lock
+-- Released on connection close, even after crash
+
+-- SQLite: BEGIN IMMEDIATE
+-- Write lock held for entire migration run
+
+-- ClickHouse: lease with fencing token
+-- TTL-based expiry, heartbeat renewal`}</CodeBlock></div></div>
     </PageSection>
-    <PageSection number="02" label="Recovery" title="Stale locks are diagnosed, not guessed." doc="https://docs.dbwarden.org/advanced/migration-locking/">
-      <div className="why-split"><div><p>The heartbeat records whether the worker is still making progress. Lock status distinguishes healthy, stuck, dead, available, failed, and needs-review states, so an operator can tell an active migration from a dead process before intervening.</p><p><code className="inline-code">unlock</code> is an explicit recovery command for a lock that is no longer held by a live migration. It requires confirmation by default, supports <code className="inline-code">--force</code> for automation, and records the unlock at audit level.</p></div><div><span className="comparison-label">recover deliberately</span><CodeBlock>{`$ dbwarden lock-status --database primary
-$ dbwarden unlock --database primary --force`}</CodeBlock></div></div>
+    <PageSection number="02" label="Heartbeat" title="The lock knows when the worker stops." doc="https://docs.dbwarden.org/advanced/migration-locking/">
+      <div className="why-split"><div><p>A lock that never expires is worse than no lock at all. If a migration process crashes or hangs, the lock stays held and every subsequent runner fails forever. dbwarden solves this with a heartbeat: the lock holder writes a timestamp at regular intervals, and the status checker compares the last heartbeat against the current time.</p><p>On native-lock engines (PostgreSQL, MySQL, SQLite), the heartbeat runs in a background thread and updates <code className="inline-code">last_heartbeat_at</code> on the status row. On ClickHouse, the heartbeat is part of the lease renewal. If the heartbeat stops, the lock status transitions from HEALTHY to STUCK, then to DEAD after a configurable timeout.</p><p>This gives operators a clear picture: HEALTHY means the migration is running and making progress. STUCK means the process may be hung. DEAD means the process is gone and the lock can be recovered. AVAILABLE means no lock is held. Each state has a clear remediation path.</p><CodeBlock label="terminal">{`$ dbwarden lock-status --database primary
+Migration lock status
+  State: STUCK
+  Health: STUCK
+  Last heartbeat: 2026-09-13T14:25:00Z
+  Timeout: 120s
+  Recommendation: Check process 12345 on deploy-worker-3`}</CodeBlock></div><div><span className="comparison-label">heartbeat states</span><CodeBlock>{`HEALTHY  - running, making progress
+STUCK    - no heartbeat for > timeout
+DEAD     - no heartbeat for > 2x timeout
+AVAILABLE - no lock held
+FAILED   - lock acquisition failed
+NEEDS_REVIEW - manual intervention required`}</CodeBlock></div></div>
     </PageSection>
-    <PageSection number="03" label="Distributed deployments" title="Database locks and Redis locks solve different problems." doc="https://github.com/dbwarden-org/dbwarden-redis">
-      <div className="why-split"><div><p>The core database lock protects CLI migration and rollback commands using the target database itself. The official <code className="inline-code">dbwarden-redis</code> plugin provides a Redis-backed lock for application code and multiple replicas, where the entry point is outside the CLI.</p><p>Use either independently or both together: the database lock protects schema execution, while the Redis lock coordinates code paths across application instances.</p></div><div><span className="comparison-label">install the optional plugin</span><CodeBlock>{`$ dbwarden plugin add dbwarden-redis`}</CodeBlock><a className="text-link" href="https://github.com/dbwarden-org/dbwarden-redis" target="_blank" rel="noreferrer">View dbwarden-redis <span>↗</span></a></div></div>
+    <PageSection number="03" label="Recovery" title="Stale locks are diagnosed, not guessed." doc="https://docs.dbwarden.org/advanced/migration-locking/">
+      <div className="why-split"><div><p>When a lock is stuck or dead, the operator needs to decide whether to recover. dbwarden makes that decision explicit: <code className="inline-code">unlock</code> is a deliberate command that requires confirmation by default, records the action at audit level, and supports <code className="inline-code">--force</code> for automation.</p><p>The unlock command does not blindly release the lock. It checks the current status, confirms the holder is not still running, and only then releases. This prevents a race condition where two operators both think the lock is stale.</p><p>For distributed deployments, the official <code className="inline-code">dbwarden-redis</code> plugin provides a Redis-backed lock for application code and multiple replicas. The core database lock protects CLI commands; the Redis lock coordinates across application instances. They solve different problems and can be used independently or together.</p><CodeBlock label="terminal">{`$ dbwarden lock-status --database primary
+Migration lock status
+  State: DEAD
+  Health: DEAD
+  Last heartbeat: 2026-09-13T14:20:00Z
+
+# Confirm recovery
+$ dbwarden unlock --database primary
+
+# Or force for automation
+$ dbwarden unlock --database primary --force`}</CodeBlock></div><div><span className="comparison-label">install the optional plugin</span><CodeBlock>{`$ dbwarden plugin add dbwarden-redis`}</CodeBlock><a className="text-link" href="https://github.com/dbwarden-org/dbwarden-redis" target="_blank" rel="noreferrer">View dbwarden-redis <span>↗</span></a></div></div>
     </PageSection>
     <Faq items={[
       { q: 'What happens if a migration process crashes?', a: 'The lock is released when the connection closes. On PostgreSQL, the advisory lock is session-scoped and auto-releases. On SQLite, the journal cleanup releases the write lock. On ClickHouse, the lease expires after the TTL.' },
       { q: 'Can I check who holds the lock?', a: 'Yes. `dbwarden lock-status` shows the holder identity, PID, host, execution ID, and health state. `dbwarden unlock` is the explicit recovery command for stale locks.' },
       { q: 'Do I need Redis for multi-replica deployments?', a: 'The core database lock protects CLI commands. For application code and multiple replicas, the `dbwarden-redis` plugin provides a Redis-backed lock that coordinates across processes.' },
+      { q: 'How does the heartbeat work?', a: 'A background thread writes a timestamp to the status row at regular intervals. If the heartbeat stops, the lock status transitions from HEALTHY to STUCK to DEAD, giving operators a clear picture of what is happening.' },
     ]} />
+    <section className="fit-section"><div className="section-label">/ honest fit</div><div className="fit-grid"><div><strong>Choose dbwarden locking when</strong><p>You run migrations in CI/CD pipelines or multi-developer environments where concurrent migration attempts are possible.</p></div><div><strong>Choose something else when</strong><p>You are the only developer, run migrations manually, and never have concurrent processes touching the database.</p></div></div></section>
+    <section className="article-links"><div className="section-label">/ keep reading</div><div><a href="/advanced/migration-locking">Lock architecture deep dive <span>↗</span></a><a href="/advanced/clickhouse-locking">ClickHouse coordination profiles <span>↗</span></a><a href="/tool-scope/locking">Locking overview <span>↗</span></a></div></section>
   </PageFrame>
 }
 
 export function MergeHandlingPage({ dark, toggleTheme }) {
   return <PageFrame dark={dark} toggleTheme={toggleTheme} eyebrow="tool scope / merge handling" title={<>Git Merges, Reconciled<br /><em>Before They Run.</em></>} intro="When branches generate divergent migrations, dbwarden uses the merged models and merge-base state to create one reconciliation migration instead of guessing which branch wins." install="uv add dbwarden">
-    <PageSection number="01" label="The model" title="The merged models define the result." doc="https://docs.dbwarden.org/advanced/merge-handling/">
-      <div className="why-split"><div><p>Branch migrations are derived artifacts. After a Git merge, dbwarden computes the correct next change as the diff between the merge-base state and the merged models. The branch files remain as provenance, but the reconciliation migration is the only new runnable migration.</p><p>Generation and status detect divergent bases, version collisions, and snapshot discontinuities. Until the merge is resolved, <code className="inline-code">make-migrations</code> refuses to generate from an ambiguous history.</p></div><div><span className="comparison-label">after pulling a merge</span><CodeBlock>{`$ dbwarden status
+    <PageSection number="01" label="The problem" title="Branch migrations are derived, not authoritative." doc="https://docs.dbwarden.org/advanced/merge-handling/">
+      <div className="why-split"><div><p>In a conventional migration workflow, each branch generates its own migration files. When those branches merge, the migration history diverges: two files with different versions, different SQL, and no clear winner. The database cannot tell which branch's changes are correct, and neither can the developer without reading both files and comparing them against the models.</p><p>dbwarden treats branch migrations as derived artifacts. The models are the source of truth; the migration files are outputs. After a Git merge, dbwarden computes the correct next change as the diff between the merge-base state and the merged models. The branch files remain as provenance, but the reconciliation migration is the only new runnable migration.</p><p>Generation and status detect divergent bases, version collisions, and snapshot discontinuities. Until the merge is resolved, <code className="inline-code">make-migrations</code> refuses to generate from an ambiguous history. This prevents the common failure mode where two developers generate migrations on top of the same base, merge, and end up with two migrations that conflict.</p><CodeBlock label="terminal">{`$ dbwarden status
+Database: primary
 Merge: PENDING
 
-$ dbwarden merge --database primary`}</CodeBlock></div></div>
+$ dbwarden make-migrations "add feature" --database primary
+Error: Merge pending. Resolve before generating.`}</CodeBlock></div><div><span className="comparison-label">the merge detection</span><CodeBlock>{`-- After a Git merge, dbwarden detects:
+-- 1. Divergent bases (branch migrations from same base)
+-- 2. Version collisions (same version, different SQL)
+-- 3. Snapshot discontinuities (state mismatch)
+
+-- Status reports: Merge: PENDING
+-- make-migrations refuses until resolved`}</CodeBlock></div></div>
     </PageSection>
     <PageSection number="02" label="Three commands" title="Reconcile the repository, then each environment." doc="https://docs.dbwarden.org/advanced/merge-handling/">
-      <div className="comparison-command-grid">
-        <div><span className="comparison-label">merge</span><p>Generate the reconciliation migration and mark divergent branch files as superseded.</p><CodeBlock>{`$ dbwarden merge --database primary`}</CodeBlock></div>
-        <div><span className="comparison-label">rebase</span><p>Recover a disposable environment, such as a local database, against the merged models.</p><CodeBlock>{`$ dbwarden rebase --database local`}</CodeBlock></div>
-        <div><span className="comparison-label">reconcile</span><p>Recover a persistent environment after a dirty merge, with an environment-specific plan.</p><CodeBlock>{`$ dbwarden reconcile --environment staging`}</CodeBlock></div>
-      </div>
+      <div className="why-split"><div><p>dbwarden provides three commands for handling merges, each solving a different part of the problem. The commands are designed to be run in sequence: first reconcile the repository, then each environment.</p><p><code className="inline-code">merge</code> generates the reconciliation migration. It computes the diff between the merge-base state and the merged models, writes one migration file that accounts for both branches, and marks the divergent branch files as superseded. The superseded files are never deleted; they retain full provenance for review and recovery.</p><p><code className="inline-code">rebase</code> recovers a disposable environment, such as a local database, against the merged models. It replays the reconciliation migration on top of the current state, so the environment matches the merged models. This is useful for local development after a merge.</p><p><code className="inline-code">reconcile</code> recovers a persistent environment after a dirty merge. It creates an environment-specific plan that accounts for what has already been applied in that environment, so the reconciliation is safe to run on staging or production.</p></div><div><span className="comparison-label">merge</span><CodeBlock>{`$ dbwarden merge --database primary
+Created migration: migrations/primary/primary__0005_reconcile.sql
+Superseded: primary__0003_add_feature_a.sql
+Superseded: primary__0004_add_feature_b.sql`}</CodeBlock><span className="comparison-label">rebase</span><CodeBlock>{`$ dbwarden rebase --database local
+Rebased local database against merged models`}</CodeBlock><span className="comparison-label">reconcile</span><CodeBlock>{`$ dbwarden reconcile --environment staging
+Created migration: migrations/primary/primary__0006_reconcile_staging.sql`}</CodeBlock></div></div>
     </PageSection>
     <PageSection number="03" label="Safety boundaries" title="The history stays auditable." doc="https://docs.dbwarden.org/advanced/merge-handling/">
-      <div className="why-split"><div><p>Superseded migrations are never deleted. They are excluded from the runnable chain and retain merge-base, branch, checksum, and environment information for review and recovery. The generated reconciliation file records what it supersedes and how it was produced.</p><p>MariaDB has incomplete snapshot support, so merge-base resolution relies on model state and rename candidates require explicit confirmation. All merge operations require Git, and manual migrations remain SQL-only.</p></div><div><span className="comparison-label">explicit rename intent</span><CodeBlock>{`$ dbwarden merge --database primary \\
-    --rename-column users.name=full_name`}</CodeBlock></div></div>
+      <div className="why-split"><div><p>Superseded migrations are never deleted. They are excluded from the runnable chain and retain merge-base, branch, checksum, and environment information for review and recovery. The generated reconciliation file records what it supersedes and how it was produced, so the entire history remains auditable.</p><p>This is important for incident response: if a reconciliation migration causes problems, you can trace it back to the original branch files, understand what each branch intended, and make an informed decision about how to fix it. The provenance is preserved in the repository, not lost in a merge.</p><p>MariaDB has incomplete snapshot support, so merge-base resolution relies on model state and rename candidates require explicit confirmation. All merge operations require Git, and manual migrations remain SQL-only. The merge handling is designed to work within these constraints, not around them.</p><CodeBlock label="terminal">{`$ dbwarden merge --database primary \\
+    --rename-column users.name=full_name
+
+# The reconciliation file records:
+# - What it supersedes (branch files)
+# - How it was produced (merge-base diff)
+# - What renames were confirmed`}</CodeBlock></div><div><span className="comparison-label">superseded files retain provenance</span><CodeBlock>{`-- primary__0003_add_feature_a.sql
+-- dbwarden: superseded by primary__0005_reconcile.sql
+-- merge-base: abc123
+-- branch: feature/a
+-- environment: local`}</CodeBlock></div></div>
     </PageSection>
     <Faq items={[
       { q: 'What happens when two branches add the same column?', a: 'dbwarden detects the version collision and refuses to generate until the merge is resolved. The `merge` command creates a reconciliation migration that accounts for both branches.' },
       { q: 'Can I use merge handling with MariaDB?', a: 'MariaDB has incomplete snapshot support, so merge-base resolution relies on model state. Rename candidates require explicit confirmation with `--rename`.' },
       { q: 'What does superseded mean?', a: 'Superseded migrations are excluded from the runnable chain but never deleted. They retain full provenance for review and recovery, and the reconciliation file records what it supersedes.' },
+      { q: 'Do I need to run all three commands?', a: 'Not always. `merge` is required for repository reconciliation. `rebase` is for disposable environments like local databases. `reconcile` is for persistent environments like staging or production.' },
     ]} />
+    <section className="fit-section"><div className="section-label">/ honest fit</div><div className="fit-grid"><div><strong>Choose dbwarden merge handling when</strong><p>Multiple developers generate migrations on the same database, or you use feature branches that modify the schema.</p></div><div><strong>Choose something else when</strong><p>You have a single developer, or your branching strategy never modifies the schema in parallel.</p></div></div></section>
+    <section className="article-links"><div className="section-label">/ keep reading</div><div><a href="/advanced/merge-handling">Merge handling deep dive <span>↗</span></a><a href="/tool-scope/state">Schema state and drift detection <span>↗</span></a><a href="/tool-scope/safety">Safety and impact analysis <span>↗</span></a></div></section>
   </PageFrame>
 }
