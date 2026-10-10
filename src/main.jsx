@@ -106,6 +106,7 @@ const pluginDirectory = [
   { name: 'dbwarden-pgsql-rbac', tier: 'official', description: 'Roles, grants, and privilege metadata for PostgreSQL.', repository: 'https://github.com/dbwarden-org/dbwarden-pgsql-rbac' },
   { name: 'dbwarden-pgsql-extensions', tier: 'official', description: 'PostgreSQL extensions and database object handlers.', repository: 'https://github.com/dbwarden-org/dbwarden-pgsql-extensions' },
   { name: 'dbwarden-ch-rbac', tier: 'official', description: 'ClickHouse access control and RBAC metadata.', repository: 'https://github.com/dbwarden-org/dbwarden-ch-rbac' },
+  { name: 'dbwarden-redis', tier: 'official', description: 'Redis-backed distributed migration lock for multi-instance deployments.', repository: 'https://github.com/dbwarden-org/dbwarden-redis' },
   { name: 'dbwarden-seeds', tier: 'official', description: 'Deterministic seed data with migration-aware rollback.', repository: 'https://github.com/dbwarden-org/dbwarden-seeds' },
   { name: 'dbwarden-sandbox', tier: 'official', description: 'Validate generated SQL in an isolated sandbox before deploy.', repository: 'https://github.com/dbwarden-org/dbwarden-sandbox' },
 ]
